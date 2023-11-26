@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/ferramentas/ConexaoBD.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/modelo/Usuario.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/visao/TelaLoginUsuario.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/controle/UsuarioControle.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/visao/TelaCadastro.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/persistencia/UsuarioDAO.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/ferramentas/SenhaHashing.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/controle/IUsuarioControle.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/ferramentas/TesteHashing.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/visao/TelaNovaDenuncia.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/persistencia/IUsuarioDAO.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/enumeracao/TipoUsuario.java</file>
+            <file>file:/C:/Users/Mariana/Documents/PataDeMacaco4PI/PataDeMacaco4PI/src/com/patademacaco/visao/TelaTipoUsuario.java</file>
+        </group>
+    </open-files>
+</project-private>
