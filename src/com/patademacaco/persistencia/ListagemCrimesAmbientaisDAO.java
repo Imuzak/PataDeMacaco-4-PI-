@@ -8,8 +8,11 @@ import com.patademacaco.ferramentas.ConexaoBD;
 import com.patademacaco.modelo.ListagemCrimesAmbientais;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  *
@@ -43,7 +46,19 @@ public class ListagemCrimesAmbientaisDAO implements IListagemCrimesAmbientaisDAO
 
     @Override
     public void alterar(ListagemCrimesAmbientais objeto) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       try {
+           
+            String sql = "UPDATE crimesambientais SET categoria=?, subcategoria=?,descricaocompletacrimesambientais=?  WHERE idservico=" + objeto.getIdCrimesAmbientais() + ";";
+            PreparedStatement preparedStatement = conexao.prepareStatement(sql);
+           preparedStatement.setString(1, objeto.getCategoria());
+            preparedStatement.setString(2, objeto.getSubCategoria());
+            preparedStatement.setString(3, objeto.getDescricaoCompletaCrimesAmbientais());
+            preparedStatement.executeUpdate();
+        } catch (SQLException erro) {
+            throw new Exception("SQL Erro: " + erro.getMessage());
+        } catch(Exception erro){
+            throw erro;
+        }    
     }
 
     @Override
@@ -53,7 +68,26 @@ public class ListagemCrimesAmbientaisDAO implements IListagemCrimesAmbientaisDAO
 
     @Override
     public ArrayList<ListagemCrimesAmbientais> listagem() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<ListagemCrimesAmbientais> listaDosCrimesAmbientais = new ArrayList<ListagemCrimesAmbientais>();
+        String sql = "SELECT * FROM servico";
+        try {
+            Statement statement = conexao.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                ListagemCrimesAmbientais listagem = new ListagemCrimesAmbientais();
+                listagem.setIdCrimesAmbientais(rs.getInt("iddrimesambientais"));
+                listagem.setCategoria(rs.getString("categoria"));
+                listagem.setSubCategoria(rs.getString("subcategoria"));
+                listagem.setDescricaoCompletaCrimesAmbientais("descricaocompletacrimesambientais");
+                
+                
+                listaDosCrimesAmbientais.add(listagem);
+            }
+            
+        } catch (SQLException e) {
+              e.printStackTrace();
+          }
+          return listaDosCrimesAmbientais;
     }
 
 }
