@@ -111,18 +111,6 @@ public class UsuarioControle implements IUsuarioControle {
 
     @Override
     public void alterar(Usuario objeto) throws Exception {
-        /* CPF PODE SER ALTERADO?
-        if (objeto.getCpf().equalsIgnoreCase("")) {
-            throw new Exception("O Cpf deve ser informado.");
-        }
-        if (validaCpf(objeto.getCpf())) {
-            throw new Exception("Cpf inválido. Digite um Cpf válido.");
-        }
-        */
-        /* ERRO AO ALTERAR
-        if (verificaCadastroExistente(objeto.getCpf())) {
-            throw new Exception("Usuário já cadastrado.");
-        }*/
         if (objeto.getNome().equalsIgnoreCase("")) {
             throw new Exception("O Nome deve ser informado.");
         }
@@ -135,21 +123,12 @@ public class UsuarioControle implements IUsuarioControle {
         if (objeto.getTelefone().equalsIgnoreCase("")) {
             throw new Exception("O Telefone deve ser informado.");
         }
-        /* TIPO DO USUÁRIO NÃO PODE SER ALTERADO
-        if (objeto.getTipo() == null) {
-            throw new Exception("Selecione uma das opções como usuário (DENUNCIANTE / ANALISTA).");
-        }*/
         usuarioPersistencia.alterar(objeto);
     }
 
     @Override
     public Usuario buscar(String cpf) throws Exception {
         return usuarioPersistencia.buscar(cpf);
-    }
-
-    @Override
-    public void deletar(Usuario objeto) throws Exception {
-        usuarioPersistencia.deletar(objeto);
     }
     
 }

@@ -4,6 +4,7 @@ package com.patademacaco.persistencia;
 
 import com.patademacaco.enumeracao.TipoUsuario;
 import com.patademacaco.ferramentas.ConexaoBD;
+import static com.patademacaco.ferramentas.SenhaHashing.doHashing;
 import java.util.ArrayList;
 import com.patademacaco.modelo.Usuario;
 import java.sql.Connection;
@@ -34,7 +35,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             preparedStatement.setString(2, objeto.getNome());
             preparedStatement.setString(3, objeto.getEmail());
             preparedStatement.setString(4, objeto.getTelefone());
-            preparedStatement.setString(5, objeto.getSenha());
+            preparedStatement.setString(5, doHashing(objeto.getSenha()));
             preparedStatement.setString(6, objeto.getTipo().toString());
             preparedStatement.executeUpdate();
         } catch (SQLException erro) {
@@ -53,7 +54,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             preparedStatement.setString(1, objeto.getNome());
             preparedStatement.setString(2, objeto.getEmail());
             preparedStatement.setString(3, objeto.getTelefone());
-            preparedStatement.setString(4, objeto.getSenha());
+            preparedStatement.setString(4, doHashing(objeto.getSenha()));
             preparedStatement.setString(5, objeto.getCpf());
             preparedStatement.executeUpdate();
         } catch (SQLException erro) {
@@ -108,18 +109,5 @@ public class UsuarioDAO implements IUsuarioDAO {
           }
         listaUsuario.sort(Comparator.comparing(Usuario::getNome).thenComparing(Usuario::getCpf));
           return listaUsuario;
-    }
-
-    @Override
-    public void deletar(Usuario objeto) throws Exception {
-        try {
-            String sql = "delete from usuario where cpf = '" + objeto.getCpf()+ "';";
-            PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        } catch (SQLException erro) {
-            throw new Exception("SQL Erro: " + erro.getMessage());
-        } catch(Exception erro){
-            throw erro;
-        }
     }
 }
