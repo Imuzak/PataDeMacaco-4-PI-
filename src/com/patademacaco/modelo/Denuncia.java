@@ -8,7 +8,7 @@ public class Denuncia {
     private String protocolo = "";
     private String descricao = "";
     private Categoria categoria = null;
-    private ArrayList<String> foto = new ArrayList<>();
+    private Fotos fotos = new Fotos();
     private Date data = null;
     private String autorCrime = "";
     private String parecer = "";
@@ -19,11 +19,11 @@ public class Denuncia {
     public Denuncia(){
     }
     
-    public Denuncia(String protocolo, String descricao, Categoria categoria, ArrayList<String> foto, Date data, String autorCrime, String parecer, Usuario denunciante, Endereco endereco, Status status){
+    public Denuncia(String protocolo, String descricao, Categoria categoria, Fotos fotos, Date data, String autorCrime, String parecer, Usuario denunciante, Endereco endereco, Status status){
         this.protocolo = protocolo;
         this.descricao = descricao;
         this.categoria = categoria;
-        this.foto = foto;
+        this.fotos = fotos;
         this.data = data;
         this.autorCrime = autorCrime;
         this.parecer = parecer;
