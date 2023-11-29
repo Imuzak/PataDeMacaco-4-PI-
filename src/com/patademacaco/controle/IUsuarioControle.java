@@ -9,5 +9,6 @@ public interface IUsuarioControle {
     void cadastrar(Usuario objeto) throws Exception;
     void alterar(Usuario objeto) throws Exception;
     Usuario buscar(String cpf) throws Exception;
+    Usuario validaSenha(String cpf, String senhaLogin) throws Exception;
     
 }

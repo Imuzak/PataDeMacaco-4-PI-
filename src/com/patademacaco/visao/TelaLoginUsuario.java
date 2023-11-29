@@ -258,17 +258,11 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
     private void jButtonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEntrarActionPerformed
         try {
             String cpf = jFormattedTextFieldLoginCpf.getText();
-            String senha = doHashing(new String(jPasswordFieldSenha.getPassword()));
-            usuario = usuarioControle.buscar(cpf);
-            if (usuario != null) {
-                if (UsuarioControle.validaSenha(usuario.getSenha(), senha)) {
-                    AbrirTelaNovaDenuncia(usuario);
-                    //AbrirTelaUsuario(usuario, new String(jPasswordFieldSenha.getPassword()));
-                } else {
-                    throw new Exception("Senha incorreta.");
-                }
-            }
-            LimparTela();
+            String senha = new String(jPasswordFieldSenha.getPassword());
+            usuario = usuarioControle.validaSenha(cpf, senha);
+            AbrirTelaNovaDenuncia(usuario);
+            //AbrirTelaUsuario(usuario, new String(jPasswordFieldSenha.getPassword()));
+            //LimparTela(); //necessário?
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
@@ -451,15 +445,15 @@ public void AbrirTelaNovaDenuncia(Usuario usuario) {
     this.dispose();
 }
 
-public void AbrirTelaUsuario(Usuario usuario, String senha) {
-    TelaCadastro tela = new TelaCadastro(usuario, senha);
-    tela.setVisible(true);
-    this.dispose();
-}
+//public void AbrirTelaUsuario(Usuario usuario, String senha) {
+//    TelaCadastro tela = new TelaCadastro(usuario, senha);
+//    tela.setVisible(true);
+//    this.dispose();
+//}
 
-public void LimparTela() {
-    jFormattedTextFieldLoginCpf.setText("");
-    jPasswordFieldSenha.setText("");
-}
+//public void LimparTela() {
+//    jFormattedTextFieldLoginCpf.setText("");
+//    jPasswordFieldSenha.setText("");
+//}
 
 }

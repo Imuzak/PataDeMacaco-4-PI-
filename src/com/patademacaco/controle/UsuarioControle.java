@@ -1,5 +1,6 @@
 package com.patademacaco.controle;
 
+import static com.patademacaco.ferramentas.SenhaHashing.doHashing;
 import java.util.ArrayList;
 import java.util.Iterator;
 import com.patademacaco.modelo.Usuario;
@@ -62,24 +63,24 @@ public class UsuarioControle implements IUsuarioControle {
         return false;
     }
     
-    public static boolean validaSenha(String senha_BD, String senha_Login) throws Exception {
+    @Override
+    public Usuario validaSenha(String cpf, String senhaLogin) throws Exception {
         try {
-            if (senha_BD.equals(senha_Login)) return true;
-            return false;
+            Usuario usuario = buscar(cpf);
+            if (usuario != null) {
+                if (usuario.getSenha().equals(doHashing(senhaLogin))) {
+                    return usuario;
+                } else {
+                    throw new Exception("Senha incorreta.");
+                }
+            } else {
+                throw new Exception("Usuário não encontrado.");
+            }
         } catch (Exception erro) {
-            throw new Exception("Cpf ou Senha incorreto(s)");
+            throw new Exception("Cpf ou Senha incorreto(s).");
         }
     }
     
-    public static boolean validaTipoUsuario(String tipo_BD, String tipo_Login) throws Exception {
-        try {
-            if (tipo_BD.equals(tipo_Login)) return true;
-            return false;
-        } catch (Exception erro) {
-            throw new Exception("Cpf ou Senha incorreto(s)");
-        }
-    }
-
     @Override
     public void cadastrar(Usuario objeto) throws Exception {
         if (objeto.getCpf().equalsIgnoreCase("") || objeto.getCpf().equalsIgnoreCase(" ")) {
