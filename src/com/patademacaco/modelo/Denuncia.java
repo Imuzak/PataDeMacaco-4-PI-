@@ -1,7 +1,6 @@
 package com.patademacaco.modelo;
 
 import com.patademacaco.enumeracao.Status;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Denuncia {
@@ -13,13 +12,14 @@ public class Denuncia {
     private String autorCrime = "";
     private String parecer = "";
     private Usuario denunciante = null;
+    private Usuario analista = null;
     private Endereco endereco = null;
     private Status status = null;
     
     public Denuncia(){
     }
     
-    public Denuncia(String protocolo, String descricao, Categoria categoria, Fotos fotos, Date data, String autorCrime, String parecer, Usuario denunciante, Endereco endereco, Status status){
+    public Denuncia(String protocolo, String descricao, Categoria categoria, Fotos fotos, Date data, String autorCrime, String parecer, Usuario denunciante, Usuario analista, Endereco endereco, Status status){
         this.protocolo = protocolo;
         this.descricao = descricao;
         this.categoria = categoria;
@@ -28,6 +28,7 @@ public class Denuncia {
         this.autorCrime = autorCrime;
         this.parecer = parecer;
         this.denunciante = denunciante;
+        this.analista = analista;
         this.endereco = endereco;
         this.status = status;
     }
@@ -56,12 +57,12 @@ public class Denuncia {
         this.categoria = categoria;
     }
 
-    public ArrayList<String> getFoto() {
-        return foto;
+    public Fotos getFotos() {
+        return fotos;
     }
 
-    public void setFoto(ArrayList<String> foto) {
-        this.foto = foto;
+    public void setFotos(Fotos fotos) {
+        this.fotos = fotos;
     }
 
     public Date getData() {
@@ -94,6 +95,14 @@ public class Denuncia {
 
     public void setDenunciante(Usuario denunciante) {
         this.denunciante = denunciante;
+    }
+
+    public Usuario getAnalista() {
+        return analista;
+    }
+
+    public void setAnalista(Usuario analista) {
+        this.analista = analista;
     }
 
     public Endereco getEndereco() {

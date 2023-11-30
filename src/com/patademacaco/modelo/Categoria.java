@@ -1,21 +1,18 @@
 package com.patademacaco.modelo;
 
-import com.patademacaco.enumeracao.TipoAmbiental;
-
 public class Categoria {
     private int id = 0;
-    private TipoAmbiental tipoAmbiental = null;
-    private String subTipoResumo = "";
-    private String subTipo = "";
+    private String tipoAmbiental = "";
+    private SubCategoria subCategoria = null;
     
     public Categoria(){
     }
     
-    public Categoria(int id, TipoAmbiental tipoAmbiental, String subTipoResumo, String subTipo){
+    public Categoria(int id,  String tipoAmbiental, SubCategoria subCategoria){
         this.id = id;
         this.tipoAmbiental = tipoAmbiental;
-        this.subTipoResumo = subTipoResumo;
-        this.subTipo = subTipo;
+        this.subCategoria = subCategoria;
+        
     }
 
     public int getId() {
@@ -26,28 +23,20 @@ public class Categoria {
         this.id = id;
     }
 
-    public TipoAmbiental getTipoAmbiental() {
+    public String getTipoAmbiental() {
         return tipoAmbiental;
     }
 
-    public void setTipoAmbiental(TipoAmbiental tipoAmbiental) {
+    public void setTipoAmbiental(String tipoAmbiental) {
         this.tipoAmbiental = tipoAmbiental;
     }
 
-    public String getSubTipoResumo() {
-        return subTipoResumo;
+    public SubCategoria getSubCategoria() {
+        return subCategoria;
     }
 
-    public void setSubTipoResumo(String subTipoResumo) {
-        this.subTipoResumo = subTipoResumo;
-    }
-
-    public String getSubTipo() {
-        return subTipo;
-    }
-
-    public void setSubTipo(String subTipo) {
-        this.subTipo = subTipo;
+    public void setSubCategoria(SubCategoria subCategoria) {
+        this.subCategoria = subCategoria;
     }
     
 }
