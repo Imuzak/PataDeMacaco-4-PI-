@@ -8,6 +8,7 @@ import com.patademacaco.modelo.Denuncia;
 import com.patademacaco.modelo.Endereco;
 import com.patademacaco.modelo.Fotos;
 import com.patademacaco.modelo.Municipio;
+import com.patademacaco.modelo.SubCategoria;
 import com.patademacaco.modelo.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -54,8 +55,8 @@ public class DenunciaDao implements IDenunciaDao{
         
         try {
             String sqlFotos = "INSERT INTO fotos (url1, url2, url3, url4) Values (?, ?, ?, ?) RETURNING idFotos";
-            String sql = "INSERT INTO denuncia(cpfDenunciante, cpfAnalista, idMunicipio, cep, logradouro, bairro, pontoDeReferencia, descricao, idCategoria, idSubcategoria, data, autorCrime, parecer, status, idFotos)";
-            sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING idDenuncia";
+            String sql = "INSERT INTO denuncia(cpfDenunciante, cpfAnalista, idMunicipio, cep, logradouro, bairro, pontoDeReferencia, descricao, idCategoria, idSubcategoria, data, dataDenuncia, autorCrime, parecer, status, idFotos)";
+            sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING idDenuncia";
             PreparedStatement preparedStatement = conexao.prepareStatement(sqlFotos);
             int idFotos = preparedStatement.executeUpdate();
             preparedStatement = conexao.prepareStatement(sql);
@@ -71,15 +72,18 @@ public class DenunciaDao implements IDenunciaDao{
             preparedStatement.setInt(10, objeto.getCategoria().getSubCategoria().getIdSubcategoria());
             SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
             String datainclusao = formata.format(objeto.getData());
+            String dataDenuncia = formata.format(objeto.getDataDenuncia());
             preparedStatement.setString(11, datainclusao);
-            preparedStatement.setString(12, objeto.getAutorCrime());
-            preparedStatement.setString(13, objeto.getParecer());
-            preparedStatement.setString(14, objeto.getStatus().toString());
-            preparedStatement.setInt(15, idFotos);
+            preparedStatement.setString(12, dataDenuncia);
+            preparedStatement.setString(13, objeto.getAutorCrime());
+            preparedStatement.setString(14, objeto.getParecer());
+            preparedStatement.setString(15, objeto.getStatus().toString());
+            preparedStatement.setInt(16, idFotos);
+            // Executa o update e coleta o ID para gerar protocolo
             int idGerado = preparedStatement.executeUpdate();
             formata = new SimpleDateFormat("yyyy");
             String protocolo =  idGerado +"/"+ formata.format(objeto.getData());
-            // Atualiza o protocolo na tabela gasto
+            // Atualiza o protocolo na tabela denuncia
             String sqlUpdate = "UPDATE denuncia SET protocolo = ? WHERE idDenuncia = ?";
             PreparedStatement updateStatement = conexao.prepareStatement(sqlUpdate);
             updateStatement.setString(1, protocolo);
@@ -94,18 +98,31 @@ public class DenunciaDao implements IDenunciaDao{
     }
 
     @Override
-    public Denuncia Buscar(String protocolo) throws Exception{
+    public ArrayList<Denuncia> Buscar(Denuncia objeto) throws Exception{
+        SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
+        ArrayList<Denuncia> listaFiltrada = new ArrayList<>();
         String sql = "SELECT * FROM denuncia ";
         sql += "INNER JOIN municipio ON denuncia.idDenuncia = municipio.idMunicipio ";
         sql += "INNER JOIN categoria ON denuncia.idCategoria = categoria.idCategoria ";
         sql += "INNER JOIN fotos ON denuncia.idFotos = fotos.idFotos ";
-        sql += "INNER JOIN usuario AS denunciante ON denuncia.cpfDenunciante = denunciante.cpf";
-        sql += "INNER JOIN usuario AS analista ON denuncia.cpfAnalista = analista.cpf";
+        sql += "INNER JOIN usuario AS denunciante ON denuncia.cpfDenunciante = denunciante.cpf ";
+        sql += "INNER JOIN usuario AS analista ON denuncia.cpfAnalista = analista.cpf ";
+        sql += "WHERE 1=1";
+        if(!objeto.getProtocolo().equalsIgnoreCase("")) {
+            sql += " AND protocolo = '"+objeto.getProtocolo()+"'";
+        }else{
+            if(objeto.getEndereco().getMunicipio().getId() > 0) sql +=" AND idMunicipio = "+objeto.getEndereco().getMunicipio().getId();
+            if(objeto.getCategoria().getId() > 0) sql +=" AND idCategoria = "+objeto.getCategoria().getId();
+            if(objeto.getData()!= null) sql += " AND data = '"+formata.format(objeto.getData())+"'";
+            if(objeto.getDataDenuncia()!= null) sql += " AND dataDenuncia = '"+formata.format(objeto.getDataDenuncia())+"'";
+            if(objeto.getStatus() != null) sql += " AND status = '"+objeto.getStatus().toString()+"'";
+        }
+        sql += " ;";
         try {
           Statement statement = conexao.createStatement();
           ResultSet rs = statement.executeQuery(sql);
           Denuncia denuncia = new Denuncia();
-          if (rs.next()) {
+          while (rs.next()) {
             denuncia.setProtocolo(rs.getString("protocolo"));
             denuncia.setDescricao(rs.getString("descricao"));
             denuncia.setAutorCrime(rs.getString("autorCrime"));
@@ -114,6 +131,9 @@ public class DenunciaDao implements IDenunciaDao{
             String data = rs.getString("data") ;
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(data);
             denuncia.setData(date);
+            data = rs.getString("dataDenuncia") ;
+            date = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+            denuncia.setDataDenuncia(date);
             
             Fotos fotos = new Fotos();
             fotos.setId(rs.getInt("idFotos"));
@@ -156,17 +176,21 @@ public class DenunciaDao implements IDenunciaDao{
             
             Categoria categoria = new Categoria();
             categoria.setId(rs.getInt("idCategoria"));
-            categoria.getSubCategoria().setIdSubcategoria(rs.getInt("idSubcategoria"));
             categoria.setTipoAmbiental(rs.getString("tipo"));
-            String sqlTipo = "SELECT * FROM "+categoria.getTipoAmbiental()+" WHERE idSubcategoria = "+categoria.getSubCategoria().getIdSubcategoria()+";";
+            
+            SubCategoria subCategoria = new SubCategoria();
+            subCategoria.setIdSubcategoria(rs.getInt("idSubcategoria"));
+            //Coleta a subcategoria pelo ID na tabela apropriada de acordo com o nome da Categoria recem coletada
+            String sqlTipo = "SELECT * FROM "+categoria.getTipoAmbiental()+" WHERE idSubcategoria = "+subCategoria.getIdSubcategoria()+";";
             Statement statementTipo = conexao.createStatement();
             ResultSet rsTipo = statementTipo.executeQuery(sqlTipo);
-            categoria.getSubCategoria().setSubTipoResumo(rsTipo.getString("resumo"));
-            categoria.getSubCategoria().setSubTipo(rsTipo.getString("descricao"));
+            subCategoria.setSubTipoResumo(rsTipo.getString("resumo"));
+            subCategoria.setSubTipo(rsTipo.getString("descricao"));
+            categoria.setSubCategoria(subCategoria);
             denuncia.setCategoria(categoria);
-            
+            listaFiltrada.add(denuncia);
           }
-          return denuncia;
+          return listaFiltrada;
         } catch (SQLException erro) {
             throw new Exception("SQL Erro: " + erro.getMessage());
         } catch(Exception erro){
@@ -177,15 +201,22 @@ public class DenunciaDao implements IDenunciaDao{
 
     @Override
     public void Alterar(Denuncia denuncia) throws Exception{
-        String sql = "UPDATE denuncia SET  idCategoria = ?,  idSubCategoria = ?  WHERE protocolo =" + denuncia.getProtocolo() + ";";
-        PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-        preparedStatement.setInt(1, denuncia.getCategoria().getId());
-        preparedStatement.setInt(2, denuncia.getCategoria().getSubCategoria().getIdSubcategoria());
-        preparedStatement.executeUpdate();
+        try{
+            String sql = "UPDATE denuncia SET  idCategoria = ?,  idSubCategoria = ?  WHERE protocolo =" + denuncia.getProtocolo() + ";";
+            PreparedStatement preparedStatement = conexao.prepareStatement(sql);
+            preparedStatement.setInt(1, denuncia.getCategoria().getId());
+            preparedStatement.setInt(2, denuncia.getCategoria().getSubCategoria().getIdSubcategoria());
+            preparedStatement.executeUpdate();
+        }catch (SQLException erro) {
+            throw new Exception("SQL Erro: " + erro.getMessage());
+        } catch(Exception erro){
+            throw erro;
+        }
     }
 
     @Override
     public ArrayList<Denuncia> Listar() throws Exception{
+        SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
         ArrayList<Denuncia> listaDeDenuncias = new ArrayList<>();
         String sql = "SELECT * FROM denuncia ";
         sql += "INNER JOIN municipio ON denuncia.idDenuncia = municipio.idMunicipio ";
@@ -204,8 +235,11 @@ public class DenunciaDao implements IDenunciaDao{
             denuncia.setParecer(rs.getString("parecer"));
             denuncia.setStatus(Status.valueOf(rs.getString("status")));
             String data = rs.getString("data") ;
-            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+            Date date = formata.parse(data);
             denuncia.setData(date);
+            data = rs.getString("dataDenuncia") ;
+            date = formata.parse(data);
+            denuncia.setDataDenuncia(date);
             
             Fotos fotos = new Fotos();
             fotos.setId(rs.getInt("idFotos"));
@@ -248,13 +282,16 @@ public class DenunciaDao implements IDenunciaDao{
             
             Categoria categoria = new Categoria();
             categoria.setId(rs.getInt("idCategoria"));
-            categoria.getSubCategoria().setIdSubcategoria(rs.getInt("idSubcategoria"));
             categoria.setTipoAmbiental(rs.getString("tipo"));
-            String sqlTipo = "SELECT * FROM "+categoria.getTipoAmbiental()+" WHERE idSubcategoria = "+categoria.getSubCategoria().getIdSubcategoria()+";";
+            
+            SubCategoria subCategoria = new SubCategoria();
+            subCategoria.setIdSubcategoria(rs.getInt("idSubcategoria"));
+            String sqlTipo = "SELECT * FROM "+categoria.getTipoAmbiental()+" WHERE idSubcategoria = "+subCategoria.getIdSubcategoria()+";";
             Statement statementTipo = conexao.createStatement();
             ResultSet rsTipo = statementTipo.executeQuery(sqlTipo);
-            categoria.getSubCategoria().setSubTipoResumo(rsTipo.getString("resumo"));
-            categoria.getSubCategoria().setSubTipo(rsTipo.getString("descricao"));
+            subCategoria.setSubTipoResumo(rsTipo.getString("resumo"));
+            subCategoria.setSubTipo(rsTipo.getString("descricao"));
+            categoria.setSubCategoria(subCategoria);
             denuncia.setCategoria(categoria);
             
             listaDeDenuncias.add(denuncia);

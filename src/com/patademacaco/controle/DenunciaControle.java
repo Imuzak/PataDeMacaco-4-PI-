@@ -20,8 +20,8 @@ public class DenunciaControle implements IDenunciaControle{
     }
 
     @Override
-    public Denuncia Buscar(String protocolo) throws Exception {
-        return denunciaDao.Buscar(protocolo);
+    public ArrayList<Denuncia> Buscar(Denuncia denuncia) throws Exception {
+        return denunciaDao.Buscar(denuncia);
     }
 
     @Override

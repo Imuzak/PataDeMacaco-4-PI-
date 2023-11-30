@@ -9,6 +9,7 @@ public class Denuncia {
     private Categoria categoria = null;
     private Fotos fotos = new Fotos();
     private Date data = null;
+    private Date dataDenuncia = null;
     private String autorCrime = "";
     private String parecer = "";
     private Usuario denunciante = null;
@@ -19,12 +20,13 @@ public class Denuncia {
     public Denuncia(){
     }
     
-    public Denuncia(String protocolo, String descricao, Categoria categoria, Fotos fotos, Date data, String autorCrime, String parecer, Usuario denunciante, Usuario analista, Endereco endereco, Status status){
+    public Denuncia(String protocolo, String descricao, Categoria categoria, Fotos fotos, Date data, Date dataDenuncia, String autorCrime, String parecer, Usuario denunciante, Usuario analista, Endereco endereco, Status status){
         this.protocolo = protocolo;
         this.descricao = descricao;
         this.categoria = categoria;
         this.fotos = fotos;
         this.data = data;
+        this.dataDenuncia = dataDenuncia;
         this.autorCrime = autorCrime;
         this.parecer = parecer;
         this.denunciante = denunciante;
@@ -71,6 +73,14 @@ public class Denuncia {
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    public Date getDataDenuncia() {
+        return dataDenuncia;
+    }
+
+    public void setDataDenuncia(Date dataDenuncia) {
+        this.dataDenuncia = dataDenuncia;
     }
 
     public String getAutorCrime() {
