@@ -16,9 +16,8 @@ public class ConexaoBD {
         try
         {
             if(conexao == null){
-                String driver = "org.postgresql.Driver";
-                String url = "jdbc:postgresql://localhost:5432/PataDeMacacoBD"
-                        + "";
+                String driver = "org.postgresql.Driver"
+                String url = "jdbc:postgresql://localhost:5432/DenunciasBD";
                 String user = "postgres";
                 String password = "aluno"; 
                 Class.forName(driver);
@@ -35,5 +34,4 @@ public class ConexaoBD {
         }
         return conexao;
     }
-    
 }
