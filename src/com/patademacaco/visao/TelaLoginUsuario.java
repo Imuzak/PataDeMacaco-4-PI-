@@ -3,27 +3,13 @@ package com.patademacaco.visao;
 import com.patademacaco.controle.IUsuarioControle;
 import com.patademacaco.controle.UsuarioControle;
 import com.patademacaco.enumeracao.TipoUsuario;
-import static com.patademacaco.ferramentas.SenhaHashing.doHashing;
 import com.patademacaco.modelo.Usuario;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.geom.RoundRectangle2D;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
+import com.patademacaco.ferramentas.RoundedPanel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 //@author Mariana
 
@@ -36,10 +22,10 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
     public TelaLoginUsuario() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
+        
         ImageIcon image = new ImageIcon(".\\src\\com\\patademacaco\\imagens\\icones\\leaf.png");
         this.setIconImage(image.getImage());
-        jButtonEntrar.setBorder(new RoundedBorder(20));
-        jButtonEntrar.setRolloverEnabled(false);
+        
         try {
             usuarioControle = new UsuarioControle();
         } catch (Exception erro) {
@@ -50,11 +36,10 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jPainelLoginUsuario = new RoundedPanel(15, new Color(222, 220, 225));
+        jPainelLoginUsuario = new RoundedPanel(20, new Color(222, 220, 225));
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -76,6 +61,7 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jPainelLoginUsuario.setBackground(new java.awt.Color(163, 177, 138));
+        jPainelLoginUsuario.setPreferredSize(new java.awt.Dimension(362, 441));
 
         jLabel1.setFont(new java.awt.Font("Calibri", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(31, 36, 33));
@@ -83,33 +69,25 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
         jLabel1.setText("Login");
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        jLabel2.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(31, 36, 33));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel2.setText("CPF :");
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        jLabel3.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(31, 36, 33));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel3.setText("Senha :");
         jLabel3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         jButtonEntrar.setBackground(new java.awt.Color(52, 78, 65));
-        jButtonEntrar.setFont(new java.awt.Font("Calibri", 1, 24)); // NOI18N
+        jButtonEntrar.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
         jButtonEntrar.setForeground(new java.awt.Color(156, 197, 161));
         jButtonEntrar.setText("Entrar");
         jButtonEntrar.setBorder(null);
         jButtonEntrar.setBorderPainted(false);
         jButtonEntrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonEntrar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButtonEntrarMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jButtonEntrarMouseExited(evt);
-            }
-        });
         jButtonEntrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEntrarActionPerformed(evt);
@@ -139,6 +117,9 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
         jLabelRealizarDenunciaAnonima.setText("<HTML><U>Realizar denúncia anônima?  ></U></HTML>");
         jLabelRealizarDenunciaAnonima.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jLabelRealizarDenunciaAnonima.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelRealizarDenunciaAnonimaMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabelRealizarDenunciaAnonimaMouseEntered(evt);
             }
@@ -173,51 +154,46 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
         jPainelLoginUsuario.setLayout(jPainelLoginUsuarioLayout);
         jPainelLoginUsuarioLayout.setHorizontalGroup(
             jPainelLoginUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPainelLoginUsuarioLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPainelLoginUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jFormattedTextFieldLoginCpf, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPainelLoginUsuarioLayout.createSequentialGroup()
-                        .addGroup(jPainelLoginUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelVisible, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButtonEntrar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelAindaNaoTemCadastro, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelRealizarDenunciaAnonima, javax.swing.GroupLayout.Alignment.LEADING))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(55, 55, 55)
+                .addGroup(jPainelLoginUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFormattedTextFieldLoginCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPainelLoginUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabelRealizarDenunciaAnonima)
+                        .addComponent(jButtonEntrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPainelLoginUsuarioLayout.createSequentialGroup()
+                            .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, 0)
+                            .addComponent(jLabelVisible, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabelAindaNaoTemCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         jPainelLoginUsuarioLayout.setVerticalGroup(
             jPainelLoginUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPainelLoginUsuarioLayout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel2)
-                .addGap(6, 6, 6)
+                .addGap(7, 7, 7)
                 .addComponent(jFormattedTextFieldLoginCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
+                .addGap(9, 9, 9)
                 .addComponent(jLabel3)
-                .addGap(6, 6, 6)
+                .addGap(7, 7, 7)
                 .addGroup(jPainelLoginUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelVisible, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
+                .addGap(59, 59, 59)
                 .addComponent(jButtonEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
+                .addGap(46, 46, 46)
                 .addComponent(jLabelAindaNaoTemCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelRealizarDenunciaAnonima, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addComponent(jLabelRealizarDenunciaAnonima, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(147, 321, 155, 267);
-        jPanel1.add(jPainelLoginUsuario, gridBagConstraints);
+        jPanel1.add(jPainelLoginUsuario, new java.awt.GridBagConstraints());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -250,7 +226,7 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelAindaNaoTemCadastroMouseEntered
 
     private void jLabelAindaNaoTemCadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelAindaNaoTemCadastroMouseClicked
-        TelaCadastro tela = new TelaCadastro();
+        TelaCadastro tela = new TelaCadastro(TipoUsuario.DENUNCIANTE);
         tela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabelAindaNaoTemCadastroMouseClicked
@@ -260,21 +236,14 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
             String cpf = jFormattedTextFieldLoginCpf.getText();
             String senha = new String(jPasswordFieldSenha.getPassword());
             usuario = usuarioControle.validaSenha(cpf, senha);
-            AbrirTelaNovaDenuncia(usuario);
+            AbrirTelaDenuncia(usuario);
+            this.dispose();
             //AbrirTelaUsuario(usuario, new String(jPasswordFieldSenha.getPassword()));
             //LimparTela(); //necessário?
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
     }//GEN-LAST:event_jButtonEntrarActionPerformed
-
-    private void jButtonEntrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEntrarMouseExited
-        jButtonEntrar.setBackground(new Color(52,78,65));
-    }//GEN-LAST:event_jButtonEntrarMouseExited
-
-    private void jButtonEntrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEntrarMouseEntered
-        jButtonEntrar.setBackground(new Color(58, 90, 64));
-    }//GEN-LAST:event_jButtonEntrarMouseEntered
 
     private void jLabelVisibleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelVisibleMouseClicked
         if (visible) {
@@ -289,6 +258,18 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
             jPasswordFieldSenha.setEchoChar((char) 0); 
         }
     }//GEN-LAST:event_jLabelVisibleMouseClicked
+
+    private void jLabelRealizarDenunciaAnonimaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRealizarDenunciaAnonimaMouseClicked
+        try {
+            Usuario anonimo = new Usuario();
+            anonimo = usuarioControle.buscar("cpf do usuario anonimo");
+            TelaDenuncia tela = new TelaDenuncia(usuario);
+            tela.setVisible(true);
+            this.dispose();
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+    }//GEN-LAST:event_jLabelRealizarDenunciaAnonimaMouseClicked
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -312,137 +293,11 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordFieldSenha;
     // End of variables declaration//GEN-END:variables
-class RoundedPanel extends JPanel{
-        private Color backgroundColor;
-        private int cornerRadius = 15;
-        public RoundedPanel(LayoutManager layout, int radius) {
-            super(layout);
-            cornerRadius = radius;
-        }
-        public RoundedPanel(LayoutManager layout, int radius, Color bgColor) {
-            super(layout);
-            cornerRadius = radius;
-            backgroundColor = bgColor;
-        }
-        public RoundedPanel(int radius) {
-            super();
-            cornerRadius = radius;
-            
-        }
-        public RoundedPanel(int radius, Color bgColor) {
-            super();
-            cornerRadius = radius;
-            backgroundColor = bgColor;
-        }
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Dimension arcs = new Dimension(cornerRadius, cornerRadius);
-            int width = getWidth();
-            int height = getHeight();
-            Graphics2D graphics = (Graphics2D) g;
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            //Draws the rounded panel with borders.
-            if (backgroundColor != null) {
-                graphics.setColor(backgroundColor);
-            } else {
-                graphics.setColor(getBackground());
-            }
-            graphics.fillRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height); //paint background
-            graphics.setColor(getForeground());
-//            graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height); //paint border
-//             
-        }
-    }
-
-public class RoundJTextField extends JTextField {
-    private Shape shape;
-    public RoundJTextField(int size) {
-        super(size);
-        setOpaque(true); // As suggested by @AVD in comment.
-    }
-    protected void paintComponent(Graphics g) {
-         g.setColor(getBackground());
-         g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
-         super.paintComponent(g);
-    }
-    protected void paintBorder(Graphics g) {
-         g.setColor(getForeground());
-         g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
-    }
-    public boolean contains(int x, int y) {
-         if (shape == null || !shape.getBounds().equals(getBounds())) {
-             shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 15, 15);
-         }
-         return shape.contains(x, y);
-    }
-}
-
-public class RoundJFormattedTextField extends JFormattedTextField {
-    private Shape shape;
-
-    public RoundJFormattedTextField(Object value, int size) {
-        super(value);
-        setOpaque(true);
-        setBorder(BorderFactory.createEmptyBorder()); // Remove the default border
-        setHorizontalAlignment(JTextField.LEFT); // Center text
-
-        // Customize the formatter as needed (e.g., for numbers, dates, etc.)
-        // DefaultFormatter formatter = new DefaultFormatter();
-        // formatter.setOverwriteMode(false);
-        // setFormatter(formatter);
-    }
-
-    @Override
-    public void setBounds(int x, int y, int width, int height) {
-        super.setBounds(x, y, width, height);
-        shape = new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        g.setColor(getBackground());
-        g.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
-        super.paintComponent(g);
-    }
-
-    @Override
-    protected void paintBorder(Graphics g) {
-        g.setColor(getForeground());
-        g.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
-    }
-
-    @Override
-    public boolean contains(int x, int y) {
-        if (shape == null || !shape.getBounds().equals(getBounds())) {
-            shape = new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
-        }
-        return shape.contains(x, y);
-    }
-}
 
 
-private static class RoundedBorder implements Border {
-    private int radius;
-    RoundedBorder(int radius) {
-        this.radius = radius;
-    }
-
-    public Insets getBorderInsets(Component c) {
-        return new Insets(this.radius+1, this.radius+1, this.radius+2, this.radius);
-    }
-    public boolean isBorderOpaque() {
-        return true;
-    }
-    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-        g.drawRoundRect(x, y, width-1, height-1, radius, radius);
-    }
-}
-
-public void AbrirTelaNovaDenuncia(Usuario usuario) {
-    TelaNovaDenuncia tela = new TelaNovaDenuncia(usuario);
+public void AbrirTelaDenuncia(Usuario usuario) {
+    TelaDenuncia tela = new TelaDenuncia(usuario);
     tela.setVisible(true);
-    this.dispose();
 }
 
 //public void AbrirTelaUsuario(Usuario usuario, String senha) {
