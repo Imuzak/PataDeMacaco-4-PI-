@@ -24,6 +24,8 @@ public class TelaListagem extends javax.swing.JFrame {
         
         jLabelTituloCpfUsuario.setText("CPF : " + "314.836.374-23");
         jLabelTituloNomeUsuario.setText("Nome : " + "kjdashfkajshfuyeiugaskjgf");
+        jLabelTituloTelefoneUsuario.setText("Telefone : " + "(62)98234-1238");
+        jLabelTituloEmailUsuario.setText("Email : " + "email@email");
         
         jTableListagem.getTableHeader().setFont(new Font("Calibri", Font.BOLD, 18));
         jTableListagem.getTableHeader().setOpaque(true);
@@ -48,6 +50,8 @@ public class TelaListagem extends javax.swing.JFrame {
         
         jLabelTituloCpfUsuario.setText("CPF : " + usuario.getCpf());
         jLabelTituloNomeUsuario.setText("Nome : " + usuario.getNome());
+        jLabelTituloTelefoneUsuario.setText("Telefone : " + usuario.getTelefone());
+        jLabelTituloEmailUsuario.setText("Email : " + usuario.getEmail());
         
         jTableListagem.getTableHeader().setFont(new Font("Calibri", Font.BOLD, 18));
         jTableListagem.getTableHeader().setOpaque(true);
@@ -86,6 +90,8 @@ public class TelaListagem extends javax.swing.JFrame {
         jButtonNovaDenuncia = new javax.swing.JButton();
         jLabelTituloCpfUsuario = new javax.swing.JLabel();
         jLabelTituloNomeUsuario = new javax.swing.JLabel();
+        jLabelTituloTelefoneUsuario = new javax.swing.JLabel();
+        jLabelTituloEmailUsuario = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Denúncias de Crimes Ambientais");
@@ -264,6 +270,16 @@ public class TelaListagem extends javax.swing.JFrame {
         jLabelTituloNomeUsuario.setText("Nome Usuário");
         jLabelTituloNomeUsuario.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
+        jLabelTituloTelefoneUsuario.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jLabelTituloTelefoneUsuario.setForeground(new java.awt.Color(153, 153, 153));
+        jLabelTituloTelefoneUsuario.setText("Telefone Usuário");
+        jLabelTituloTelefoneUsuario.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        jLabelTituloEmailUsuario.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jLabelTituloEmailUsuario.setForeground(new java.awt.Color(153, 153, 153));
+        jLabelTituloEmailUsuario.setText("Email Usuário");
+        jLabelTituloEmailUsuario.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -280,7 +296,11 @@ public class TelaListagem extends javax.swing.JFrame {
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabelTituloCpfUsuario)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelTituloNomeUsuario)))
+                                .addComponent(jLabelTituloNomeUsuario)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelTituloTelefoneUsuario)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelTituloEmailUsuario)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -295,7 +315,10 @@ public class TelaListagem extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelTituloCpfUsuario)
-                    .addComponent(jLabelTituloNomeUsuario))
+                    .addComponent(jLabelTituloNomeUsuario)
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelTituloTelefoneUsuario)
+                        .addComponent(jLabelTituloEmailUsuario)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -413,7 +436,9 @@ public class TelaListagem extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JLabel jLabelTitulo1;
     private javax.swing.JLabel jLabelTituloCpfUsuario;
+    private javax.swing.JLabel jLabelTituloEmailUsuario;
     private javax.swing.JLabel jLabelTituloNomeUsuario;
+    private javax.swing.JLabel jLabelTituloTelefoneUsuario;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
