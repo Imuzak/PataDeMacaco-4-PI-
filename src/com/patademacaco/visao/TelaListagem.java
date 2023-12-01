@@ -1,18 +1,27 @@
 package com.patademacaco.visao;
 
+import com.patademacaco.controle.DenunciaControle;
+import com.patademacaco.controle.IDenunciaControle;
+import com.patademacaco.ferramentas.ImageRender;
 import com.patademacaco.ferramentas.RoundedPanel;
+import com.patademacaco.modelo.Denuncia;
 import com.patademacaco.modelo.Usuario;
 import java.awt.Color;
 import java.awt.Font;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 //@author Mariana
  
 public class TelaListagem extends javax.swing.JFrame {
     
-    //IDenunciaControle denunciaControle = null;
+    IDenunciaControle denunciaControle = null;
     Usuario usuario = null;
 
     public TelaListagem() {
@@ -35,12 +44,12 @@ public class TelaListagem extends javax.swing.JFrame {
         jTableListagem.setRowHeight(60);
         jTableListagem.setBackground(new Color(242,242,242));
         
-//        try {
-//            denunciaControle = new DenunciaControle();
-//            if (denunciaControle != null) imprimirDadosNaGrid(denunciaControle.listagem());
-//        } catch (Exception erro) {
-//            JOptionPane.showMessageDialog(this, erro.getMessage());
-//        }
+        try {
+            denunciaControle = new DenunciaControle();
+            if (denunciaControle != null) imprimirDadosNaGrid(denunciaControle.Listar());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
     }
     
     public TelaListagem(Usuario usuario) {
@@ -61,12 +70,12 @@ public class TelaListagem extends javax.swing.JFrame {
         jTableListagem.setRowHeight(60);
         jTableListagem.setBackground(new Color(242,242,242));
         
-//        try {
-//            denunciaControle = new DenunciaControle();
-//            if (denunciaControle != null) imprimirDadosNaGrid(denunciaControle.listagem());
-//        } catch (Exception erro) {
-//            JOptionPane.showMessageDialog(this, erro.getMessage());
-//        }
+        try {
+            denunciaControle = new DenunciaControle();
+            if (denunciaControle != null) imprimirDadosNaGrid(denunciaControle.Listar());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -313,12 +322,13 @@ public class TelaListagem extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparatorTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelTituloCpfUsuario)
-                    .addComponent(jLabelTituloNomeUsuario)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabelTituloTelefoneUsuario)
-                        .addComponent(jLabelTituloEmailUsuario)))
+                        .addComponent(jLabelTituloEmailUsuario))
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelTituloCpfUsuario)
+                        .addComponent(jLabelTituloNomeUsuario)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -338,46 +348,45 @@ public class TelaListagem extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // imprimir na table
-//    private void imprimirDadosNaGrid(ArrayList<Denuncia> listaDenuncias) {
-//        try {
-//            DefaultTableModel model = (DefaultTableModel) jTableListagem.getModel();
-//            model.setNumRows(0);
-//            Iterator<Denuncia> lista = listaDenuncias.iterator();
-//            while (lista.hasNext()) {
-//                String[] saida = new String[7];
-//                denuncia aux = lista.next();
-//                saida[0] = aux.getProtocolo();
-//                saida[1] = aux.getStatus().toString();
-//                saida[2] = aux.getUsuario().getCpf();
-//                saida[3] = aux.getUsuario().getNome();
-//                saida[4] = aux.getEndereco().getMunicipio().getNome() + " - " + aux.getEndereco().getMunicipio().getUf();
-//                saida[5] = aux.getCategoria().getNome();//?
-//                saida[6] = aux.getCategoria().getSubCategoria().getDescricao();//?
-//                Object[] dados = {saida[0], saida[1], saida[2], saida[3], saida[4], saida[5], saida[6]};
-//                model.addRow(dados);
-//            }
-//            jTableListagem.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
-//        } catch (Exception erro) {
-//            JOptionPane.showMessageDialog(this, erro.getMessage());
-//        }
-//    }
+//     imprimir na table
+    public void imprimirDadosNaGrid(ArrayList<Denuncia> listaDenuncias) {
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTableListagem.getModel();
+            model.setNumRows(0);
+            Iterator<Denuncia> lista = listaDenuncias.iterator();
+            SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
+            while (lista.hasNext()) {
+                String[] saida = new String[7];
+                Denuncia aux = lista.next();
+                saida[0] = aux.getProtocolo();
+                saida[1] = aux.getStatus().toString();
+                saida[2] = aux.getDenunciante().getCpf();
+                saida[3] = aux.getDenunciante().getNome();
+                saida[4] = aux.getEndereco().getMunicipio().getNome() + " - " + aux.getEndereco().getMunicipio().getUf();
+                saida[5] = aux.getSubCategoria().getCategoria().getTipoAmbiental();//?
+                String data = formata.format(aux.getData());
+                saida[6] = data;//?
+                Object[] dados = {saida[0], saida[1], saida[2], saida[3], saida[4], saida[5], saida[6]};
+                model.addRow(dados);
+            }
+            jTableListagem.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+    }
     
     private void jLabelMenuMeuUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenuMeuUsuarioMouseClicked
-        //TelaCadastro tela = new TelaCadastro(usuario);
-        TelaCadastro tela = new TelaCadastro();
+        TelaCadastro tela = new TelaCadastro(usuario);
         tela.setVisible(true);
     }//GEN-LAST:event_jLabelMenuMeuUsuarioMouseClicked
 
     private void jLabelMenuDenunciasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenuDenunciasMouseClicked
-//        TelaListagem tela = new TelaListagem(usuario);
-//        TelaListagem tela = new TelaListagem();
-//        tela.setVisible(true);
+        TelaListagem tela = new TelaListagem(usuario);
+        tela.setVisible(true);
     }//GEN-LAST:event_jLabelMenuDenunciasMouseClicked
 
     private void jLabelMenuNovaDenunciaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenuNovaDenunciaMouseClicked
-        //TelaDenuncia tela = new TelaDenuncia(usuario);
-        TelaDenuncia tela = new TelaDenuncia();
+        TelaDenuncia tela = new TelaDenuncia(usuario);
         tela.setVisible(true);
     }//GEN-LAST:event_jLabelMenuNovaDenunciaMouseClicked
 
@@ -388,7 +397,8 @@ public class TelaListagem extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldBuscarProtocoloKeyPressed
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        System.out.println(jTextFieldBuscarProtocolo.getText());
+        TelaDeBusca telaBusca = new TelaDeBusca(usuario);
+        telaBusca.setVisible(true);
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonNovaDenunciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaDenunciaActionPerformed

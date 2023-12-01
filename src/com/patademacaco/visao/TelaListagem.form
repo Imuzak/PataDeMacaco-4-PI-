@@ -79,12 +79,14 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jSeparatorTitulo" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelTituloCpfUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelTituloNomeUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                           <Component id="jLabelTituloTelefoneUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelTituloEmailUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabelTituloCpfUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelTituloNomeUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>

@@ -2,9 +2,30 @@ package com.patademacaco.visao;
 
 // @author Mariana
 
+import com.patademacaco.ferramentas.CategoriaComboBoxRenderer;
+import com.patademacaco.modelo.Categoria;
+import com.patademacaco.modelo.Denuncia;
+import com.patademacaco.modelo.Municipio;
+import com.patademacaco.modelo.Usuario;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+
+
 public class TelaDeBusca extends javax.swing.JFrame {
 
     public TelaDeBusca() {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        
+        boxCategoria();
+        jTextFieldBuscarProtocolo.setEditable(false);
+        jComboBoxMunicipio.setEnabled(false);
+        jComboBoxCategoria.setEnabled(false);
+        jFormattedTextFieldDataOcorrencia.setEnabled(false);
+        jFormattedTextFieldDataCadastro.setEnabled(false);
+    }
+    
+    public TelaDeBusca(Usuario usuario) {
         initComponents();
         this.setLocationRelativeTo(null);
 
@@ -39,6 +60,7 @@ public class TelaDeBusca extends javax.swing.JFrame {
         setUndecorated(true);
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(null));
 
         jLabelTitulo2.setFont(new java.awt.Font("Calibri", 0, 30)); // NOI18N
         jLabelTitulo2.setText("Buscar por");
@@ -55,7 +77,6 @@ public class TelaDeBusca extends javax.swing.JFrame {
         });
 
         jComboBoxCategoria.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
-        jComboBoxCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FAUNA", "FLORA", "POLUIÇÃO", "ODENAMENTO URBANO E PATRIMÔNIO CULTURAL", "ADMINISTRAÇÃO AMBIENTAL" }));
 
         jCheckBoxProtocolo.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jCheckBoxProtocolo.setText("Protocolo");
@@ -153,7 +174,7 @@ public class TelaDeBusca extends javax.swing.JFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelTitulo2)
                             .addComponent(jCheckBoxDataDoCadastro))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                         .addComponent(jFormattedTextFieldDataCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(277, 277, 277))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
@@ -189,7 +210,7 @@ public class TelaDeBusca extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxDataDoCadastro)
                     .addComponent(jFormattedTextFieldDataCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBuscar)
                     .addComponent(jButtonCancelar))
@@ -209,9 +230,41 @@ public class TelaDeBusca extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    public void boxCategoria(ArrayList<Categoria> lista) throws Exception {
+        DefaultComboBoxModel<Categoria> defaultComboBox = new DefaultComboBoxModel<>();
+        Categoria objeto = new Categoria();
+        objeto.setTipoAmbiental("-SELECIONE-");
+        defaultComboBox.addElement(objeto);
+        for (Categoria objetoCategoria : lista) {
+            defaultComboBox.addElement(objetoCategoria);
+        }
+        jComboBoxCategoria.setRenderer(new CategoriaComboBoxRenderer());
+        jComboBoxCategoria.setModel(defaultComboBox);
+    }
+    
+    public void boxMunicipio(ArrayList<Municipio> lista) throws Exception {
+        DefaultComboBoxModel<Municipio> defaultComboBox = new DefaultComboBoxModel<>();
+        Municipio objeto = new Municipio();
+        objeto.setNome("-SELECIONE-");
+        defaultComboBox.addElement(objeto);
+        for (Municipio objetoMunicipio : lista) {
+            defaultComboBox.addElement(objetoMunicipio);
+        }
+        jComboBoxMunicipio.setRenderer(new CategoriaComboBoxRenderer());
+        jComboBoxMunicipio.setModel(defaultComboBox);
+    }
+    
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        // TODO add your handling code here:
+        Denuncia denuncia = new Denuncia();
+        Categoria categoria = new Categoria();
+        Municipio municipio = new Municipio();
+        if(jCheckBoxProtocolo.isSelected()) denuncia.setProtocolo(jTextFieldBuscarProtocolo.getText());
+        if(jCheckBoxCategoria.isSelected()) denuncia.setProtocolo(jTextFieldBuscarProtocolo.getText());
+        if(jCheckBoxMunicipio.isSelected()) municipio = (Municipio) jComboBoxMunicipio.getSelectedItem();
+        if(jCheckBoxDataDaOcorrencia.isSelected()) denuncia.setData(jTextFieldBuscarProtocolo.getText());
+        if(jCheckBoxDataDoCadastro.isSelected()) denuncia.setDataDenuncia(dataDenuncia);
+        
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -317,8 +370,8 @@ public class TelaDeBusca extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBoxDataDoCadastro;
     private javax.swing.JCheckBox jCheckBoxMunicipio;
     private javax.swing.JCheckBox jCheckBoxProtocolo;
-    private javax.swing.JComboBox<String> jComboBoxCategoria;
-    private javax.swing.JComboBox<String> jComboBoxMunicipio;
+    private javax.swing.JComboBox<Categoria> jComboBoxCategoria;
+    private javax.swing.JComboBox<Municipio> jComboBoxMunicipio;
     private javax.swing.JFormattedTextField jFormattedTextFieldDataCadastro;
     private javax.swing.JFormattedTextField jFormattedTextFieldDataOcorrencia;
     private javax.swing.JLabel jLabelTitulo2;

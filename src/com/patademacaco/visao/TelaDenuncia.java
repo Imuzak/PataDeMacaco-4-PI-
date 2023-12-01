@@ -80,7 +80,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.usuario = usuario;
         //this.telaListagem = telaListagem;
-        if(usuario.getTipo() == TipoUsuario.DENUNCIANTE){
+        if(usuario.getTipo() == TipoUsuario.DENUNCIANTE && !usuario.getNome().equals("Anonimo")){
             jButtonEditar.setVisible(false);
             jTextFieldNome.setText(usuario.getNome());
             jTextFieldEmail.setText(usuario.getEmail());
@@ -396,7 +396,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelImagem1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelImagem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/patademacaco/imagens/icones/add.png"))); // NOI18N
         jLabelImagem1.setText("Adicionar Imagem");
-        jLabelImagem1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabelImagem1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         jLabelImagem1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelImagem1MouseClicked(evt);
@@ -407,7 +407,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelImagem2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelImagem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/patademacaco/imagens/icones/add.png"))); // NOI18N
         jLabelImagem2.setText("Adicionar Imagem");
-        jLabelImagem2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabelImagem2.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         jLabelImagem2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelImagem2MouseClicked(evt);
@@ -418,7 +418,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelImagem3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelImagem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/patademacaco/imagens/icones/add.png"))); // NOI18N
         jLabelImagem3.setText("Adicionar Imagem");
-        jLabelImagem3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabelImagem3.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         jLabelImagem3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelImagem3MouseClicked(evt);
@@ -429,7 +429,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelImagem4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelImagem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/patademacaco/imagens/icones/add.png"))); // NOI18N
         jLabelImagem4.setText("Adicionar Imagem");
-        jLabelImagem4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabelImagem4.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         jLabelImagem4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelImagem4MouseClicked(evt);
