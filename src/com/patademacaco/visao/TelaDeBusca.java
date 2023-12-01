@@ -1,14 +1,18 @@
 package com.patademacaco.visao;
 
-import java.awt.event.KeyEvent;
-
 // @author Mariana
- 
+
 public class TelaDeBusca extends javax.swing.JFrame {
 
     public TelaDeBusca() {
         initComponents();
         this.setLocationRelativeTo(null);
+
+        jTextFieldBuscarProtocolo.setEditable(false);
+        jComboBoxMunicipio.setEnabled(false);
+        jComboBoxCategoria.setEnabled(false);
+        jFormattedTextFieldDataOcorrencia.setEnabled(false);
+        jFormattedTextFieldDataCadastro.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -44,6 +48,11 @@ public class TelaDeBusca extends javax.swing.JFrame {
 
         jCheckBoxCategoria.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jCheckBoxCategoria.setText("Categoria");
+        jCheckBoxCategoria.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBoxCategoriaStateChanged(evt);
+            }
+        });
 
         jComboBoxCategoria.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jComboBoxCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FAUNA", "FLORA", "POLUIÇÃO", "ODENAMENTO URBANO E PATRIMÔNIO CULTURAL", "ADMINISTRAÇÃO AMBIENTAL" }));
@@ -55,29 +64,34 @@ public class TelaDeBusca extends javax.swing.JFrame {
                 jCheckBoxProtocoloStateChanged(evt);
             }
         });
-        jCheckBoxProtocolo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxProtocoloActionPerformed(evt);
-            }
-        });
 
         jTextFieldBuscarProtocolo.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
-        jTextFieldBuscarProtocolo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldBuscarProtocoloKeyPressed(evt);
-            }
-        });
 
         jCheckBoxMunicipio.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jCheckBoxMunicipio.setText("Município");
+        jCheckBoxMunicipio.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBoxMunicipioStateChanged(evt);
+            }
+        });
 
         jComboBoxMunicipio.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
 
         jCheckBoxDataDaOcorrencia.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jCheckBoxDataDaOcorrencia.setText("Data da Ocorrência");
+        jCheckBoxDataDaOcorrencia.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBoxDataDaOcorrenciaStateChanged(evt);
+            }
+        });
 
         jCheckBoxDataDoCadastro.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jCheckBoxDataDoCadastro.setText("Data do Cadastro da Denúncia");
+        jCheckBoxDataDoCadastro.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBoxDataDoCadastroStateChanged(evt);
+            }
+        });
 
         try {
             jFormattedTextFieldDataOcorrencia.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -196,16 +210,6 @@ public class TelaDeBusca extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBoxProtocoloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxProtocoloActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBoxProtocoloActionPerformed
-
-    private void jTextFieldBuscarProtocoloKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarProtocoloKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER && (jTextFieldBuscarProtocolo.getText() != null || jTextFieldBuscarProtocolo.getText() != "")) {
-            System.out.println(jTextFieldBuscarProtocolo.getText());
-        }
-    }//GEN-LAST:event_jTextFieldBuscarProtocoloKeyPressed
-
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonBuscarActionPerformed
@@ -216,11 +220,62 @@ public class TelaDeBusca extends javax.swing.JFrame {
 
     private void jCheckBoxProtocoloStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxProtocoloStateChanged
         if (jCheckBoxProtocolo.isSelected()) {
+            jTextFieldBuscarProtocolo.setEditable(true);
+            
             jCheckBoxCategoria.setEnabled(false);
+            jCheckBoxMunicipio.setEnabled(false);
+            jCheckBoxCategoria.setEnabled(false);
+            jCheckBoxDataDaOcorrencia.setEnabled(false);
+            jCheckBoxDataDoCadastro.setEnabled(false);
+
+            jCheckBoxMunicipio.setSelected(false);
+            jCheckBoxCategoria.setSelected(false);
+            jCheckBoxDataDaOcorrencia.setSelected(false);
+            jCheckBoxDataDoCadastro.setSelected(false);
+    
         } else {
-             jCheckBoxCategoria.setEnabled(true);
+            jTextFieldBuscarProtocolo.setEditable(false);
+            
+            jCheckBoxCategoria.setEnabled(true);
+            jCheckBoxMunicipio.setEnabled(true);
+            jCheckBoxCategoria.setEnabled(true);
+            jCheckBoxDataDaOcorrencia.setEnabled(true);
+            jCheckBoxDataDoCadastro.setEnabled(true);
+  
         }
     }//GEN-LAST:event_jCheckBoxProtocoloStateChanged
+
+    private void jCheckBoxMunicipioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxMunicipioStateChanged
+        if (jCheckBoxMunicipio.isSelected()) {
+            jComboBoxMunicipio.setEnabled(true);
+        } else {
+            jComboBoxMunicipio.setEnabled(false);
+        }
+    }//GEN-LAST:event_jCheckBoxMunicipioStateChanged
+
+    private void jCheckBoxCategoriaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxCategoriaStateChanged
+        if (jCheckBoxCategoria.isSelected()) {
+            jComboBoxCategoria.setEnabled(true);
+        } else {
+            jComboBoxCategoria.setEnabled(false);
+        }
+    }//GEN-LAST:event_jCheckBoxCategoriaStateChanged
+
+    private void jCheckBoxDataDaOcorrenciaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxDataDaOcorrenciaStateChanged
+        if (jCheckBoxDataDaOcorrencia.isSelected()) {
+            jFormattedTextFieldDataOcorrencia.setEnabled(true);
+        } else {
+            jFormattedTextFieldDataOcorrencia.setEnabled(false);
+        }
+    }//GEN-LAST:event_jCheckBoxDataDaOcorrenciaStateChanged
+
+    private void jCheckBoxDataDoCadastroStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxDataDoCadastroStateChanged
+        if (jCheckBoxDataDoCadastro.isSelected()) {
+            jFormattedTextFieldDataCadastro.setEnabled(true);
+        } else {
+            jFormattedTextFieldDataCadastro.setEnabled(false);
+        }
+    }//GEN-LAST:event_jCheckBoxDataDoCadastroStateChanged
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
