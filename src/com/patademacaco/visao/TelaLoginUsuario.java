@@ -6,8 +6,6 @@ import com.patademacaco.enumeracao.TipoUsuario;
 import com.patademacaco.modelo.Usuario;
 import java.awt.Color;
 import com.patademacaco.ferramentas.RoundedPanel;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 

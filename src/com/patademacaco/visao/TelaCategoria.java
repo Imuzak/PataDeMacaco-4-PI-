@@ -10,25 +10,20 @@ public class TelaCategoria extends javax.swing.JFrame {
 
     public TelaCategoria() {
         initComponents();
-        this.setExtendedState(MAXIMIZED_BOTH);
+        //this.setExtendedState(MAXIMIZED_BOTH);
+        this.setLocationRelativeTo(null);
         
-        jScrollPanePrincipal.getVerticalScrollBar().setUI(new CustomScrollBarUI());
-        jScrollPanePrincipal.setDoubleBuffered(true);
-        jScrollPanePrincipal.getVerticalScrollBar().setUnitIncrement(10);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPanePrincipal = new javax.swing.JScrollPane();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
         jLabelTitulo = new javax.swing.JLabel();
         jSeparatorTitulo = new javax.swing.JSeparator();
         jPanel4 = new RoundedPanel(20, new Color(255, 255, 255));
-        jScrollPaneTabela = new javax.swing.JScrollPane();
-        jTableListagem = new javax.swing.JTable();
         jLabelCategoria = new javax.swing.JLabel();
         jTextFieldSubCategoria = new javax.swing.JTextField();
         jButtonAdicionar = new javax.swing.JButton();
@@ -37,22 +32,23 @@ public class TelaCategoria extends javax.swing.JFrame {
         jLabelCategoria2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jButtonEditar = new javax.swing.JButton();
+        jButtonFechar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
-        jPanel5.setBackground(new java.awt.Color(218, 215, 205));
+        jPanel11.setBackground(new java.awt.Color(218, 215, 205));
 
-        jPanel1.setBackground(new java.awt.Color(88, 129, 87));
+        jPanel10.setBackground(new java.awt.Color(88, 129, 87));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 48, Short.MAX_VALUE)
         );
 
@@ -64,30 +60,6 @@ public class TelaCategoria extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(218, 215, 205));
 
-        jTableListagem.setBackground(new java.awt.Color(221, 221, 221));
-        jTableListagem.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        jTableListagem.setForeground(new java.awt.Color(0, 51, 51));
-        jTableListagem.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Protocolo", "Status", "CPF", "Nome", "Municipio", "Categoria", "SubCategoria"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPaneTabela.setViewportView(jTableListagem);
-
         jLabelCategoria.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
         jLabelCategoria.setText("Categoria :");
         jLabelCategoria.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
@@ -97,18 +69,13 @@ public class TelaCategoria extends javax.swing.JFrame {
         jButtonAdicionar.setBackground(new java.awt.Color(163, 177, 138));
         jButtonAdicionar.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
         jButtonAdicionar.setText("Adicionar");
-        jButtonAdicionar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAdicionarActionPerformed(evt);
-            }
-        });
 
         jLabelCategoria1.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
         jLabelCategoria1.setText("SubCategoria :");
         jLabelCategoria1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         jComboBoxMunicipio.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        jComboBoxMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FAUNA ", "FLORA", "POLUIÇÃO", "ODENAMENTO URBANO E PATRIMÔNIO CULTURAL", "ADMINISTRAÇÃO AMBIENTAL" }));
+        jComboBoxMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FAUNA", "FLORA", "POLUIÇÃO", "ODENAMENTO URBANO E PATRIMÔNIO CULTURAL", "ADMINISTRAÇÃO AMBIENTAL" }));
         jComboBoxMunicipio.setToolTipText("");
 
         jLabelCategoria2.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
@@ -120,12 +87,12 @@ public class TelaCategoria extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jButtonEditar.setBackground(new java.awt.Color(163, 177, 138));
-        jButtonEditar.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
-        jButtonEditar.setText("Editar");
-        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+        jButtonFechar.setBackground(new java.awt.Color(163, 177, 138));
+        jButtonFechar.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jButtonFechar.setText("Fechar");
+        jButtonFechar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditarActionPerformed(evt);
+                jButtonFecharActionPerformed(evt);
             }
         });
 
@@ -136,7 +103,6 @@ public class TelaCategoria extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPaneTabela)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelCategoria1)
@@ -147,11 +113,10 @@ public class TelaCategoria extends javax.swing.JFrame {
                             .addComponent(jComboBoxMunicipio, 0, 521, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)
                             .addComponent(jTextFieldSubCategoria))
-                        .addGap(0, 202, Short.MAX_VALUE))
+                        .addGap(0, 204, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonFechar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonAdicionar)))
                 .addContainerGap())
         );
@@ -173,63 +138,60 @@ public class TelaCategoria extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAdicionar)
-                    .addComponent(jButtonEditar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneTabela, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-                .addContainerGap())
+                    .addComponent(jButtonFechar))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparatorTitulo)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGroup(jPanel11Layout.createSequentialGroup()
                         .addComponent(jLabelTitulo)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabelTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparatorTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-
-        jScrollPanePrincipal.setViewportView(jPanel5);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPanePrincipal)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 2, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPanePrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 891, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonAdicionarActionPerformed
-
-    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonEditarActionPerformed
+    private void jButtonFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFecharActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButtonFecharActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -265,20 +227,25 @@ public class TelaCategoria extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdicionar;
-    private javax.swing.JButton jButtonEditar;
+    private javax.swing.JButton jButtonFechar;
     private javax.swing.JComboBox<String> jComboBoxMunicipio;
     private javax.swing.JLabel jLabelCategoria;
     private javax.swing.JLabel jLabelCategoria1;
     private javax.swing.JLabel jLabelCategoria2;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPanePrincipal;
-    private javax.swing.JScrollPane jScrollPaneTabela;
     private javax.swing.JSeparator jSeparatorTitulo;
-    private javax.swing.JTable jTableListagem;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextFieldSubCategoria;
     // End of variables declaration//GEN-END:variables

@@ -1,7 +1,7 @@
 package com.patademacaco.persistencia;
 
 import com.patademacaco.enumeracao.Status;
-import com.patademacaco.enumeracao.Tipo;
+import com.patademacaco.enumeracao.TipoUsuario;
 import com.patademacaco.ferramentas.ConexaoBD;
 import com.patademacaco.modelo.Categoria;
 import com.patademacaco.modelo.Denuncia;
@@ -148,7 +148,7 @@ public class DenunciaDao implements IDenunciaDao{
             denunciante.setNome(rs.getString("nome"));
             denunciante.setEmail(rs.getString("email"));            
             denunciante.setTelefone(rs.getString("telefone"));
-            denunciante.setTipo(Tipo.valueOf(rs.getString("tipo")));
+            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
             denuncia.setDenunciante(denunciante);
             
             Usuario analista = new Usuario();
@@ -156,7 +156,7 @@ public class DenunciaDao implements IDenunciaDao{
             analista.setNome(rs.getString("nome"));
             analista.setEmail(rs.getString("email"));            
             analista.setTelefone(rs.getString("telefone"));
-            analista.setTipo(Tipo.valueOf(rs.getString("tipo")));
+            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
             denuncia.setAnalista(analista);
 
             Endereco endereco = new Endereco();
@@ -254,7 +254,7 @@ public class DenunciaDao implements IDenunciaDao{
             denunciante.setNome(rs.getString("nome"));
             denunciante.setEmail(rs.getString("email"));            
             denunciante.setTelefone(rs.getString("telefone"));
-            denunciante.setTipo(Tipo.valueOf(rs.getString("tipo")));
+            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
             denuncia.setDenunciante(denunciante);
             
             Usuario analista = new Usuario();
@@ -262,7 +262,7 @@ public class DenunciaDao implements IDenunciaDao{
             analista.setNome(rs.getString("nome"));
             analista.setEmail(rs.getString("email"));            
             analista.setTelefone(rs.getString("telefone"));
-            analista.setTipo(Tipo.valueOf(rs.getString("tipo")));
+            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
             denuncia.setAnalista(analista);
 
             Endereco endereco = new Endereco();
