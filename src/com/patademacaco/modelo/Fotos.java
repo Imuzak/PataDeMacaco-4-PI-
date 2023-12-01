@@ -1,21 +1,17 @@
 package com.patademacaco.modelo;
 
+import java.util.ArrayList;
+
 public class Fotos {
     private int id = 0;
-    private String url1 = "";
-    private String url2 = "";
-    private String url3 = "";
-    private String url4 = "";
+    private ArrayList<String> urls= null;
     
     public Fotos(){
         
     }
     
-    public Fotos(String url1, String url2, String url3, String url4){
-        this.url1 = url1;
-        this.url2 = url2;
-        this.url3 = url3;
-        this.url4 = url4;
+    public Fotos(ArrayList<String> urls){
+        this.urls = urls;
     }
     
     public int getId() {
@@ -25,38 +21,16 @@ public class Fotos {
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getUrl1() {
-        return url1;
-    }
-
-    public void setUrl1(String url1) {
-        this.url1 = url1;
-    }
-
-    public String getUrl2() {
-        return url2;
-    }
-
-    public void setUrl2(String url2) {
-        this.url2 = url2;
-    }
-
-    public String getUrl3() {
-        return url3;
-    }
-
-    public void setUrl3(String url3) {
-        this.url3 = url3;
-    }
-
-    public String getUrl4() {
-        return url4;
-    }
-
-    public void setUrl4(String url4) {
-        this.url4 = url4;
+    
+    public void addUrl(String url){
+        urls.add(url);
     }
     
-    
+    public ArrayList<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrl1(ArrayList<String> urls) {
+        this.urls = urls;
+    }    
 }

@@ -15,13 +15,13 @@ public class CategoriaControle implements ICategoriaControle{
     }
     
     @Override
-    public void Cadastrar(Categoria categoria) throws Exception {
-        categoriaDao.Cadastrar(categoria);
+    public void Cadastrar(SubCategoria objeto) throws Exception {
+        categoriaDao.Cadastrar(objeto);
     }
 
     @Override
-    public void Alterar(Categoria categoria) throws Exception {
-        categoriaDao.Alterar(categoria);
+    public void Alterar(SubCategoria objeto) throws Exception {
+        categoriaDao.Alterar(objeto);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class CategoriaControle implements ICategoriaControle{
     }
 
     @Override
-    public ArrayList<SubCategoria> ListarSubCategorias() throws Exception {
-        return categoriaDao.ListarSubCategorias();
+    public ArrayList<SubCategoria> ListarSubCategorias(int idCategoria) throws Exception {
+        return categoriaDao.ListarSubCategorias(idCategoria);
     }
     
 }

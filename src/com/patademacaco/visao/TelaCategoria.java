@@ -1,18 +1,42 @@
 package com.patademacaco.visao;
 
-import com.patademacaco.ferramentas.CustomScrollBarUI;
+import com.patademacaco.controle.CategoriaControle;
+import com.patademacaco.controle.ICategoriaControle;
+import com.patademacaco.ferramentas.CategoriaComboBoxRenderer;
 import com.patademacaco.ferramentas.RoundedPanel;
+import com.patademacaco.modelo.Categoria;
+import com.patademacaco.modelo.SubCategoria;
 import java.awt.Color;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 //@author Mariana
 
 public class TelaCategoria extends javax.swing.JFrame {
-
+    ICategoriaControle categoriaControle = null;
     public TelaCategoria() {
         initComponents();
-        //this.setExtendedState(MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
-        
+        try{
+            categoriaControle = new CategoriaControle();
+            boxCategoria(categoriaControle.ListarCategorias());
+        }catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+        //this.setExtendedState(MAXIMIZED_BOTH);
+    }
+    
+    public void boxCategoria(ArrayList<Categoria> lista) throws Exception {
+        DefaultComboBoxModel<Categoria> defaultComboBox = new DefaultComboBoxModel<>();
+        Categoria objeto = new Categoria();
+        objeto.setTipoAmbiental("-SELECIONE-");
+        defaultComboBox.addElement(objeto);
+        for (Categoria objetoCategoria : lista) {
+            defaultComboBox.addElement(objetoCategoria);
+        }
+        jComboBoxCategoria.setRenderer(new CategoriaComboBoxRenderer());
+        jComboBoxCategoria.setModel(defaultComboBox);
     }
 
     @SuppressWarnings("unchecked")
@@ -28,10 +52,10 @@ public class TelaCategoria extends javax.swing.JFrame {
         jTextFieldSubCategoria = new javax.swing.JTextField();
         jButtonAdicionar = new javax.swing.JButton();
         jLabelCategoria1 = new javax.swing.JLabel();
-        jComboBoxMunicipio = new javax.swing.JComboBox<>();
+        jComboBoxCategoria = new javax.swing.JComboBox<>();
         jLabelCategoria2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextDescricao = new javax.swing.JTextArea();
         jButtonFechar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,23 +93,27 @@ public class TelaCategoria extends javax.swing.JFrame {
         jButtonAdicionar.setBackground(new java.awt.Color(163, 177, 138));
         jButtonAdicionar.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
         jButtonAdicionar.setText("Adicionar");
+        jButtonAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdicionarActionPerformed(evt);
+            }
+        });
 
         jLabelCategoria1.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
         jLabelCategoria1.setText("SubCategoria :");
         jLabelCategoria1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        jComboBoxMunicipio.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        jComboBoxMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FAUNA", "FLORA", "POLUIÇÃO", "ODENAMENTO URBANO E PATRIMÔNIO CULTURAL", "ADMINISTRAÇÃO AMBIENTAL" }));
-        jComboBoxMunicipio.setToolTipText("");
+        jComboBoxCategoria.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jComboBoxCategoria.setToolTipText("");
 
         jLabelCategoria2.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
         jLabelCategoria2.setText("Descrição :");
         jLabelCategoria2.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jTextDescricao.setColumns(20);
+        jTextDescricao.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jTextDescricao.setRows(5);
+        jScrollPane1.setViewportView(jTextDescricao);
 
         jButtonFechar.setBackground(new java.awt.Color(163, 177, 138));
         jButtonFechar.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
@@ -110,7 +138,7 @@ public class TelaCategoria extends javax.swing.JFrame {
                             .addComponent(jLabelCategoria2))
                         .addGap(51, 51, 51)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBoxMunicipio, 0, 521, Short.MAX_VALUE)
+                            .addComponent(jComboBoxCategoria, 0, 521, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)
                             .addComponent(jTextFieldSubCategoria))
                         .addGap(0, 204, Short.MAX_VALUE))
@@ -126,7 +154,7 @@ public class TelaCategoria extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelCategoria)
-                    .addComponent(jComboBoxMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelCategoria1)
@@ -193,6 +221,19 @@ public class TelaCategoria extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButtonFecharActionPerformed
 
+    private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
+        try{
+            Categoria categoria = (Categoria) jComboBoxCategoria.getSelectedItem();
+            SubCategoria subCategoria = new SubCategoria();
+            subCategoria.setSubTipoResumo(jTextFieldSubCategoria.getText());
+            subCategoria.setSubTipo(jTextDescricao.getText());
+            subCategoria.setCategoria(categoria);
+            categoriaControle.Cadastrar(subCategoria);
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+    }//GEN-LAST:event_jButtonAdicionarActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -228,25 +269,17 @@ public class TelaCategoria extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdicionar;
     private javax.swing.JButton jButtonFechar;
-    private javax.swing.JComboBox<String> jComboBoxMunicipio;
+    private javax.swing.JComboBox<Categoria> jComboBoxCategoria;
     private javax.swing.JLabel jLabelCategoria;
     private javax.swing.JLabel jLabelCategoria1;
     private javax.swing.JLabel jLabelCategoria2;
     private javax.swing.JLabel jLabelTitulo;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparatorTitulo;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextDescricao;
     private javax.swing.JTextField jTextFieldSubCategoria;
     // End of variables declaration//GEN-END:variables
 }

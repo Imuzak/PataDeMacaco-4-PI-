@@ -1,5 +1,14 @@
 package com.patademacaco.visao;
 
+import com.patademacaco.controle.ICategoriaControle;
+import com.patademacaco.controle.CategoriaControle;
+import com.patademacaco.controle.DenunciaControle;
+import com.patademacaco.controle.IDenunciaControle;
+import com.patademacaco.controle.IUsuarioControle;
+import com.patademacaco.controle.UsuarioControle;
+import com.patademacaco.enumeracao.Status;
+import com.patademacaco.enumeracao.TipoUsuario;
+import com.patademacaco.ferramentas.CategoriaComboBoxRenderer;
 import com.patademacaco.ferramentas.CustomScrollBarUI;
 import java.awt.Color;
 import java.io.File;
@@ -11,15 +20,33 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import com.patademacaco.ferramentas.RoundedPanel;
+import com.patademacaco.ferramentas.SubCategoriaComboBoxRenderer;
+import com.patademacaco.modelo.Categoria;
+import com.patademacaco.modelo.Denuncia;
+import com.patademacaco.modelo.Endereco;
+import com.patademacaco.modelo.Fotos;
+import com.patademacaco.modelo.Municipio;
+import com.patademacaco.modelo.SubCategoria;
 import com.patademacaco.modelo.Usuario;
 import java.awt.Font;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.DefaultComboBoxModel;
 
 //@author Mariana
 
 public class TelaDenuncia extends javax.swing.JFrame {
 
     Usuario usuario = null;
+    Denuncia denuncia = null;
+    Fotos fotos = new Fotos();
     int controleImagens = 1;
+    ICategoriaControle categoriaControle = null;
+    IDenunciaControle denunciaControle = null;
+    IUsuarioControle usuarioControle = null;
+    SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
+    //TelaListagem telaListagem = null;
 
     public TelaDenuncia() {
         initComponents();
@@ -31,18 +58,35 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jScrollPanePrincipal.setDoubleBuffered(true);
         jScrollPanePrincipal.getVerticalScrollBar().setUnitIncrement(10);
         
+        jComboBoxSubcategoria.setEditable(false);
         jFormattedTextFieldCpf.setEditable(false);
         jTextFieldNome.setEditable(false);
         jTextFieldEmail.setEditable(false);
         jTextFieldTelefone2.setEditable(false);
- 
+        
+        try{
+            categoriaControle = new CategoriaControle();
+            denunciaControle = new DenunciaControle();
+            usuarioControle = new UsuarioControle();
+            boxCategoria(categoriaControle.ListarCategorias());
+            boxMunicipio(denunciaControle.ListarMunicipio());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
     }
     
     public TelaDenuncia(Usuario usuario) {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         this.usuario = usuario;
-        
+        //this.telaListagem = telaListagem;
+        if(usuario.getTipo() == TipoUsuario.DENUNCIANTE){
+            jButtonEditar.setVisible(false);
+            jTextFieldNome.setText(usuario.getNome());
+            jTextFieldEmail.setText(usuario.getEmail());
+            jTextFieldTelefone2.setText(usuario.getTelefone());
+            jFormattedTextFieldCpf.setText(usuario.getCpf());
+        }
         ImageIcon image = new ImageIcon(".\\src\\com\\patademacaco\\imagens\\icones\\leaf.png");
         this.setIconImage(image.getImage());
 
@@ -50,14 +94,60 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jScrollPanePrincipal.setDoubleBuffered(true);
         jScrollPanePrincipal.getVerticalScrollBar().setUnitIncrement(10);
         
+        jComboBoxSubcategoria.setEditable(false);
         jFormattedTextFieldCpf.setEditable(false);
         jTextFieldNome.setEditable(false);
         jTextFieldEmail.setEditable(false);
         jTextFieldTelefone2.setEditable(false);
- 
+        
+        try{
+            categoriaControle = new CategoriaControle();
+            denunciaControle = new DenunciaControle();
+            usuarioControle = new UsuarioControle();
+            boxCategoria(categoriaControle.ListarCategorias());
+            boxMunicipio(denunciaControle.ListarMunicipio());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
  
     }
-
+    
+    public void boxCategoria(ArrayList<Categoria> lista) throws Exception {
+        DefaultComboBoxModel<Categoria> defaultComboBox = new DefaultComboBoxModel<>();
+        Categoria objeto = new Categoria();
+        objeto.setTipoAmbiental("-SELECIONE-");
+        defaultComboBox.addElement(objeto);
+        for (Categoria objetoCategoria : lista) {
+            defaultComboBox.addElement(objetoCategoria);
+        }
+        jComboBoxCategoria.setRenderer(new CategoriaComboBoxRenderer());
+        jComboBoxCategoria.setModel(defaultComboBox);
+    }
+    
+    public void boxSubCategoria(ArrayList<SubCategoria> lista) throws Exception {
+        DefaultComboBoxModel<SubCategoria> defaultComboBox = new DefaultComboBoxModel<>();
+        SubCategoria objeto = new SubCategoria();
+        objeto.setSubTipoResumo("-SELECIONE-");
+        defaultComboBox.addElement(objeto);
+        for (SubCategoria objetoSubCategoria : lista) {
+            defaultComboBox.addElement(objetoSubCategoria);
+        }
+        jComboBoxSubcategoria.setRenderer(new SubCategoriaComboBoxRenderer());
+        jComboBoxSubcategoria.setModel(defaultComboBox);
+    }
+    
+    public void boxMunicipio(ArrayList<Municipio> lista) throws Exception {
+        DefaultComboBoxModel<Municipio> defaultComboBox = new DefaultComboBoxModel<>();
+        Municipio objeto = new Municipio();
+        objeto.setNome("-SELECIONE-");
+        defaultComboBox.addElement(objeto);
+        for (Municipio objetoMunicipio : lista) {
+            defaultComboBox.addElement(objetoMunicipio);
+        }
+        jComboBoxMunicipio.setRenderer(new CategoriaComboBoxRenderer());
+        jComboBoxMunicipio.setModel(defaultComboBox);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -81,7 +171,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelStatus = new javax.swing.JLabel();
         jLabelStatusAtual = new javax.swing.JLabel();
         jLabelCep = new javax.swing.JLabel();
-        jTextFieldTelefone = new javax.swing.JTextField();
+        jTextFieldCoordenadas = new javax.swing.JTextField();
         jComboBoxMunicipio = new javax.swing.JComboBox<>();
         jLabelPontoDeReferencia = new javax.swing.JLabel();
         jTextFieldPontoDeReferencia = new javax.swing.JTextField();
@@ -108,7 +198,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jFormattedTextFieldCpf = new javax.swing.JFormattedTextField();
         jLabelParecerTecnico = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextParecer = new javax.swing.JTextArea();
         jLabelRelatoDoOcorrido = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextAreaRelatoDoOcorrido = new javax.swing.JTextArea();
@@ -117,6 +207,15 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jFormattedTextFieldCep = new javax.swing.JFormattedTextField();
         jFormattedTextFieldDataOcorrencia = new javax.swing.JFormattedTextField();
         jLabelDataOcorrido = new javax.swing.JLabel();
+        Coordenadas = new javax.swing.JLabel();
+        jTextFieldPossivelAutor = new javax.swing.JTextField();
+        Coordenadas1 = new javax.swing.JLabel();
+        jLabelCategoria = new javax.swing.JLabel();
+        jComboBoxCategoria = new javax.swing.JComboBox<>();
+        jLabelSubCategoria1 = new javax.swing.JLabel();
+        jComboBoxSubcategoria = new javax.swing.JComboBox<>();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextAreaSubCategoria = new javax.swing.JTextArea();
         jLabelcamposObrigatorios = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -171,7 +270,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(1638, Short.MAX_VALUE)
                 .addComponent(jLabelMenuDenuncias1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,14 +354,13 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelCep.setText("CEP *");
         jLabelCep.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        jTextFieldTelefone.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jTextFieldCoordenadas.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
 
         jComboBoxMunicipio.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        jComboBoxMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item fjshhhhhhhhhhhhhhhhhhhhhhhh4" }));
         jComboBoxMunicipio.setToolTipText("");
 
         jLabelPontoDeReferencia.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        jLabelPontoDeReferencia.setText("Ponto de Referência *");
+        jLabelPontoDeReferencia.setText("Ponto de Referência ");
         jLabelPontoDeReferencia.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         jTextFieldPontoDeReferencia.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
@@ -443,10 +541,10 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelParecerTecnico.setText("Parecer Técnico");
         jLabelParecerTecnico.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        jTextParecer.setColumns(20);
+        jTextParecer.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jTextParecer.setRows(5);
+        jScrollPane2.setViewportView(jTextParecer);
 
         jLabelRelatoDoOcorrido.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
         jLabelRelatoDoOcorrido.setText("Relato do Ocorrido *");
@@ -484,21 +582,97 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelDataOcorrido.setText("Data do Ocorrido *");
         jLabelDataOcorrido.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
+        Coordenadas.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        Coordenadas.setText("Coordenadas ");
+        Coordenadas.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        jTextFieldPossivelAutor.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+
+        Coordenadas1.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        Coordenadas1.setText("Possivel Autor do Crime");
+        Coordenadas1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        jLabelCategoria.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jLabelCategoria.setText("Categoria*");
+        jLabelCategoria.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        jComboBoxCategoria.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jComboBoxCategoria.setToolTipText("");
+        jComboBoxCategoria.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxCategoriaItemStateChanged(evt);
+            }
+        });
+
+        jLabelSubCategoria1.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jLabelSubCategoria1.setText("Subcategoria*");
+        jLabelSubCategoria1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        jComboBoxSubcategoria.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jComboBoxSubcategoria.setToolTipText("");
+        jComboBoxSubcategoria.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxSubcategoriaItemStateChanged(evt);
+            }
+        });
+
+        jTextAreaSubCategoria.setColumns(20);
+        jTextAreaSubCategoria.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jTextAreaSubCategoria.setRows(5);
+        jScrollPane4.setViewportView(jTextAreaSubCategoria);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelProtocolo)
-                            .addComponent(jLabelStatus))
-                        .addGap(166, 166, 166)
+                            .addComponent(jLabelStatus)
+                            .addComponent(jLabelBairro)
+                            .addComponent(jLabelEndereco)
+                            .addComponent(jLabelPontoDeReferencia)
+                            .addComponent(jLabelCep)
+                            .addComponent(jLabelDataOcorrido)
+                            .addComponent(Coordenadas)
+                            .addComponent(Coordenadas1))
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelStatusAtual, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelNumeroDoProtocolo, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(47, 47, 47)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelStatusAtual, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelNumeroDoProtocolo, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(42, 42, 42)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jTextFieldBairro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(jFormattedTextFieldDataOcorrencia, javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jFormattedTextFieldCep, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabelMunicipio)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jComboBoxMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(36, 36, 36)
+                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabelSubCategoria1)
+                                            .addComponent(jLabelCategoria)))
+                                    .addComponent(jTextFieldCoordenadas, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldPontoDeReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldPossivelAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBoxSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -507,38 +681,16 @@ public class TelaDenuncia extends javax.swing.JFrame {
                                 .addComponent(jButtonEscolherArquivo))
                             .addComponent(jLabelInfoDenunciante)
                             .addComponent(jLabelParecerTecnico)
-                            .addComponent(jLabelAnonimo))
+                            .addComponent(jLabelAnonimo)
+                            .addComponent(jLabelRelatoDoOcorrido))
                         .addGap(7, 7, 7)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanelImagens, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelMunicipio)
-                            .addComponent(jLabelBairro)
-                            .addComponent(jLabelEndereco)
-                            .addComponent(jLabelPontoDeReferencia)
-                            .addComponent(jLabelRelatoDoOcorrido)
-                            .addComponent(jLabelCep)
-                            .addComponent(jLabelDataOcorrido))
-                        .addGap(63, 63, 63)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextFieldBairro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTextFieldPontoDeReferencia, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel4Layout.createSequentialGroup()
-                                    .addComponent(jTextFieldTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jComboBoxMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jFormattedTextFieldDataOcorrencia, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jFormattedTextFieldCep, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)))))
-                .addContainerGap(634, Short.MAX_VALUE))
+                                .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanelImagens, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(432, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -551,42 +703,56 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelStatus)
                     .addComponent(jLabelStatusAtual))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jFormattedTextFieldDataOcorrencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelDataOcorrido))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelCep)
-                    .addComponent(jFormattedTextFieldCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jFormattedTextFieldCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelMunicipio)
+                    .addComponent(jComboBoxMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelCategoria)
+                    .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelEndereco))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelBairro))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelMunicipio)
-                    .addComponent(jComboBoxMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelPontoDeReferencia)
-                    .addComponent(jTextFieldPontoDeReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelEndereco)
+                    .addComponent(jLabelSubCategoria1)
+                    .addComponent(jComboBoxSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelRelatoDoOcorrido)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelBairro))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelPontoDeReferencia)
+                            .addComponent(jTextFieldPontoDeReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldCoordenadas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Coordenadas))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldPossivelAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Coordenadas1))
+                        .addGap(99, 99, 99)
+                        .addComponent(jLabelRelatoDoOcorrido)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelImagens, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabelImagens)
-                        .addComponent(jButtonEscolherArquivo))
-                    .addComponent(jPanelImagens, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
+                        .addComponent(jButtonEscolherArquivo)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabelInfoDenunciante)
@@ -612,28 +778,28 @@ public class TelaDenuncia extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator1)
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(9, 9, 9)
+                                .addComponent(jLabelcamposObrigatorios)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1969, Short.MAX_VALUE))
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jButtonCancelar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonEditar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonEnviar))))
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addComponent(jButtonCancelar)
+                                        .addGap(1669, 1669, 1669)
+                                        .addComponent(jButtonEditar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButtonEnviar))
+                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jLabelcamposObrigatorios)))
-                .addGap(6, 6, 6))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -648,7 +814,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 .addComponent(jLabelcamposObrigatorios)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(36, 36, 36)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancelar)
                     .addComponent(jButtonEnviar)
@@ -662,7 +828,9 @@ public class TelaDenuncia extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPanePrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1766, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPanePrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 1952, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -672,16 +840,84 @@ public class TelaDenuncia extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void TravarCampos(){
+        jTextAreaRelatoDoOcorrido.setEditable(false);
+        jTextFieldBairro.setEditable(false);
+        jTextFieldCoordenadas.setEditable(false);
+        jTextFieldEndereco.setEditable(false);
+        jTextFieldPontoDeReferencia.setEditable(false);
+        jTextFieldPossivelAutor.setEditable(false);
+        jFormattedTextFieldCep.setEditable(false);
+        jFormattedTextFieldDataOcorrencia.setEditable(false);
+        jComboBoxCategoria.setEditable(false);
+        jComboBoxMunicipio.setEditable(false);
+        jComboBoxSubcategoria.setEditable(false);
+    }
+    
     private void jButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnviarActionPerformed
-
+        try{
+            
+            if(usuario.getTipo() == TipoUsuario.ANALISTA){
+            String parecer = jTextParecer.getText();
+            denuncia.setParecer(parecer);
+            denuncia.setStatus(Status.FINALIZADO);
+            denunciaControle.Alterar(denuncia);
+            }else{
+                //data
+                Date dataOcorrido = formata.parse(jFormattedTextFieldDataOcorrencia.getText());
+                Date dataDenuncia = new Date();
+                //Endereco
+                Endereco endereco = new Endereco();
+                endereco.setCep(jFormattedTextFieldCep.getText());
+                endereco.setBairro(jTextFieldBairro.getText());
+                endereco.setLogradouro(jTextFieldEndereco.getText());
+                endereco.setCoordenada(jTextFieldCoordenadas.getText());
+                endereco.setPontoDeReferencia(jTextFieldPontoDeReferencia.getText());
+                Municipio municipio = new Municipio();
+                municipio = (Municipio) jComboBoxMunicipio.getSelectedItem();
+                endereco.setMunicipio(municipio);
+                
+                //Possivel Autor
+                String possivelAutor = jTextFieldPossivelAutor.getText();
+                String descricao = jTextAreaRelatoDoOcorrido.getText();
+                
+                //Categoria e Subcategoria
+                SubCategoria subcategoria = new SubCategoria();
+                subcategoria = (SubCategoria) jComboBoxSubcategoria.getSelectedItem();
+                
+                denuncia.setEndereco(endereco);
+                denuncia.setFotos(fotos);
+                denuncia.setDenunciante(usuario);
+                denuncia.setData(dataOcorrido);
+                denuncia.setDataDenuncia(dataDenuncia);
+                denuncia.setAutorCrime(possivelAutor);
+                denuncia.setDescricao(descricao);
+                denuncia.setSubCategoria(subcategoria);
+                String protocolo = denunciaControle.Cadastrar(denuncia);
+                jLabelNumeroDoProtocolo.setText(protocolo);
+                jLabelStatusAtual.setText(denuncia.getStatus().toString());
+                TravarCampos();
+                jButtonEnviar.setEnabled(false);
+            }
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
     }//GEN-LAST:event_jButtonEnviarActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-
+        try{
+            SubCategoria subCategoria = (SubCategoria) jComboBoxSubcategoria.getSelectedItem();
+            denuncia.setSubCategoria(subCategoria);
+            String parecer = jTextParecer.getText();
+            denuncia.setParecer(parecer);
+            denunciaControle.Alterar(denuncia);
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
-
+        this.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonEscolherArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEscolherArquivoActionPerformed
@@ -724,6 +960,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
             fc.showOpenDialog(this);
             File arquivo = fc.getSelectedFile();
             String nomeDoArquivo = arquivo.getPath();
+            fotos.addUrl(nomeDoArquivo);
             ImageIcon icon = new ImageIcon(nomeDoArquivo);
             icon.setImage(icon.getImage().getScaledInstance(jLabelImagem1.getWidth(), jLabelImagem1.getHeight(), 1));
             jLabelImagem1.setIcon(icon);
@@ -733,15 +970,54 @@ public class TelaDenuncia extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelImagem1MouseClicked
 
     private void jLabelImagem2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImagem2MouseClicked
-        // TODO add your handling code here:
+        try {
+            JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Escolha um Arquivo");
+            fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fc.showOpenDialog(this);
+            File arquivo = fc.getSelectedFile();
+            String nomeDoArquivo = arquivo.getPath();
+            fotos.addUrl(nomeDoArquivo);
+            ImageIcon icon = new ImageIcon(nomeDoArquivo);
+            icon.setImage(icon.getImage().getScaledInstance(jLabelImagem2.getWidth(), jLabelImagem2.getHeight(), 1));
+            jLabelImagem2.setIcon(icon);
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro);
+        }
     }//GEN-LAST:event_jLabelImagem2MouseClicked
 
     private void jLabelImagem3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImagem3MouseClicked
-        // TODO add your handling code here:
+        try {
+            JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Escolha um Arquivo");
+            fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fc.showOpenDialog(this);
+            File arquivo = fc.getSelectedFile();
+            String nomeDoArquivo = arquivo.getPath();
+            fotos.addUrl(nomeDoArquivo);
+            ImageIcon icon = new ImageIcon(nomeDoArquivo);
+            icon.setImage(icon.getImage().getScaledInstance(jLabelImagem3.getWidth(), jLabelImagem3.getHeight(), 1));
+            jLabelImagem3.setIcon(icon);
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro);
+        }
     }//GEN-LAST:event_jLabelImagem3MouseClicked
 
     private void jLabelImagem4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImagem4MouseClicked
-        // TODO add your handling code here:
+        try {
+            JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Escolha um Arquivo");
+            fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fc.showOpenDialog(this);
+            File arquivo = fc.getSelectedFile();
+            String nomeDoArquivo = arquivo.getPath();
+            fotos.addUrl(nomeDoArquivo);
+            ImageIcon icon = new ImageIcon(nomeDoArquivo);
+            icon.setImage(icon.getImage().getScaledInstance(jLabelImagem4.getWidth(), jLabelImagem4.getHeight(), 1));
+            jLabelImagem4.setIcon(icon);
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro);
+        }
     }//GEN-LAST:event_jLabelImagem4MouseClicked
 
     private void jLabelMenuMeuUsuario1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenuMeuUsuario1MouseClicked
@@ -761,6 +1037,24 @@ public class TelaDenuncia extends javax.swing.JFrame {
         TelaDenuncia tela = new TelaDenuncia();
         tela.setVisible(true);
     }//GEN-LAST:event_jLabelMenuNovaDenuncia1MouseClicked
+
+    private void jComboBoxCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxCategoriaItemStateChanged
+        Categoria objeto = (Categoria) jComboBoxCategoria.getSelectedItem();
+        try {
+            boxSubCategoria(categoriaControle.ListarSubCategorias(objeto.getId()));
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+    }//GEN-LAST:event_jComboBoxCategoriaItemStateChanged
+
+    private void jComboBoxSubcategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxSubcategoriaItemStateChanged
+        SubCategoria objeto = (SubCategoria) jComboBoxSubcategoria.getSelectedItem();
+        try {
+            jTextAreaSubCategoria.setText(objeto.getSubTipo());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+    }//GEN-LAST:event_jComboBoxSubcategoriaItemStateChanged
 
     public static void main(String args[]) {
         
@@ -786,17 +1080,22 @@ public class TelaDenuncia extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Coordenadas;
+    private javax.swing.JLabel Coordenadas1;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonEnviar;
     private javax.swing.JButton jButtonEscolherArquivo;
-    private javax.swing.JComboBox<String> jComboBoxMunicipio;
+    private javax.swing.JComboBox<Categoria> jComboBoxCategoria;
+    private javax.swing.JComboBox<Municipio> jComboBoxMunicipio;
+    private javax.swing.JComboBox<SubCategoria> jComboBoxSubcategoria;
     private javax.swing.JFormattedTextField jFormattedTextFieldCep;
     private javax.swing.JFormattedTextField jFormattedTextFieldCpf;
     private javax.swing.JFormattedTextField jFormattedTextFieldDataOcorrencia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelAnonimo;
     private javax.swing.JLabel jLabelBairro;
+    private javax.swing.JLabel jLabelCategoria;
     private javax.swing.JLabel jLabelCep;
     private javax.swing.JLabel jLabelCpf;
     private javax.swing.JLabel jLabelDataOcorrido;
@@ -820,6 +1119,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelRelatoDoOcorrido;
     private javax.swing.JLabel jLabelStatus;
     private javax.swing.JLabel jLabelStatusAtual;
+    private javax.swing.JLabel jLabelSubCategoria1;
     private javax.swing.JLabel jLabelTelefone;
     private javax.swing.JLabel jLabelcamposObrigatorios;
     private javax.swing.JPanel jPanel2;
@@ -829,19 +1129,22 @@ public class TelaDenuncia extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelImagens;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPanePrincipal;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextAreaRelatoDoOcorrido;
+    private javax.swing.JTextArea jTextAreaSubCategoria;
     private javax.swing.JTextField jTextFieldBairro;
+    private javax.swing.JTextField jTextFieldCoordenadas;
     private javax.swing.JTextField jTextFieldEmail;
     private javax.swing.JTextField jTextFieldEndereco;
     private javax.swing.JTextField jTextFieldNome;
     private javax.swing.JTextField jTextFieldPontoDeReferencia;
-    private javax.swing.JTextField jTextFieldTelefone;
+    private javax.swing.JTextField jTextFieldPossivelAutor;
     private javax.swing.JTextField jTextFieldTelefone2;
+    private javax.swing.JTextArea jTextParecer;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -58,6 +58,13 @@ public class DenunciaDao implements IDenunciaDao{
             String sql = "INSERT INTO denuncia(cpfDenunciante, cpfAnalista, idMunicipio, cep, logradouro, bairro, pontoDeReferencia, descricao, idCategoria, idSubcategoria, data, dataDenuncia, autorCrime, parecer, status, idFotos)";
             sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING idDenuncia";
             PreparedStatement preparedStatement = conexao.prepareStatement(sqlFotos);
+            for (int i = 0; i < 4; i++) {
+                if (i < objeto.getFotos().getUrls().size()) {
+                    preparedStatement.setString(i + 1, objeto.getFotos().getUrls().get(i));
+                } else {
+                    preparedStatement.setNull(i + 1, java.sql.Types.VARCHAR); // Se a URL não estiver presente, insere null
+                }
+            }
             int idFotos = preparedStatement.executeUpdate();
             preparedStatement = conexao.prepareStatement(sql);
             preparedStatement.setString(1, objeto.getDenunciante().getCpf());
@@ -68,8 +75,8 @@ public class DenunciaDao implements IDenunciaDao{
             preparedStatement.setString(6, objeto.getEndereco().getBairro());
             preparedStatement.setString(7, objeto.getEndereco().getPontoDeReferencia());
             preparedStatement.setString(8, objeto.getDescricao());
-            preparedStatement.setInt(9, objeto.getCategoria().getId());
-            preparedStatement.setInt(10, objeto.getCategoria().getSubCategoria().getIdSubcategoria());
+            preparedStatement.setInt(9, objeto.getSubCategoria().getCategoria().getId());
+            preparedStatement.setInt(10, objeto.getSubCategoria().getIdSubcategoria());
             SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
             String datainclusao = formata.format(objeto.getData());
             String dataDenuncia = formata.format(objeto.getDataDenuncia());
@@ -101,18 +108,21 @@ public class DenunciaDao implements IDenunciaDao{
     public ArrayList<Denuncia> Buscar(Denuncia objeto) throws Exception{
         SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
         ArrayList<Denuncia> listaFiltrada = new ArrayList<>();
-        String sql = "SELECT * FROM denuncia ";
+        String sql = "denuncias.*, municipio.*, subcategoria*, categoria*, fotos*, ";
+        sql += "d.nome AS nomeDenunciante, d.email AS emailDenunciante, d.telefone AS telefoneDenunciante, d.tipo AS tipoDenunciante, ";
+        sql += "a.nome AS nomeAnalista, a.email AS emailAnalista, a.telefone AS telefoneAnalista, a.tipo AS tipoAnalista  ";
         sql += "INNER JOIN municipio ON denuncia.idDenuncia = municipio.idMunicipio ";
-        sql += "INNER JOIN categoria ON denuncia.idCategoria = categoria.idCategoria ";
         sql += "INNER JOIN fotos ON denuncia.idFotos = fotos.idFotos ";
-        sql += "INNER JOIN usuario AS denunciante ON denuncia.cpfDenunciante = denunciante.cpf ";
-        sql += "INNER JOIN usuario AS analista ON denuncia.cpfAnalista = analista.cpf ";
+        sql += "INNER JOIN usuario AS d ON denuncia.cpfDenunciante = denunciante.cpf ";
+        sql += "INNER JOIN usuario AS a ON denuncia.cpfAnalista = analista.cpf ";
+        sql += "INNER JOIN subcategoria ON denuncia.idSubCategoria = categoria.idSubCategoria ";
+        sql += "INNER JOIN categoria ON subcategoria.idCategoria = categoria.idCategoria ";
         sql += "WHERE 1=1";
         if(!objeto.getProtocolo().equalsIgnoreCase("")) {
             sql += " AND protocolo = '"+objeto.getProtocolo()+"'";
         }else{
             if(objeto.getEndereco().getMunicipio().getId() > 0) sql +=" AND idMunicipio = "+objeto.getEndereco().getMunicipio().getId();
-            if(objeto.getCategoria().getId() > 0) sql +=" AND idCategoria = "+objeto.getCategoria().getId();
+            if(objeto.getSubCategoria().getCategoria().getId() > 0) sql +=" AND idCategoria = "+objeto.getSubCategoria().getCategoria().getId();
             if(objeto.getData()!= null) sql += " AND data = '"+formata.format(objeto.getData())+"'";
             if(objeto.getDataDenuncia()!= null) sql += " AND dataDenuncia = '"+formata.format(objeto.getDataDenuncia())+"'";
             if(objeto.getStatus() != null) sql += " AND status = '"+objeto.getStatus().toString()+"'";
@@ -137,26 +147,32 @@ public class DenunciaDao implements IDenunciaDao{
             
             Fotos fotos = new Fotos();
             fotos.setId(rs.getInt("idFotos"));
-            fotos.setUrl1(rs.getString("url1"));
-            fotos.setUrl2(rs.getString("url2"));
-            fotos.setUrl3(rs.getString("url3"));
-            fotos.setUrl4(rs.getString("url4"));
+            fotos.addUrl(rs.getString("url1"));
+            if(!rs.getString("url2").equalsIgnoreCase(null)){
+                fotos.addUrl(rs.getString("url2"));
+                if(!rs.getString("url2").equalsIgnoreCase(null)){
+                    fotos.addUrl(rs.getString("url3"));
+                    if(!rs.getString("url2").equalsIgnoreCase(null)){
+                        fotos.addUrl(rs.getString("url4"));
+                    }
+                }
+            }
             denuncia.setFotos(fotos);
             
             Usuario denunciante = new Usuario();
-            denunciante.setCpf(rs.getString("cpf"));
-            denunciante.setNome(rs.getString("nome"));
-            denunciante.setEmail(rs.getString("email"));            
-            denunciante.setTelefone(rs.getString("telefone"));
-            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
+            denunciante.setCpf(rs.getString("cpfDenunciante"));
+            denunciante.setNome(rs.getString("nomeDenunciante"));
+            denunciante.setEmail(rs.getString("emailDenunciante"));            
+            denunciante.setTelefone(rs.getString("telefoneDenunciante"));
+            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipoDenunciante")));
             denuncia.setDenunciante(denunciante);
             
             Usuario analista = new Usuario();
-            analista.setCpf(rs.getString("cpf"));
-            analista.setNome(rs.getString("nome"));
-            analista.setEmail(rs.getString("email"));            
-            analista.setTelefone(rs.getString("telefone"));
-            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
+            analista.setCpf(rs.getString("cpfAnalista"));
+            analista.setNome(rs.getString("nomeAnalista"));
+            analista.setEmail(rs.getString("emailAnalista"));            
+            analista.setTelefone(rs.getString("telefoneAnalista"));
+            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipoAnalista")));
             denuncia.setAnalista(analista);
 
             Endereco endereco = new Endereco();
@@ -174,20 +190,17 @@ public class DenunciaDao implements IDenunciaDao{
             endereco.setMunicipio(municipio);
             denuncia.setEndereco(endereco);
             
+            SubCategoria subCategoria = new SubCategoria();
+            subCategoria.setIdSubcategoria(rs.getInt("idSubcategoria"));
+            subCategoria.setSubTipoResumo(rs.getString("resumo"));
+            subCategoria.setSubTipo(rs.getString("subtipo"));
+
             Categoria categoria = new Categoria();
             categoria.setId(rs.getInt("idCategoria"));
             categoria.setTipoAmbiental(rs.getString("tipo"));
+            subCategoria.setCategoria(categoria);
+            denuncia.setSubCategoria(subCategoria);
             
-            SubCategoria subCategoria = new SubCategoria();
-            subCategoria.setIdSubcategoria(rs.getInt("idSubcategoria"));
-            //Coleta a subcategoria pelo ID na tabela apropriada de acordo com o nome da Categoria recem coletada
-            String sqlTipo = "SELECT * FROM "+categoria.getTipoAmbiental()+" WHERE idSubcategoria = "+subCategoria.getIdSubcategoria()+";";
-            Statement statementTipo = conexao.createStatement();
-            ResultSet rsTipo = statementTipo.executeQuery(sqlTipo);
-            subCategoria.setSubTipoResumo(rsTipo.getString("resumo"));
-            subCategoria.setSubTipo(rsTipo.getString("descricao"));
-            categoria.setSubCategoria(subCategoria);
-            denuncia.setCategoria(categoria);
             listaFiltrada.add(denuncia);
           }
           return listaFiltrada;
@@ -202,10 +215,12 @@ public class DenunciaDao implements IDenunciaDao{
     @Override
     public void Alterar(Denuncia denuncia) throws Exception{
         try{
-            String sql = "UPDATE denuncia SET  idCategoria = ?,  idSubCategoria = ?  WHERE protocolo =" + denuncia.getProtocolo() + ";";
+            String sql = "UPDATE denuncia SET  idSubCategoria = ?, cpfAnalista = ?, status = ?, parecer = ?  WHERE protocolo =" + denuncia.getProtocolo() + ";";
             PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-            preparedStatement.setInt(1, denuncia.getCategoria().getId());
-            preparedStatement.setInt(2, denuncia.getCategoria().getSubCategoria().getIdSubcategoria());
+            preparedStatement.setInt(1, denuncia.getSubCategoria().getIdSubcategoria());
+            preparedStatement.setString(2, denuncia.getAnalista().getCpf());
+            preparedStatement.setString(3, denuncia.getStatus().toString());
+            preparedStatement.setString(4, denuncia.getParecer());
             preparedStatement.executeUpdate();
         }catch (SQLException erro) {
             throw new Exception("SQL Erro: " + erro.getMessage());
@@ -218,12 +233,15 @@ public class DenunciaDao implements IDenunciaDao{
     public ArrayList<Denuncia> Listar() throws Exception{
         SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
         ArrayList<Denuncia> listaDeDenuncias = new ArrayList<>();
-        String sql = "SELECT * FROM denuncia ";
+        String sql = "denuncias.*, municipio.*, subcategoria*, categoria*, fotos*, ";
+        sql += "d.nome AS nomeDenunciante, d.email AS emailDenunciante, d.telefone AS telefoneDenunciante, d.tipo AS tipoDenunciante, ";
+        sql += "a.nome AS nomeAnalista, a.email AS emailAnalista, a.telefone AS telefoneAnalista, a.tipo AS tipoAnalista  ";
         sql += "INNER JOIN municipio ON denuncia.idDenuncia = municipio.idMunicipio ";
-        sql += "INNER JOIN categoria ON denuncia.idCategoria = categoria.idCategoria ";
         sql += "INNER JOIN fotos ON denuncia.idFotos = fotos.idFotos ";
-        sql += "INNER JOIN usuario AS denunciante ON denuncia.cpfDenunciante = denunciante.cpf";
-        sql += "INNER JOIN usuario AS analista ON denuncia.cpfAnalista = analista.cpf";
+        sql += "INNER JOIN usuario AS d ON denuncia.cpfDenunciante = denunciante.cpf";
+        sql += "INNER JOIN usuario AS a ON denuncia.cpfAnalista = analista.cpf";
+        sql += "INNER JOIN subcategoria ON denuncia.idSubCategoria = categoria.idSubCategoria ";
+        sql += "INNER JOIN categoria ON subcategoria.idCategoria = categoria.idCategoria ";
         try {
           Statement statement = conexao.createStatement();
           ResultSet rs = statement.executeQuery(sql);
@@ -243,26 +261,32 @@ public class DenunciaDao implements IDenunciaDao{
             
             Fotos fotos = new Fotos();
             fotos.setId(rs.getInt("idFotos"));
-            fotos.setUrl1(rs.getString("url1"));
-            fotos.setUrl2(rs.getString("url2"));
-            fotos.setUrl3(rs.getString("url3"));
-            fotos.setUrl4(rs.getString("url4"));
+            fotos.addUrl(rs.getString("url1"));
+            if(!rs.getString("url2").equalsIgnoreCase(null)){
+                fotos.addUrl(rs.getString("url2"));
+                if(!rs.getString("url2").equalsIgnoreCase(null)){
+                    fotos.addUrl(rs.getString("url3"));
+                    if(!rs.getString("url2").equalsIgnoreCase(null)){
+                        fotos.addUrl(rs.getString("url4"));
+                    }
+                }
+            }
             denuncia.setFotos(fotos);
             
             Usuario denunciante = new Usuario();
-            denunciante.setCpf(rs.getString("cpf"));
-            denunciante.setNome(rs.getString("nome"));
-            denunciante.setEmail(rs.getString("email"));            
-            denunciante.setTelefone(rs.getString("telefone"));
-            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
+            denunciante.setCpf(rs.getString("cpfDenunciante"));
+            denunciante.setNome(rs.getString("nomeDenunciante"));
+            denunciante.setEmail(rs.getString("emailDenunciante"));            
+            denunciante.setTelefone(rs.getString("telefoneDenunciante"));
+            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipoDenunciante")));
             denuncia.setDenunciante(denunciante);
             
             Usuario analista = new Usuario();
-            analista.setCpf(rs.getString("cpf"));
-            analista.setNome(rs.getString("nome"));
-            analista.setEmail(rs.getString("email"));            
-            analista.setTelefone(rs.getString("telefone"));
-            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
+            analista.setCpf(rs.getString("cpfAnalista"));
+            analista.setNome(rs.getString("nomeAnalista"));
+            analista.setEmail(rs.getString("emailAnalista"));            
+            analista.setTelefone(rs.getString("telefoneAnalista"));
+            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipoAnalista")));
             denuncia.setAnalista(analista);
 
             Endereco endereco = new Endereco();
@@ -280,19 +304,16 @@ public class DenunciaDao implements IDenunciaDao{
             endereco.setMunicipio(municipio);
             denuncia.setEndereco(endereco);
             
+            SubCategoria subCategoria = new SubCategoria();
+            subCategoria.setIdSubcategoria(rs.getInt("idSubcategoria"));
+            subCategoria.setSubTipoResumo(rs.getString("resumo"));
+            subCategoria.setSubTipo(rs.getString("subtipo"));
+
             Categoria categoria = new Categoria();
             categoria.setId(rs.getInt("idCategoria"));
             categoria.setTipoAmbiental(rs.getString("tipo"));
-            
-            SubCategoria subCategoria = new SubCategoria();
-            subCategoria.setIdSubcategoria(rs.getInt("idSubcategoria"));
-            String sqlTipo = "SELECT * FROM "+categoria.getTipoAmbiental()+" WHERE idSubcategoria = "+subCategoria.getIdSubcategoria()+";";
-            Statement statementTipo = conexao.createStatement();
-            ResultSet rsTipo = statementTipo.executeQuery(sqlTipo);
-            subCategoria.setSubTipoResumo(rsTipo.getString("resumo"));
-            subCategoria.setSubTipo(rsTipo.getString("descricao"));
-            categoria.setSubCategoria(subCategoria);
-            denuncia.setCategoria(categoria);
+            subCategoria.setCategoria(categoria);
+            denuncia.setSubCategoria(subCategoria);
             
             listaDeDenuncias.add(denuncia);
           }

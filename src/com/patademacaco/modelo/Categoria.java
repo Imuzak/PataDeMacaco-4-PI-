@@ -3,15 +3,13 @@ package com.patademacaco.modelo;
 public class Categoria {
     private int id = 0;
     private String tipoAmbiental = "";
-    private SubCategoria subCategoria = null;
     
     public Categoria(){
     }
     
-    public Categoria(int id,  String tipoAmbiental, SubCategoria subCategoria){
+    public Categoria(int id,  String tipoAmbiental){
         this.id = id;
         this.tipoAmbiental = tipoAmbiental;
-        this.subCategoria = subCategoria;
         
     }
 
@@ -29,14 +27,6 @@ public class Categoria {
 
     public void setTipoAmbiental(String tipoAmbiental) {
         this.tipoAmbiental = tipoAmbiental;
-    }
-
-    public SubCategoria getSubCategoria() {
-        return subCategoria;
-    }
-
-    public void setSubCategoria(SubCategoria subCategoria) {
-        this.subCategoria = subCategoria;
     }
     
 }

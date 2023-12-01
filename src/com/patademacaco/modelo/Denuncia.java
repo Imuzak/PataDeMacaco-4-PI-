@@ -6,7 +6,7 @@ import java.util.Date;
 public class Denuncia {
     private String protocolo = "";
     private String descricao = "";
-    private Categoria categoria = null;
+    private SubCategoria subCategoria = null;
     private Fotos fotos = new Fotos();
     private Date data = null;
     private Date dataDenuncia = null;
@@ -15,15 +15,15 @@ public class Denuncia {
     private Usuario denunciante = null;
     private Usuario analista = null;
     private Endereco endereco = null;
-    private Status status = null;
+    private Status status = Status.ABERTO;
     
     public Denuncia(){
     }
     
-    public Denuncia(String protocolo, String descricao, Categoria categoria, Fotos fotos, Date data, Date dataDenuncia, String autorCrime, String parecer, Usuario denunciante, Usuario analista, Endereco endereco, Status status){
+    public Denuncia(String protocolo, String descricao, SubCategoria subCategoria, Fotos fotos, Date data, Date dataDenuncia, String autorCrime, String parecer, Usuario denunciante, Usuario analista, Endereco endereco, Status status){
         this.protocolo = protocolo;
         this.descricao = descricao;
-        this.categoria = categoria;
+        this.subCategoria = subCategoria;
         this.fotos = fotos;
         this.data = data;
         this.dataDenuncia = dataDenuncia;
@@ -51,12 +51,12 @@ public class Denuncia {
         this.descricao = descricao;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public SubCategoria getSubCategoria() {
+        return subCategoria;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setSubCategoria(SubCategoria subCategoria) {
+        this.subCategoria = subCategoria;
     }
 
     public Fotos getFotos() {

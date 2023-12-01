@@ -20,12 +20,12 @@ public class CategoriaDao implements ICategoriaDao {
     }
     
     @Override
-    public void Cadastrar(Categoria categoria)throws Exception{
+    public void Cadastrar(SubCategoria objeto)throws Exception{
         try{
-            String sql = "INSERT INTO "+categoria.getTipoAmbiental()+"(resumo, descricao) VALUES (?, ?)";
+            String sql = "INSERT INTO "+objeto.getCategoria().getTipoAmbiental()+"(resumo, descricao) VALUES (?, ?)";
             PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-            preparedStatement.setString(1, categoria.getSubCategoria().getSubTipoResumo());
-            preparedStatement.setString(2, categoria.getSubCategoria().getSubTipo());
+            preparedStatement.setString(1, objeto.getSubTipoResumo());
+            preparedStatement.setString(2, objeto.getSubTipo());
             preparedStatement.executeUpdate();
         }catch (SQLException erro) {
             throw new Exception("SQL Erro: " + erro.getMessage());
@@ -35,12 +35,12 @@ public class CategoriaDao implements ICategoriaDao {
     }
     
     @Override
-    public void Alterar(Categoria categoria)throws Exception{
+    public void Alterar(SubCategoria objeto)throws Exception{
         try{
-            String sql = "UPDATE "+categoria.getTipoAmbiental()+" SET resumo = ?, descricao = ? WHERE "+categoria.getSubCategoria().getIdSubcategoria()+ ";";
+            String sql = "UPDATE "+objeto.getCategoria().getTipoAmbiental()+" SET resumo = ?, descricao = ? WHERE "+objeto.getIdSubcategoria()+ ";";
             PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-            preparedStatement.setString(1, categoria.getSubCategoria().getSubTipoResumo());
-            preparedStatement.setString(2, categoria.getSubCategoria().getSubTipo());
+            preparedStatement.setString(1, objeto.getSubTipoResumo());
+            preparedStatement.setString(2, objeto.getSubTipo());
             preparedStatement.executeUpdate();
         } catch (SQLException erro) {
             throw new Exception("SQL Erro: " + erro.getMessage());
@@ -71,9 +71,9 @@ public class CategoriaDao implements ICategoriaDao {
     }
     
     @Override
-    public ArrayList<SubCategoria> ListarSubCategorias() throws Exception{
+    public ArrayList<SubCategoria> ListarSubCategorias(int idCategoria) throws Exception{
         ArrayList<SubCategoria> listaDeSubCategorias = new ArrayList<>();
-        String sql = "SELECT * FROM categorias ";
+        String sql = "SELECT * FROM subcategorias INNER JOIN categoria ON subcategoria.idCategoria = categoria.idCategoria WHERE idCategoria = "+idCategoria+";";
         try {
           Statement statement = conexao.createStatement();
           ResultSet rs = statement.executeQuery(sql);
@@ -82,7 +82,12 @@ public class CategoriaDao implements ICategoriaDao {
               subCategoria.setIdSubcategoria(rs.getInt("idSubcategoria"));
               subCategoria.setSubTipoResumo(rs.getString("resumo"));
               subCategoria.setSubTipo(rs.getString("subtipo"));
+              
+              Categoria categoria = new Categoria();
+              categoria.setId(rs.getInt("idCategoria"));
+              categoria.setTipoAmbiental(rs.getString("tipo"));
               listaDeSubCategorias.add(subCategoria);
+              
             }
           return listaDeSubCategorias;
         }catch (SQLException erro) {
