@@ -260,8 +260,8 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
     private void jLabelRealizarDenunciaAnonimaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRealizarDenunciaAnonimaMouseClicked
         try {
             Usuario anonimo = new Usuario();
-            anonimo = usuarioControle.buscar("cpf do usuario anonimo");
-            TelaDenuncia tela = new TelaDenuncia(usuario);
+            anonimo = usuarioControle.buscar("00000000000");
+            TelaDenuncia tela = new TelaDenuncia(anonimo, null);
             tela.setVisible(true);
             this.dispose();
         } catch (Exception erro) {
@@ -294,7 +294,7 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
 
 
 public void AbrirTelaDenuncia(Usuario usuario) {
-    TelaDenuncia tela = new TelaDenuncia(usuario);
+    TelaListagem tela = new TelaListagem(usuario);
     tela.setVisible(true);
 }
 

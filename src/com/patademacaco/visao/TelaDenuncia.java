@@ -10,6 +10,7 @@ import com.patademacaco.enumeracao.Status;
 import com.patademacaco.enumeracao.TipoUsuario;
 import com.patademacaco.ferramentas.CategoriaComboBoxRenderer;
 import com.patademacaco.ferramentas.CustomScrollBarUI;
+import com.patademacaco.ferramentas.MunicipioComboBoxRenderer;
 import java.awt.Color;
 import java.io.File;
 import java.util.logging.Level;
@@ -38,14 +39,19 @@ import javax.swing.DefaultComboBoxModel;
 
 public class TelaDenuncia extends javax.swing.JFrame {
 
-    Usuario usuario = null;
-    Denuncia denuncia = null;
-    Fotos fotos = new Fotos();
-    int controleImagens = 1;
-    ICategoriaControle categoriaControle = null;
-    IDenunciaControle denunciaControle = null;
-    IUsuarioControle usuarioControle = null;
-    SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
+    private Usuario usuario = null;
+    private Denuncia denuncia = null;
+    private Fotos fotos = new Fotos();
+    private int controleImagens = 1;
+    private String imagem1 = "sem foto";
+    private String imagem2 = "sem foto";
+    private String imagem3 = "sem foto";
+    private String imagem4 = "sem foto";
+    private TelaListagem telaListagem = null;
+    private ICategoriaControle categoriaControle = null;
+    private IDenunciaControle denunciaControle = null;
+    private IUsuarioControle usuarioControle = null;
+    private SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
     //TelaListagem telaListagem = null;
 
     public TelaDenuncia() {
@@ -53,7 +59,8 @@ public class TelaDenuncia extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         ImageIcon image = new ImageIcon(".\\src\\com\\patademacaco\\imagens\\icones\\leaf.png");
         this.setIconImage(image.getImage());
-
+        denuncia = new Denuncia();
+        
         jScrollPanePrincipal.getVerticalScrollBar().setUI(new CustomScrollBarUI());
         jScrollPanePrincipal.setDoubleBuffered(true);
         jScrollPanePrincipal.getVerticalScrollBar().setUnitIncrement(10);
@@ -62,7 +69,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jFormattedTextFieldCpf.setEditable(false);
         jTextFieldNome.setEditable(false);
         jTextFieldEmail.setEditable(false);
-        jTextFieldTelefone2.setEditable(false);
+        jTextFieldTelefone.setEditable(false);
         
         try{
             categoriaControle = new CategoriaControle();
@@ -75,17 +82,20 @@ public class TelaDenuncia extends javax.swing.JFrame {
         }
     }
     
-    public TelaDenuncia(Usuario usuario) {
+    public TelaDenuncia(Usuario usuario, TelaListagem telaListagem) {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         this.usuario = usuario;
-        //this.telaListagem = telaListagem;
-        if(usuario.getTipo() == TipoUsuario.DENUNCIANTE && !usuario.getNome().equals("Anonimo")){
+        this.telaListagem = telaListagem;
+        denuncia = new Denuncia();
+        if(usuario.getTipo() == TipoUsuario.DENUNCIANTE ){
             jButtonEditar.setVisible(false);
-            jTextFieldNome.setText(usuario.getNome());
-            jTextFieldEmail.setText(usuario.getEmail());
-            jTextFieldTelefone2.setText(usuario.getTelefone());
-            jFormattedTextFieldCpf.setText(usuario.getCpf());
+            if(!usuario.getNome().equals("Anonimo")){
+                jTextFieldNome.setText(usuario.getNome());
+                jTextFieldEmail.setText(usuario.getEmail());
+                jTextFieldTelefone.setText(usuario.getTelefone());
+                jFormattedTextFieldCpf.setText(usuario.getCpf());
+            }
         }
         ImageIcon image = new ImageIcon(".\\src\\com\\patademacaco\\imagens\\icones\\leaf.png");
         this.setIconImage(image.getImage());
@@ -94,11 +104,11 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jScrollPanePrincipal.setDoubleBuffered(true);
         jScrollPanePrincipal.getVerticalScrollBar().setUnitIncrement(10);
         
-        jComboBoxSubcategoria.setEditable(false);
+        jComboBoxSubcategoria.setEnabled(false);
         jFormattedTextFieldCpf.setEditable(false);
         jTextFieldNome.setEditable(false);
         jTextFieldEmail.setEditable(false);
-        jTextFieldTelefone2.setEditable(false);
+        jTextFieldTelefone.setEditable(false);
         
         try{
             categoriaControle = new CategoriaControle();
@@ -106,6 +116,64 @@ public class TelaDenuncia extends javax.swing.JFrame {
             usuarioControle = new UsuarioControle();
             boxCategoria(categoriaControle.ListarCategorias());
             boxMunicipio(denunciaControle.ListarMunicipio());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+ 
+    }
+    
+    public TelaDenuncia(Usuario usuario, Denuncia denuncia, TelaListagem telaListagem) {
+        initComponents();
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.usuario = usuario;
+        this.telaListagem = telaListagem;
+        this.denuncia = denuncia;
+        if(usuario.getTipo() == TipoUsuario.ANALISTA){
+            jButtonEnviar.setText("FINALIZAR");
+        }
+        ImageIcon image = new ImageIcon(".\\src\\com\\patademacaco\\imagens\\icones\\leaf.png");
+        this.setIconImage(image.getImage());
+
+        jScrollPanePrincipal.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+        jScrollPanePrincipal.setDoubleBuffered(true);
+        jScrollPanePrincipal.getVerticalScrollBar().setUnitIncrement(10);
+        
+        
+        TravarCampos();
+        try{
+            categoriaControle = new CategoriaControle();
+            denunciaControle = new DenunciaControle();
+            usuarioControle = new UsuarioControle();
+            boxCategoria(categoriaControle.ListarCategorias());
+            boxMunicipio(denunciaControle.ListarMunicipio());
+            
+            //Preenche o campo das fotos
+            ArrayList<String> urls = denuncia.getFotos().getUrls();
+            setImagemLabel(jLabelImagem1, urls.get(0));
+            if(urls.size() >= 2) setImagemLabel(jLabelImagem2, urls.get(1));
+            if(urls.size() >= 3) setImagemLabel(jLabelImagem3, urls.get(2));
+            if(urls.size() == 4) setImagemLabel(jLabelImagem4, urls.get(3));
+            
+            //Preenche a tela Denuncia com as informações da denuncia selecionada
+            jComboBoxMunicipio.setSelectedItem(denuncia.getEndereco().getMunicipio());
+            jComboBoxCategoria.setSelectedItem(denuncia.getSubCategoria().getCategoria());
+            jComboBoxSubcategoria.setSelectedItem(denuncia.getSubCategoria());
+            jFormattedTextFieldCep.setText(denuncia.getEndereco().getCep());
+            jFormattedTextFieldDataOcorrencia.setText(formata.format(denuncia.getData()));
+            jLabelNumeroDoProtocolo.setText(denuncia.getProtocolo());
+            jLabelStatusAtual.setText(denuncia.getStatus().toString());
+            jTextAreaRelatoDoOcorrido.setText(denuncia.getDescricao());
+            jTextAreaSubCategoria.setText(denuncia.getSubCategoria().getSubTipo());
+            jTextFieldBairro.setText(denuncia.getEndereco().getBairro());
+            jTextFieldCoordenadas.setText(denuncia.getEndereco().getCoordenada());
+            jTextFieldEmail.setText(denuncia.getDenunciante().getEmail());
+            jTextFieldLogradouro.setText(denuncia.getEndereco().getLogradouro());
+            jTextFieldNome.setText(denuncia.getDenunciante().getNome());
+            jTextFieldPontoDeReferencia.setText(denuncia.getEndereco().getPontoDeReferencia());
+            jTextFieldPossivelAutor.setText(denuncia.getAutorCrime());
+            jTextFieldTelefone.setText(denuncia.getDenunciante().getTelefone());
+            jTextParecer.setText(denuncia.getParecer());
+            
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
@@ -144,7 +212,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         for (Municipio objetoMunicipio : lista) {
             defaultComboBox.addElement(objetoMunicipio);
         }
-        jComboBoxMunicipio.setRenderer(new CategoriaComboBoxRenderer());
+        jComboBoxMunicipio.setRenderer(new MunicipioComboBoxRenderer());
         jComboBoxMunicipio.setModel(defaultComboBox);
     }
     
@@ -176,7 +244,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelPontoDeReferencia = new javax.swing.JLabel();
         jTextFieldPontoDeReferencia = new javax.swing.JTextField();
         jLabelEndereco = new javax.swing.JLabel();
-        jTextFieldEndereco = new javax.swing.JTextField();
+        jTextFieldLogradouro = new javax.swing.JTextField();
         jLabelBairro = new javax.swing.JLabel();
         jTextFieldBairro = new javax.swing.JTextField();
         jLabelMunicipio = new javax.swing.JLabel();
@@ -191,7 +259,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelCpf = new javax.swing.JLabel();
         jTextFieldNome = new javax.swing.JTextField();
         jTextFieldEmail = new javax.swing.JTextField();
-        jTextFieldTelefone2 = new javax.swing.JTextField();
+        jTextFieldTelefone = new javax.swing.JTextField();
         jLabelNome = new javax.swing.JLabel();
         jLabelEmail = new javax.swing.JLabel();
         jLabelTelefone = new javax.swing.JLabel();
@@ -366,10 +434,10 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jTextFieldPontoDeReferencia.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
 
         jLabelEndereco.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        jLabelEndereco.setText("Endereço *");
+        jLabelEndereco.setText("Logradouro *");
         jLabelEndereco.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        jTextFieldEndereco.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
+        jTextFieldLogradouro.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
 
         jLabelBairro.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
         jLabelBairro.setText("Bairro *");
@@ -396,7 +464,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelImagem1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelImagem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/patademacaco/imagens/icones/add.png"))); // NOI18N
         jLabelImagem1.setText("Adicionar Imagem");
-        jLabelImagem1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jLabelImagem1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabelImagem1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelImagem1MouseClicked(evt);
@@ -407,7 +475,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelImagem2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelImagem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/patademacaco/imagens/icones/add.png"))); // NOI18N
         jLabelImagem2.setText("Adicionar Imagem");
-        jLabelImagem2.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jLabelImagem2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabelImagem2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelImagem2MouseClicked(evt);
@@ -418,7 +486,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelImagem3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelImagem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/patademacaco/imagens/icones/add.png"))); // NOI18N
         jLabelImagem3.setText("Adicionar Imagem");
-        jLabelImagem3.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jLabelImagem3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabelImagem3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelImagem3MouseClicked(evt);
@@ -429,7 +497,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelImagem4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelImagem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/patademacaco/imagens/icones/add.png"))); // NOI18N
         jLabelImagem4.setText("Adicionar Imagem");
-        jLabelImagem4.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jLabelImagem4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabelImagem4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelImagem4MouseClicked(evt);
@@ -468,10 +536,13 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelCpf.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         jTextFieldNome.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextFieldNome.setEnabled(false);
 
         jTextFieldEmail.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextFieldEmail.setEnabled(false);
 
-        jTextFieldTelefone2.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextFieldTelefone.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextFieldTelefone.setEnabled(false);
 
         jLabelNome.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabelNome.setText("Nome :");
@@ -490,6 +561,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        jFormattedTextFieldCpf.setEnabled(false);
         jFormattedTextFieldCpf.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -512,7 +584,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabelTelefone)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
-                        .addComponent(jTextFieldTelefone2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTextFieldTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -532,7 +604,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
                     .addComponent(jLabelEmail))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldTelefone2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelTelefone))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -544,6 +616,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jTextParecer.setColumns(20);
         jTextParecer.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
         jTextParecer.setRows(5);
+        jTextParecer.setEnabled(false);
         jScrollPane2.setViewportView(jTextParecer);
 
         jLabelRelatoDoOcorrido.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
@@ -616,6 +689,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
             }
         });
 
+        jTextAreaSubCategoria.setEditable(false);
         jTextAreaSubCategoria.setColumns(20);
         jTextAreaSubCategoria.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
         jTextAreaSubCategoria.setRows(5);
@@ -651,7 +725,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jTextFieldLogradouro, javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(jTextFieldBairro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(jPanel4Layout.createSequentialGroup()
                                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -717,7 +791,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
                     .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelEndereco)
                     .addComponent(jLabelSubCategoria1)
                     .addComponent(jComboBoxSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -844,14 +918,14 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jTextAreaRelatoDoOcorrido.setEditable(false);
         jTextFieldBairro.setEditable(false);
         jTextFieldCoordenadas.setEditable(false);
-        jTextFieldEndereco.setEditable(false);
+        jTextFieldLogradouro.setEditable(false);
         jTextFieldPontoDeReferencia.setEditable(false);
         jTextFieldPossivelAutor.setEditable(false);
         jFormattedTextFieldCep.setEditable(false);
         jFormattedTextFieldDataOcorrencia.setEditable(false);
-        jComboBoxCategoria.setEditable(false);
-        jComboBoxMunicipio.setEditable(false);
-        jComboBoxSubcategoria.setEditable(false);
+        jComboBoxCategoria.setEnabled(false);
+        jComboBoxMunicipio.setEnabled(false);
+        jComboBoxSubcategoria.setEnabled(false);
     }
     
     private void jButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnviarActionPerformed
@@ -862,6 +936,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
             denuncia.setParecer(parecer);
             denuncia.setStatus(Status.FINALIZADO);
             denunciaControle.Alterar(denuncia);
+            telaListagem.imprimirDadosNaGrid(denunciaControle.Listar());
             }else{
                 //data
                 Date dataOcorrido = formata.parse(jFormattedTextFieldDataOcorrencia.getText());
@@ -870,22 +945,27 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 Endereco endereco = new Endereco();
                 endereco.setCep(jFormattedTextFieldCep.getText());
                 endereco.setBairro(jTextFieldBairro.getText());
-                endereco.setLogradouro(jTextFieldEndereco.getText());
+                endereco.setLogradouro(jTextFieldLogradouro.getText());
                 endereco.setCoordenada(jTextFieldCoordenadas.getText());
                 endereco.setPontoDeReferencia(jTextFieldPontoDeReferencia.getText());
                 Municipio municipio = new Municipio();
                 municipio = (Municipio) jComboBoxMunicipio.getSelectedItem();
                 endereco.setMunicipio(municipio);
-                
+                System.out.println("endereço settado");
                 //Possivel Autor
                 String possivelAutor = jTextFieldPossivelAutor.getText();
                 String descricao = jTextAreaRelatoDoOcorrido.getText();
-                
+                System.out.println("descricao");
                 //Categoria e Subcategoria
                 SubCategoria subcategoria = new SubCategoria();
                 subcategoria = (SubCategoria) jComboBoxSubcategoria.getSelectedItem();
-                
+                System.out.println("categoria coletada");
                 denuncia.setEndereco(endereco);
+                fotos.addUrl(imagem1);
+                if(!imagem2.equalsIgnoreCase("sem foto"))fotos.addUrl(imagem2);
+                if(!imagem3.equalsIgnoreCase("sem foto"))fotos.addUrl(imagem3);
+                if(!imagem4.equalsIgnoreCase("sem foto"))fotos.addUrl(imagem4);
+                System.out.println("imagens coletadas");
                 denuncia.setFotos(fotos);
                 denuncia.setDenunciante(usuario);
                 denuncia.setData(dataOcorrido);
@@ -893,12 +973,15 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 denuncia.setAutorCrime(possivelAutor);
                 denuncia.setDescricao(descricao);
                 denuncia.setSubCategoria(subcategoria);
+                System.out.println("itens settados");
                 String protocolo = denunciaControle.Cadastrar(denuncia);
+                System.out.println("protocolo coletado");
                 jLabelNumeroDoProtocolo.setText(protocolo);
                 jLabelStatusAtual.setText(denuncia.getStatus().toString());
-                TravarCampos();
                 jButtonEnviar.setEnabled(false);
+                if(!usuario.getNome().equalsIgnoreCase("Anonimo"))telaListagem.imprimirDadosNaGrid(denunciaControle.listaFiltrada(0, usuario.getCpf(), 0, null, null, null));
             }
+            TravarCampos();
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
@@ -919,7 +1002,13 @@ public class TelaDenuncia extends javax.swing.JFrame {
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
-
+ 
+    public void setImagemLabel(javax.swing.JLabel jlabel, String nomeDoArquivo){
+            ImageIcon icon = new ImageIcon(nomeDoArquivo);
+            icon.setImage(icon.getImage().getScaledInstance(jlabel.getWidth(), jlabel.getHeight(), 1));
+            jlabel.setIcon(icon);
+    }
+    
     private void jButtonEscolherArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEscolherArquivoActionPerformed
         try {
             if (controleImagens <= 4) {
@@ -959,11 +1048,9 @@ public class TelaDenuncia extends javax.swing.JFrame {
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
             File arquivo = fc.getSelectedFile();
-            String nomeDoArquivo = arquivo.getPath();
-            fotos.addUrl(nomeDoArquivo);
-            ImageIcon icon = new ImageIcon(nomeDoArquivo);
-            icon.setImage(icon.getImage().getScaledInstance(jLabelImagem1.getWidth(), jLabelImagem1.getHeight(), 1));
-            jLabelImagem1.setIcon(icon);
+            String imagem1 = arquivo.getPath();
+            setImagemLabel(jLabelImagem1, imagem1);
+            
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro);
         }
@@ -976,11 +1063,8 @@ public class TelaDenuncia extends javax.swing.JFrame {
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
             File arquivo = fc.getSelectedFile();
-            String nomeDoArquivo = arquivo.getPath();
-            fotos.addUrl(nomeDoArquivo);
-            ImageIcon icon = new ImageIcon(nomeDoArquivo);
-            icon.setImage(icon.getImage().getScaledInstance(jLabelImagem2.getWidth(), jLabelImagem2.getHeight(), 1));
-            jLabelImagem2.setIcon(icon);
+            String imagem2 = arquivo.getPath();
+            setImagemLabel(jLabelImagem2, imagem2);
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro);
         }
@@ -993,11 +1077,8 @@ public class TelaDenuncia extends javax.swing.JFrame {
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
             File arquivo = fc.getSelectedFile();
-            String nomeDoArquivo = arquivo.getPath();
-            fotos.addUrl(nomeDoArquivo);
-            ImageIcon icon = new ImageIcon(nomeDoArquivo);
-            icon.setImage(icon.getImage().getScaledInstance(jLabelImagem3.getWidth(), jLabelImagem3.getHeight(), 1));
-            jLabelImagem3.setIcon(icon);
+            String imagem3 = arquivo.getPath();
+            setImagemLabel(jLabelImagem3, imagem3);
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro);
         }
@@ -1010,11 +1091,8 @@ public class TelaDenuncia extends javax.swing.JFrame {
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
             File arquivo = fc.getSelectedFile();
-            String nomeDoArquivo = arquivo.getPath();
-            fotos.addUrl(nomeDoArquivo);
-            ImageIcon icon = new ImageIcon(nomeDoArquivo);
-            icon.setImage(icon.getImage().getScaledInstance(jLabelImagem4.getWidth(), jLabelImagem4.getHeight(), 1));
-            jLabelImagem4.setIcon(icon);
+            String imagem4 = arquivo.getPath();
+            setImagemLabel(jLabelImagem4, imagem4);
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro);
         }
@@ -1042,6 +1120,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         Categoria objeto = (Categoria) jComboBoxCategoria.getSelectedItem();
         try {
             boxSubCategoria(categoriaControle.ListarSubCategorias(objeto.getId()));
+            jComboBoxSubcategoria.setEnabled(true);
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
@@ -1139,11 +1218,11 @@ public class TelaDenuncia extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldBairro;
     private javax.swing.JTextField jTextFieldCoordenadas;
     private javax.swing.JTextField jTextFieldEmail;
-    private javax.swing.JTextField jTextFieldEndereco;
+    private javax.swing.JTextField jTextFieldLogradouro;
     private javax.swing.JTextField jTextFieldNome;
     private javax.swing.JTextField jTextFieldPontoDeReferencia;
     private javax.swing.JTextField jTextFieldPossivelAutor;
-    private javax.swing.JTextField jTextFieldTelefone2;
+    private javax.swing.JTextField jTextFieldTelefone;
     private javax.swing.JTextArea jTextParecer;
     // End of variables declaration//GEN-END:variables
 

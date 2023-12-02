@@ -1,18 +1,18 @@
 package com.patademacaco.modelo;
 
 public class Municipio {
-    private int id = 0;
     private String nome = "";
     private String uf = "";
     private int codIBGE = 0;
+    private int id = 0;
 
     public Municipio() {
     }
     
-    public Municipio(int id, String nome, String uf, int codIBGE){
+    public Municipio(String nome, String uf, int codIBGE, int id){
+        this.id = id;
         this.nome = nome;
         this.codIBGE = codIBGE;
-        this.id = id;
         this.uf = uf;
     }
 

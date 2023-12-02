@@ -2,38 +2,63 @@ package com.patademacaco.visao;
 
 // @author Mariana
 
+import com.patademacaco.controle.CategoriaControle;
+import com.patademacaco.controle.DenunciaControle;
+import com.patademacaco.controle.ICategoriaControle;
+import com.patademacaco.controle.IDenunciaControle;
+import com.patademacaco.enumeracao.Status;
+import com.patademacaco.enumeracao.TipoUsuario;
 import com.patademacaco.ferramentas.CategoriaComboBoxRenderer;
+import com.patademacaco.ferramentas.MunicipioComboBoxRenderer;
 import com.patademacaco.modelo.Categoria;
 import com.patademacaco.modelo.Denuncia;
 import com.patademacaco.modelo.Municipio;
 import com.patademacaco.modelo.Usuario;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 
 public class TelaDeBusca extends javax.swing.JFrame {
-
+    
+    ICategoriaControle categoriaControle = null;
+    IDenunciaControle denunciaControle = null;
+    TelaListagem telaListagem = null;
+    Usuario usuario = null;
+    
+    
     public TelaDeBusca() {
         initComponents();
         this.setLocationRelativeTo(null);
-        
-        boxCategoria();
-        jTextFieldBuscarProtocolo.setEditable(false);
-        jComboBoxMunicipio.setEnabled(false);
-        jComboBoxCategoria.setEnabled(false);
-        jFormattedTextFieldDataOcorrencia.setEnabled(false);
-        jFormattedTextFieldDataCadastro.setEnabled(false);
+        boxStatus();
+        try{
+            denunciaControle = new DenunciaControle();
+            categoriaControle = new CategoriaControle();
+            boxMunicipio(denunciaControle.ListarMunicipio());
+            boxCategoria(categoriaControle.ListarCategorias());
+            
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
     }
     
-    public TelaDeBusca(Usuario usuario) {
+    public TelaDeBusca(Usuario usuario, TelaListagem telaListagem) {
         initComponents();
         this.setLocationRelativeTo(null);
-
-        jTextFieldBuscarProtocolo.setEditable(false);
-        jComboBoxMunicipio.setEnabled(false);
-        jComboBoxCategoria.setEnabled(false);
-        jFormattedTextFieldDataOcorrencia.setEnabled(false);
-        jFormattedTextFieldDataCadastro.setEnabled(false);
+        boxStatus();
+        try{
+            this.usuario = usuario;
+            denunciaControle = new DenunciaControle();
+            categoriaControle = new CategoriaControle();
+            boxCategoria(categoriaControle.ListarCategorias());
+            boxMunicipio(denunciaControle.ListarMunicipio());
+            this.telaListagem = telaListagem;
+            
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -55,12 +80,14 @@ public class TelaDeBusca extends javax.swing.JFrame {
         jFormattedTextFieldDataCadastro = new javax.swing.JFormattedTextField();
         jButtonBuscar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
+        jCheckBoxStatus = new javax.swing.JCheckBox();
+        jComboBoxStatus = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabelTitulo2.setFont(new java.awt.Font("Calibri", 0, 30)); // NOI18N
         jLabelTitulo2.setText("Buscar por");
@@ -77,6 +104,7 @@ public class TelaDeBusca extends javax.swing.JFrame {
         });
 
         jComboBoxCategoria.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jComboBoxCategoria.setEnabled(false);
 
         jCheckBoxProtocolo.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jCheckBoxProtocolo.setText("Protocolo");
@@ -86,6 +114,7 @@ public class TelaDeBusca extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldBuscarProtocolo.setEditable(false);
         jTextFieldBuscarProtocolo.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
 
         jCheckBoxMunicipio.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
@@ -97,6 +126,7 @@ public class TelaDeBusca extends javax.swing.JFrame {
         });
 
         jComboBoxMunicipio.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jComboBoxMunicipio.setEnabled(false);
 
         jCheckBoxDataDaOcorrencia.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jCheckBoxDataDaOcorrencia.setText("Data da Ocorrência");
@@ -114,6 +144,7 @@ public class TelaDeBusca extends javax.swing.JFrame {
             }
         });
 
+        jFormattedTextFieldDataOcorrencia.setEditable(false);
         try {
             jFormattedTextFieldDataOcorrencia.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -121,6 +152,7 @@ public class TelaDeBusca extends javax.swing.JFrame {
         }
         jFormattedTextFieldDataOcorrencia.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
 
+        jFormattedTextFieldDataCadastro.setEditable(false);
         try {
             jFormattedTextFieldDataCadastro.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -146,6 +178,17 @@ public class TelaDeBusca extends javax.swing.JFrame {
             }
         });
 
+        jCheckBoxStatus.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jCheckBoxStatus.setText("Status");
+        jCheckBoxStatus.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBoxStatusStateChanged(evt);
+            }
+        });
+
+        jComboBoxStatus.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jComboBoxStatus.setEnabled(false);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -170,18 +213,21 @@ public class TelaDeBusca extends javax.swing.JFrame {
                                         .addComponent(jComboBoxMunicipio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jComboBoxCategoria, 0, 440, Short.MAX_VALUE)))))
                         .addContainerGap())
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelTitulo2)
-                            .addComponent(jCheckBoxDataDoCadastro))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
-                        .addComponent(jFormattedTextFieldDataCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(277, 277, 277))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addComponent(jButtonCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonBuscar)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelTitulo2)
+                            .addComponent(jCheckBoxDataDoCadastro)
+                            .addComponent(jCheckBoxStatus))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jComboBoxStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jFormattedTextFieldDataCadastro, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                        .addGap(277, 277, 277))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,7 +256,11 @@ public class TelaDeBusca extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxDataDoCadastro)
                     .addComponent(jFormattedTextFieldDataCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxStatus)
+                    .addComponent(jComboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBuscar)
                     .addComponent(jButtonCancelar))
@@ -230,6 +280,12 @@ public class TelaDeBusca extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    public void boxStatus(){
+        Status[] tipos = Status.values();
+       DefaultComboBoxModel<Status> status = new DefaultComboBoxModel<>(tipos);
+       jComboBoxStatus.setModel(status);
+    }
     
     public void boxCategoria(ArrayList<Categoria> lista) throws Exception {
         DefaultComboBoxModel<Categoria> defaultComboBox = new DefaultComboBoxModel<>();
@@ -251,20 +307,42 @@ public class TelaDeBusca extends javax.swing.JFrame {
         for (Municipio objetoMunicipio : lista) {
             defaultComboBox.addElement(objetoMunicipio);
         }
-        jComboBoxMunicipio.setRenderer(new CategoriaComboBoxRenderer());
+        jComboBoxMunicipio.setRenderer(new MunicipioComboBoxRenderer());
         jComboBoxMunicipio.setModel(defaultComboBox);
     }
     
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        Denuncia denuncia = new Denuncia();
-        Categoria categoria = new Categoria();
-        Municipio municipio = new Municipio();
-        if(jCheckBoxProtocolo.isSelected()) denuncia.setProtocolo(jTextFieldBuscarProtocolo.getText());
-        if(jCheckBoxCategoria.isSelected()) denuncia.setProtocolo(jTextFieldBuscarProtocolo.getText());
-        if(jCheckBoxMunicipio.isSelected()) municipio = (Municipio) jComboBoxMunicipio.getSelectedItem();
-        if(jCheckBoxDataDaOcorrencia.isSelected()) denuncia.setData(jTextFieldBuscarProtocolo.getText());
-        if(jCheckBoxDataDoCadastro.isSelected()) denuncia.setDataDenuncia(dataDenuncia);
-        
+        try{
+            Municipio municipio = new Municipio();
+            Categoria categoria = new Categoria();
+            Status status = null;
+            Date dataOcorrido = null;
+            Date dataDenuncia = null;
+            SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
+            if(jCheckBoxProtocolo.isSelected()){
+                String protocolo = (jTextFieldBuscarProtocolo.getText());
+                Denuncia denuncia = denunciaControle.Buscar(protocolo);
+                telaListagem.imprimirBusca(denuncia);
+            }else{
+                ArrayList listaFiltrada = null;
+                if(jCheckBoxCategoria.isSelected()) categoria = (Categoria) jComboBoxCategoria.getSelectedItem();
+                if(jCheckBoxMunicipio.isSelected()) municipio = (Municipio) jComboBoxMunicipio.getSelectedItem();
+                if(jCheckBoxDataDaOcorrencia.isSelected()) dataOcorrido = formata.parse(jFormattedTextFieldDataOcorrencia.getText());
+                if(jCheckBoxDataDoCadastro.isSelected()) dataDenuncia = formata.parse(jFormattedTextFieldDataCadastro.getText());
+                if(jCheckBoxStatus.isSelected()) status = (Status) jComboBoxStatus.getSelectedItem();
+                if(usuario.getTipo()== TipoUsuario.ANALISTA){
+                    listaFiltrada = denunciaControle.listaFiltrada(municipio.getCodIBGE(), null, categoria.getId(), dataOcorrido, dataDenuncia, status);
+                }else{
+                    listaFiltrada = denunciaControle.listaFiltrada(municipio.getCodIBGE(), usuario.getCpf(), categoria.getId(), dataOcorrido, dataDenuncia, status);
+                }
+                telaListagem.imprimirDadosNaGrid(listaFiltrada);
+            }
+            
+            this.dispose();
+            
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -330,6 +408,14 @@ public class TelaDeBusca extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCheckBoxDataDoCadastroStateChanged
 
+    private void jCheckBoxStatusStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxStatusStateChanged
+        if (jCheckBoxStatus.isSelected()) {
+            jComboBoxStatus.setEnabled(true);
+        } else {
+            jComboBoxStatus.setEnabled(false);
+        }
+    }//GEN-LAST:event_jCheckBoxStatusStateChanged
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -370,8 +456,10 @@ public class TelaDeBusca extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBoxDataDoCadastro;
     private javax.swing.JCheckBox jCheckBoxMunicipio;
     private javax.swing.JCheckBox jCheckBoxProtocolo;
+    private javax.swing.JCheckBox jCheckBoxStatus;
     private javax.swing.JComboBox<Categoria> jComboBoxCategoria;
     private javax.swing.JComboBox<Municipio> jComboBoxMunicipio;
+    private javax.swing.JComboBox<Status> jComboBoxStatus;
     private javax.swing.JFormattedTextField jFormattedTextFieldDataCadastro;
     private javax.swing.JFormattedTextField jFormattedTextFieldDataOcorrencia;
     private javax.swing.JLabel jLabelTitulo2;

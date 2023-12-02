@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Fotos {
     private int id = 0;
-    private ArrayList<String> urls= null;
+    private ArrayList<String> urls = new ArrayList<>();
     
     public Fotos(){
         

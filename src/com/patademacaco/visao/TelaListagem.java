@@ -2,6 +2,8 @@ package com.patademacaco.visao;
 
 import com.patademacaco.controle.DenunciaControle;
 import com.patademacaco.controle.IDenunciaControle;
+import com.patademacaco.enumeracao.Status;
+import com.patademacaco.enumeracao.TipoUsuario;
 import com.patademacaco.ferramentas.ImageRender;
 import com.patademacaco.ferramentas.RoundedPanel;
 import com.patademacaco.modelo.Denuncia;
@@ -72,7 +74,10 @@ public class TelaListagem extends javax.swing.JFrame {
         
         try {
             denunciaControle = new DenunciaControle();
-            if (denunciaControle != null) imprimirDadosNaGrid(denunciaControle.Listar());
+            if (usuario.getTipo() == TipoUsuario.ANALISTA) imprimirDadosNaGrid(denunciaControle.Listar());
+            else {
+                imprimirDadosNaGrid(denunciaControle.listaFiltrada(0, usuario.getCpf(), 0, null, null, null));
+            }
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
@@ -204,6 +209,11 @@ public class TelaListagem extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jTableListagem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableListagemMouseClicked(evt);
             }
         });
         jScrollPaneTabela.setViewportView(jTableListagem);
@@ -350,6 +360,7 @@ public class TelaListagem extends javax.swing.JFrame {
 
 //     imprimir na table
     public void imprimirDadosNaGrid(ArrayList<Denuncia> listaDenuncias) {
+        System.out.println("tento imprimir");
         try {
             DefaultTableModel model = (DefaultTableModel) jTableListagem.getModel();
             model.setNumRows(0);
@@ -362,17 +373,43 @@ public class TelaListagem extends javax.swing.JFrame {
                 saida[1] = aux.getStatus().toString();
                 saida[2] = aux.getDenunciante().getCpf();
                 saida[3] = aux.getDenunciante().getNome();
-                saida[4] = aux.getEndereco().getMunicipio().getNome() + " - " + aux.getEndereco().getMunicipio().getUf();
+                saida[4] = aux.getEndereco().getMunicipio().getNome();
                 saida[5] = aux.getSubCategoria().getCategoria().getTipoAmbiental();//?
                 String data = formata.format(aux.getData());
                 saida[6] = data;//?
                 Object[] dados = {saida[0], saida[1], saida[2], saida[3], saida[4], saida[5], saida[6]};
                 model.addRow(dados);
             }
-            jTableListagem.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
+            //jTableListagem.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
+    }
+    
+    public void imprimirBusca(Denuncia denuncia) {
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTableListagem.getModel();
+            model.setNumRows(0);
+            SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
+            String[] saida = new String[7];
+            saida[0] = denuncia.getProtocolo();
+            saida[1] = denuncia.getStatus().toString();
+            saida[2] = denuncia.getDenunciante().getCpf();
+            saida[3] = denuncia.getDenunciante().getNome();
+            saida[4] = denuncia.getEndereco().getMunicipio().getNome() + " - " + denuncia.getEndereco().getMunicipio().getUf();
+            saida[5] = denuncia.getSubCategoria().getCategoria().getTipoAmbiental();//?
+            String data = formata.format(denuncia.getData());
+            saida[6] = data;//?
+            Object[] dados = {saida[0], saida[1], saida[2], saida[3], saida[4], saida[5], saida[6]};
+            model.addRow(dados);
+            //jTableListagem.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
     }
     
     private void jLabelMenuMeuUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenuMeuUsuarioMouseClicked
@@ -386,7 +423,7 @@ public class TelaListagem extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelMenuDenunciasMouseClicked
 
     private void jLabelMenuNovaDenunciaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenuNovaDenunciaMouseClicked
-        TelaDenuncia tela = new TelaDenuncia(usuario);
+        TelaDenuncia tela = new TelaDenuncia(usuario, this);
         tela.setVisible(true);
     }//GEN-LAST:event_jLabelMenuNovaDenunciaMouseClicked
 
@@ -397,13 +434,32 @@ public class TelaListagem extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldBuscarProtocoloKeyPressed
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        TelaDeBusca telaBusca = new TelaDeBusca(usuario);
+        TelaDeBusca telaBusca = new TelaDeBusca(usuario, this);
         telaBusca.setVisible(true);
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonNovaDenunciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaDenunciaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonNovaDenunciaActionPerformed
+
+    private void jTableListagemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableListagemMouseClicked
+        DefaultTableModel modelDenuncias = (DefaultTableModel)jTableListagem.getModel();
+        int SelectedRowIndex = jTableListagem.getSelectedRow();
+        String protocolo = modelDenuncias.getValueAt(SelectedRowIndex, 0).toString();
+        try{
+            Denuncia objeto = denunciaControle.Buscar(protocolo);
+//            if(usuario.getTipo() == TipoUsuario.ANALISTA) {
+//                //objeto.setAnalista(usuario);
+//                objeto.setStatus(Status.ANDAMENTO);
+//                denunciaControle.Alterar(objeto);
+//            }
+            TelaDenuncia telaDenuncia = new TelaDenuncia(usuario, objeto, this);
+            telaDenuncia.setVisible(true);
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+        
+    }//GEN-LAST:event_jTableListagemMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

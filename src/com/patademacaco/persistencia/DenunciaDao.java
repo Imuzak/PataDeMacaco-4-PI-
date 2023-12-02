@@ -32,31 +32,33 @@ public class DenunciaDao implements IDenunciaDao{
     @Override
     public ArrayList<Municipio> ListarMunicipio() throws Exception {
         ArrayList<Municipio> listaMunicipios = new ArrayList<>();
-        String sql = "SELECT * FROM municipios ";
+        String sql = "SELECT * FROM municipios WHERE uf = 52";
         try{
             Statement statement = conexao.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Municipio municipio = new Municipio();
-                municipio.setId(Integer.parseInt(rs.getString("idMunicipio")));
-                municipio.setNome(rs.getString("nome"));
-                municipio.setUf(rs.getString("uf"));
-                municipio.setCodIBGE(Integer.parseInt(rs.getString("codigoIBGE")));
+                municipio.setId(rs.getInt("id_municipio"));
+                municipio.setNome(rs.getString("name"));
+                municipio.setUf(rs.getString("uf_code"));
+                municipio.setCodIBGE(rs.getInt("municipio"));
                 listaMunicipios.add(municipio);
             }
-        }catch (SQLException e) {
-            e.printStackTrace();
+            return listaMunicipios;
+        }catch (SQLException erro) {
+            throw new Exception("SQL Erro: " + erro.getMessage());
+        } catch(Exception erro){
+            throw erro;
         }
-        return listaMunicipios;
     }
     
     @Override
     public String Cadastrar(Denuncia objeto) throws Exception {
         
         try {
-            String sqlFotos = "INSERT INTO fotos (url1, url2, url3, url4) Values (?, ?, ?, ?) RETURNING idFotos";
-            String sql = "INSERT INTO denuncia(cpfDenunciante, cpfAnalista, idMunicipio, cep, logradouro, bairro, pontoDeReferencia, descricao, idCategoria, idSubcategoria, data, dataDenuncia, autorCrime, parecer, status, idFotos)";
-            sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING idDenuncia";
+            String sqlFotos = "INSERT INTO fotos (url1, url2, url3, url4) Values (?, ?, ?, ?) RETURNING id_fotos";
+            String sql = "INSERT INTO denuncia(cpf_denunciante, id_municipio, cep, logradouro, bairro, ponto_referencia, coordenadas, descricao, id_subcategoria, data_ocorrido, data_denuncia, autor_crime, parecer, status, id_fotos)";
+            sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id_denuncia";
             PreparedStatement preparedStatement = conexao.prepareStatement(sqlFotos);
             for (int i = 0; i < 4; i++) {
                 if (i < objeto.getFotos().getUrls().size()) {
@@ -65,33 +67,38 @@ public class DenunciaDao implements IDenunciaDao{
                     preparedStatement.setNull(i + 1, java.sql.Types.VARCHAR); // Se a URL não estiver presente, insere null
                 }
             }
-            int idFotos = preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.executeQuery();
+            int idFotos = 0;
+            if(rs.next()){
+                idFotos = rs.getInt("id_fotos");
+            }
+            
             preparedStatement = conexao.prepareStatement(sql);
             preparedStatement.setString(1, objeto.getDenunciante().getCpf());
-            preparedStatement.setString(2, objeto.getAnalista().getCpf());
-            preparedStatement.setInt(3, objeto.getEndereco().getMunicipio().getId());
-            preparedStatement.setString(4, objeto.getEndereco().getCep());
-            preparedStatement.setString(5, objeto.getEndereco().getLogradouro());
-            preparedStatement.setString(6, objeto.getEndereco().getBairro());
-            preparedStatement.setString(7, objeto.getEndereco().getPontoDeReferencia());
+            preparedStatement.setInt(2, objeto.getEndereco().getMunicipio().getId());
+            preparedStatement.setString(3, objeto.getEndereco().getCep());
+            preparedStatement.setString(4, objeto.getEndereco().getLogradouro());
+            preparedStatement.setString(5, objeto.getEndereco().getBairro());
+            preparedStatement.setString(6, objeto.getEndereco().getPontoDeReferencia());
+            preparedStatement.setString(7, objeto.getEndereco().getCoordenada());
             preparedStatement.setString(8, objeto.getDescricao());
-            preparedStatement.setInt(9, objeto.getSubCategoria().getCategoria().getId());
-            preparedStatement.setInt(10, objeto.getSubCategoria().getIdSubcategoria());
-            SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
-            String datainclusao = formata.format(objeto.getData());
-            String dataDenuncia = formata.format(objeto.getDataDenuncia());
-            preparedStatement.setString(11, datainclusao);
-            preparedStatement.setString(12, dataDenuncia);
-            preparedStatement.setString(13, objeto.getAutorCrime());
-            preparedStatement.setString(14, objeto.getParecer());
-            preparedStatement.setString(15, objeto.getStatus().toString());
-            preparedStatement.setInt(16, idFotos);
+            preparedStatement.setInt(9, objeto.getSubCategoria().getIdSubcategoria());
+            preparedStatement.setTimestamp(10, new java.sql.Timestamp(objeto.getData().getTime()));
+            preparedStatement.setTimestamp(11, new java.sql.Timestamp(objeto.getDataDenuncia().getTime()));
+            preparedStatement.setString(12, objeto.getAutorCrime());
+            preparedStatement.setString(13, objeto.getParecer());
+            preparedStatement.setString(14, objeto.getStatus().toString());
+            preparedStatement.setInt(15, idFotos);
             // Executa o update e coleta o ID para gerar protocolo
-            int idGerado = preparedStatement.executeUpdate();
-            formata = new SimpleDateFormat("yyyy");
+            rs = preparedStatement.executeQuery();
+            int idGerado = 0;
+            if(rs.next()){
+                idGerado = rs.getInt("id_denuncia");
+            }
+            SimpleDateFormat formata = new SimpleDateFormat("yyyy");
             String protocolo =  idGerado +"/"+ formata.format(objeto.getData());
             // Atualiza o protocolo na tabela denuncia
-            String sqlUpdate = "UPDATE denuncia SET protocolo = ? WHERE idDenuncia = ?";
+            String sqlUpdate = "UPDATE denuncia SET protocolo = ? WHERE id_denuncia = ?";
             PreparedStatement updateStatement = conexao.prepareStatement(sqlUpdate);
             updateStatement.setString(1, protocolo);
             updateStatement.setInt(2, idGerado);
@@ -105,28 +112,248 @@ public class DenunciaDao implements IDenunciaDao{
     }
 
     @Override
-    public ArrayList<Denuncia> Buscar(Denuncia objeto) throws Exception{
+    public Denuncia Buscar(String protocolo) throws Exception{
+        SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
+        String sql = "SELECT denuncia.*, municipios.*, subcategoria.*, categoria.*, fotos.*, ";
+        sql += "d.nome AS nome_denunciante, d.email AS email_denunciante, d.telefone AS telefone_denunciante, d.tipo AS tipo_denunciante, ";
+        sql += "a.nome AS nome_analista, a.email AS email_analista, a.telefone AS telefone_analista, a.tipo AS tipo_analista  ";
+        sql += "FROM denuncia "; 
+        sql += "LEFT JOIN municipios ON denuncia.id_municipio = municipios.id_municipio ";
+        sql += "LEFT JOIN fotos ON denuncia.id_fotos = fotos.id_fotos ";
+        sql += "LEFT JOIN usuario AS d ON denuncia.cpf_denunciante = d.cpf ";
+        sql += "LEFT JOIN usuario AS a ON denuncia.cpf_analista = a.cpf ";
+        sql += "LEFT JOIN subcategoria ON denuncia.id_subcategoria = subcategoria.id_subcategoria ";
+        sql += "LEFT JOIN categoria ON subcategoria.id_categoria = categoria.id_categoria ";
+        sql += "WHERE protocolo = '"+protocolo+"';";
+        try {
+          Statement statement = conexao.createStatement();
+          ResultSet rs = statement.executeQuery(sql);
+          Denuncia denuncia = new Denuncia();
+          if(rs.next()) {
+            denuncia.setProtocolo(rs.getString("protocolo"));
+            denuncia.setDescricao(rs.getString("descricao"));
+            denuncia.setAutorCrime(rs.getString("autor_crime"));
+            denuncia.setParecer(rs.getString("parecer"));
+            denuncia.setStatus(Status.valueOf(rs.getString("status")));
+            java.sql.Timestamp dataDenuncia = rs.getTimestamp("data_denuncia");
+            java.sql.Timestamp dataOcorrido = rs.getTimestamp("data_ocorrido");
+            denuncia.setDataDenuncia(new Date(dataDenuncia.getTime()));
+            denuncia.setData(new Date(dataOcorrido.getTime()));
+//            String data = rs.getString("data_ocorrido") ;
+//            Date date = formata.parse(data);
+//            denuncia.setData(date);
+//            data = rs.getString("data_denuncia") ;
+//            date = formata.parse(data);
+//            denuncia.setDataDenuncia(date);
+            
+            Fotos fotos = new Fotos();
+            fotos.setId(rs.getInt("id_fotos"));
+            fotos.addUrl(rs.getString("url1"));
+            if(rs.getString("url2")!= null){
+                fotos.addUrl(rs.getString("url2"));
+                if(rs.getString("url2")!= null){
+                    fotos.addUrl(rs.getString("url3"));
+                    if(rs.getString("url2") != null){
+                        fotos.addUrl(rs.getString("url4"));
+                    }
+                }
+            }
+            denuncia.setFotos(fotos);
+            
+            Usuario denunciante = new Usuario();
+            denunciante.setCpf(rs.getString("cpf_denunciante"));
+            denunciante.setNome(rs.getString("nome_denunciante"));
+            denunciante.setEmail(rs.getString("email_denunciante"));            
+            denunciante.setTelefone(rs.getString("telefone_denunciante"));
+            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipo_denunciante")));
+            denuncia.setDenunciante(denunciante);
+            
+//            Usuario analista = new Usuario();
+//            analista.setCpf(rs.getString("cpf_analista"));
+//            analista.setNome(rs.getString("nome_analista"));
+//            analista.setEmail(rs.getString("email_analista"));            
+//            analista.setTelefone(rs.getString("telefone_analista"));
+//            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipo_analista")));
+//            denuncia.setAnalista(analista);
+
+            Endereco endereco = new Endereco();
+            endereco.setCoordenada(rs.getString("coordenadas"));
+            endereco.setCep(rs.getString("cep"));
+            endereco.setLogradouro(rs.getString("logradouro"));
+            endereco.setBairro(rs.getString("bairro"));
+            endereco.setPontoDeReferencia(rs.getString("ponto_referencia"));
+            
+            Municipio municipio = new Municipio();
+            municipio.setId(rs.getInt("id_municipio"));
+            municipio.setNome(rs.getString("name"));
+            municipio.setUf(rs.getString("uf_code"));
+            municipio.setCodIBGE(rs.getInt("municipio"));
+            endereco.setMunicipio(municipio);
+            denuncia.setEndereco(endereco);
+            
+            SubCategoria subCategoria = new SubCategoria();
+            subCategoria.setIdSubcategoria(rs.getInt("id_subcategoria"));
+            subCategoria.setSubTipoResumo(rs.getString("subtipo_resumo"));
+            subCategoria.setSubTipo(rs.getString("subtipo"));
+
+            Categoria categoria = new Categoria();
+            categoria.setId(rs.getInt("id_categoria"));
+            categoria.setTipoAmbiental(rs.getString("tipo"));
+            subCategoria.setCategoria(categoria);
+            denuncia.setSubCategoria(subCategoria);
+          }
+          return denuncia;
+        } catch (SQLException erro) {
+            throw new Exception("SQL Erro: " + erro.getMessage());
+        } catch(Exception erro){
+            throw erro;
+        }
+
+    }
+
+    @Override
+    public void Alterar(Denuncia denuncia) throws Exception{
+        try{
+            String sql = "UPDATE denuncia SET  idSubCategoria = ?, status = ?, parecer = ?  WHERE protocolo =" + denuncia.getProtocolo() + ";";
+            PreparedStatement preparedStatement = conexao.prepareStatement(sql);
+            preparedStatement.setInt(1, denuncia.getSubCategoria().getIdSubcategoria());
+            //preparedStatement.setString(2, denuncia.getAnalista().getCpf());
+            preparedStatement.setString(2, denuncia.getStatus().toString());
+            preparedStatement.setString(3, denuncia.getParecer());
+            preparedStatement.executeUpdate();
+        }catch (SQLException erro) {
+            throw new Exception("SQL Erro: " + erro.getMessage());
+        } catch(Exception erro){
+            throw erro;
+        }
+    }
+    
+    @Override
+    public ArrayList<Denuncia> Listar() throws Exception{
+        SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
+        ArrayList<Denuncia> listaDeDenuncias = new ArrayList<>();
+        String sql = "SELECT denuncia.*, municipios.*, subcategoria.*, categoria.*, fotos.*, ";
+        sql += "d.nome AS nome_denunciante, d.email AS email_denunciante, d.telefone AS telefone_denunciante, d.tipo AS tipo_denunciante ";
+        //sql += "a.nome AS nome_analista, a.email AS email_analista, a.telefone AS telefone_analista, a.tipo AS tipo_analista  ";
+        sql += "FROM denuncia "; 
+        sql += "LEFT JOIN municipios ON denuncia.id_municipio = municipios.id_municipio ";
+        sql += "LEFT JOIN fotos ON denuncia.id_fotos = fotos.id_fotos ";
+        sql += "LEFT JOIN usuario AS d ON denuncia.cpf_denunciante = d.cpf ";
+        //sql += "LEFT JOIN usuario AS a ON denuncia.cpf_analista = a.cpf ";
+        sql += "LEFT JOIN subcategoria ON denuncia.id_subcategoria = subcategoria.id_subcategoria ";
+        sql += "LEFT JOIN categoria ON subcategoria.id_categoria = categoria.id_categoria ;";
+        try {
+          Statement statement = conexao.createStatement();
+          ResultSet rs = statement.executeQuery(sql);
+          Denuncia denuncia = new Denuncia();
+          while(rs.next()) {
+              System.out.println("entro no laço");
+            denuncia.setProtocolo(rs.getString("protocolo"));
+            denuncia.setDescricao(rs.getString("descricao"));
+            denuncia.setAutorCrime(rs.getString("autor_crime"));
+            denuncia.setParecer(rs.getString("parecer"));
+              System.out.println("parecer");
+            denuncia.setStatus(Status.valueOf(rs.getString("status")));
+              System.out.println("status");
+            java.sql.Timestamp dataDenuncia = rs.getTimestamp("data_denuncia");
+              System.out.println(" data");
+            java.sql.Timestamp dataOcorrido = rs.getTimestamp("data_ocorrido");
+            denuncia.setDataDenuncia(new Date(dataDenuncia.getTime()));
+              System.out.println("setData");
+            denuncia.setData(new Date(dataOcorrido.getTime()));
+//            String data = rs.getString("data_ocorrido") ;
+//            Date date = formata.parse(data);
+//            denuncia.setData(date);
+//            data = rs.getString("data_denuncia") ;
+//            date = formata.parse(data);
+//            denuncia.setDataDenuncia(date);
+            Fotos fotos = new Fotos();
+            fotos.setId(rs.getInt("id_fotos"));
+            fotos.addUrl(rs.getString("url1"));
+            if(rs.getString("url2")!= null){
+                fotos.addUrl(rs.getString("url2"));
+                if(rs.getString("url2")!= null){
+                    fotos.addUrl(rs.getString("url3"));
+                    if(rs.getString("url2") != null){
+                        fotos.addUrl(rs.getString("url4"));
+                    }
+                }
+            }
+            denuncia.setFotos(fotos);
+              System.out.println("foto listado");
+            Usuario denunciante = new Usuario();
+            denunciante.setCpf(rs.getString("cpf_denunciante"));
+            denunciante.setNome(rs.getString("nome_denunciante"));
+            denunciante.setEmail(rs.getString("email_denunciante"));            
+            denunciante.setTelefone(rs.getString("telefone_denunciante"));
+            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipo_denunciante")));
+            denuncia.setDenunciante(denunciante);
+              System.out.println("analista listado");
+//            Usuario analista = new Usuario();
+//            analista.setCpf(rs.getString("cpf_analista"));
+//            analista.setNome(rs.getString("nome_analista"));
+//            analista.setEmail(rs.getString("email_analista"));            
+//            analista.setTelefone(rs.getString("telefone_analista"));
+//            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipo_analista")));
+//            denuncia.setAnalista(analista);
+              System.out.println("endereco listado");
+            Endereco endereco = new Endereco();
+            endereco.setCoordenada(rs.getString("coordenadas"));
+            endereco.setCep(rs.getString("cep"));
+            endereco.setLogradouro(rs.getString("logradouro"));
+            endereco.setBairro(rs.getString("bairro"));
+            endereco.setPontoDeReferencia(rs.getString("ponto_referencia"));
+              System.out.println("municipio listado");
+            Municipio municipio = new Municipio();
+            municipio.setId(rs.getInt("id_municipio"));
+            municipio.setNome(rs.getString("name"));
+            municipio.setUf(rs.getString("uf_code"));
+            municipio.setCodIBGE(rs.getInt("municipio"));
+            endereco.setMunicipio(municipio);
+            denuncia.setEndereco(endereco);
+              System.out.println("sub listado");
+            SubCategoria subCategoria = new SubCategoria();
+            subCategoria.setIdSubcategoria(rs.getInt("id_subcategoria"));
+            subCategoria.setSubTipoResumo(rs.getString("subtipo_resumo"));
+            subCategoria.setSubTipo(rs.getString("subtipo"));
+              System.out.println("cat listado");
+            Categoria categoria = new Categoria();
+            categoria.setId(rs.getInt("id_categoria"));
+            categoria.setTipoAmbiental(rs.getString("tipo"));
+            subCategoria.setCategoria(categoria);
+            denuncia.setSubCategoria(subCategoria);
+              System.out.println("retornando");
+            listaDeDenuncias.add(denuncia);
+          }
+          return listaDeDenuncias;
+        } catch (SQLException erro) {
+            throw new Exception("SQL Erro: " + erro.getMessage());
+        } catch(Exception erro){
+            throw erro;
+        }
+    }
+    
+    @Override
+    public ArrayList<Denuncia> listaFiltrada(int idMunicipio, String cpfDenunciante, int idCategoria, Date dataOcorrido, Date dataDenuncia, Status status) throws Exception{
         SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
         ArrayList<Denuncia> listaFiltrada = new ArrayList<>();
-        String sql = "denuncias.*, municipio.*, subcategoria*, categoria*, fotos*, ";
-        sql += "d.nome AS nomeDenunciante, d.email AS emailDenunciante, d.telefone AS telefoneDenunciante, d.tipo AS tipoDenunciante, ";
-        sql += "a.nome AS nomeAnalista, a.email AS emailAnalista, a.telefone AS telefoneAnalista, a.tipo AS tipoAnalista  ";
-        sql += "INNER JOIN municipio ON denuncia.idDenuncia = municipio.idMunicipio ";
-        sql += "INNER JOIN fotos ON denuncia.idFotos = fotos.idFotos ";
-        sql += "INNER JOIN usuario AS d ON denuncia.cpfDenunciante = denunciante.cpf ";
-        sql += "INNER JOIN usuario AS a ON denuncia.cpfAnalista = analista.cpf ";
-        sql += "INNER JOIN subcategoria ON denuncia.idSubCategoria = categoria.idSubCategoria ";
-        sql += "INNER JOIN categoria ON subcategoria.idCategoria = categoria.idCategoria ";
+        String sql = "SELECT denuncia.*, municipios.*, subcategoria.*, categoria.*, fotos.*, ";
+        sql += "d.nome AS nome_denunciante, d.email AS email_denunciante, d.telefone AS telefone_denunciante, d.tipo AS tipo_denunciante, ";
+        sql += "a.nome AS nome_analista, a.email AS email_analista, a.telefone AS telefone_analista, a.tipo AS tipo_analista  ";
+        sql += "FROM denuncia "; 
+        sql += "LEFT JOIN municipios ON denuncia.id_municipio = municipios.id_municipio ";
+        sql += "LEFT JOIN fotos ON denuncia.id_fotos = fotos.id_fotos ";
+        sql += "LEFT JOIN usuario AS d ON denuncia.cpf_denunciante = d.cpf ";
+        sql += "LEFT JOIN usuario AS a ON denuncia.cpf_analista = a.cpf ";
+        sql += "LEFT JOIN subcategoria ON denuncia.id_subcategoria = subcategoria.id_subcategoria ";
+        sql += "LEFT JOIN categoria ON subcategoria.id_categoria = categoria.id_categoria ";
         sql += "WHERE 1=1";
-        if(!objeto.getProtocolo().equalsIgnoreCase("")) {
-            sql += " AND protocolo = '"+objeto.getProtocolo()+"'";
-        }else{
-            if(objeto.getEndereco().getMunicipio().getId() > 0) sql +=" AND idMunicipio = "+objeto.getEndereco().getMunicipio().getId();
-            if(objeto.getSubCategoria().getCategoria().getId() > 0) sql +=" AND idCategoria = "+objeto.getSubCategoria().getCategoria().getId();
-            if(objeto.getData()!= null) sql += " AND data = '"+formata.format(objeto.getData())+"'";
-            if(objeto.getDataDenuncia()!= null) sql += " AND dataDenuncia = '"+formata.format(objeto.getDataDenuncia())+"'";
-            if(objeto.getStatus() != null) sql += " AND status = '"+objeto.getStatus().toString()+"'";
-        }
+        if(idMunicipio > 0) sql +=" AND denuncia.id_municipio = "+idMunicipio;
+        if(cpfDenunciante != null) sql +=" AND id_denunciante = '" + cpfDenunciante + "'";
+        if(idCategoria > 0) sql +=" AND id_categoria = "+idCategoria;
+        if(dataOcorrido != null) sql += " AND data_ocorrido = '"+formata.format(dataOcorrido)+"'";
+        if(dataDenuncia != null) sql += " AND data_denuncia = '"+formata.format(dataDenuncia)+"'";
+        if(status != null) sql += " AND status = '"+status.toString()+"'";
         sql += " ;";
         try {
           Statement statement = conexao.createStatement();
@@ -138,15 +365,19 @@ public class DenunciaDao implements IDenunciaDao{
             denuncia.setAutorCrime(rs.getString("autorCrime"));
             denuncia.setParecer(rs.getString("parecer"));
             denuncia.setStatus(Status.valueOf(rs.getString("status")));
-            String data = rs.getString("data") ;
-            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-            denuncia.setData(date);
-            data = rs.getString("dataDenuncia") ;
-            date = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-            denuncia.setDataDenuncia(date);
+            java.sql.Timestamp dataDen = rs.getTimestamp("data_denuncia");
+            java.sql.Timestamp dataOco = rs.getTimestamp("data_ocorrido");
+            denuncia.setDataDenuncia(new Date(dataDen.getTime()));
+            denuncia.setData(new Date(dataOco.getTime()));
+//            String data = rs.getString("data_ocorrido") ;
+//            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+//            denuncia.setData(date);
+//            data = rs.getString("data_denuncia") ;
+//            date = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+//            denuncia.setDataDenuncia(date);
             
             Fotos fotos = new Fotos();
-            fotos.setId(rs.getInt("idFotos"));
+            fotos.setId(rs.getInt("id_fotos"));
             fotos.addUrl(rs.getString("url1"));
             if(!rs.getString("url2").equalsIgnoreCase(null)){
                 fotos.addUrl(rs.getString("url2"));
@@ -160,43 +391,43 @@ public class DenunciaDao implements IDenunciaDao{
             denuncia.setFotos(fotos);
             
             Usuario denunciante = new Usuario();
-            denunciante.setCpf(rs.getString("cpfDenunciante"));
-            denunciante.setNome(rs.getString("nomeDenunciante"));
-            denunciante.setEmail(rs.getString("emailDenunciante"));            
-            denunciante.setTelefone(rs.getString("telefoneDenunciante"));
-            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipoDenunciante")));
+            denunciante.setCpf(rs.getString("cpf_denunciante"));
+            denunciante.setNome(rs.getString("nome_denunciante"));
+            denunciante.setEmail(rs.getString("email_denunciante"));            
+            denunciante.setTelefone(rs.getString("telefone_denunciante"));
+            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipo_denunciante")));
             denuncia.setDenunciante(denunciante);
             
             Usuario analista = new Usuario();
-            analista.setCpf(rs.getString("cpfAnalista"));
-            analista.setNome(rs.getString("nomeAnalista"));
-            analista.setEmail(rs.getString("emailAnalista"));            
-            analista.setTelefone(rs.getString("telefoneAnalista"));
-            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipoAnalista")));
+            analista.setCpf(rs.getString("cpf_analista"));
+            analista.setNome(rs.getString("nome_analista"));
+            analista.setEmail(rs.getString("email_analista"));            
+            analista.setTelefone(rs.getString("telefone_analista"));
+            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipo_analista")));
             denuncia.setAnalista(analista);
 
             Endereco endereco = new Endereco();
-            endereco.setCoordenada(rs.getString("coordenada"));
+            endereco.setCoordenada(rs.getString("coordenadas"));
             endereco.setCep(rs.getString("cep"));
             endereco.setLogradouro(rs.getString("logradouro"));
             endereco.setBairro(rs.getString("bairro"));
-            endereco.setPontoDeReferencia(rs.getString("pontoDeReferencia"));
+            endereco.setPontoDeReferencia(rs.getString("ponto_referencia"));
             
             Municipio municipio = new Municipio();
-            municipio.setId(rs.getInt("idMunicipio"));
-            municipio.setNome(rs.getString("nome"));
-            municipio.setUf(rs.getString("uf"));
-            municipio.setCodIBGE(rs.getInt("codIbge"));
+            municipio.setId(rs.getInt("id_municipio"));
+            municipio.setNome(rs.getString("name"));
+            municipio.setUf(rs.getString("uf_code"));
+            municipio.setCodIBGE(rs.getInt("municipio"));
             endereco.setMunicipio(municipio);
             denuncia.setEndereco(endereco);
             
             SubCategoria subCategoria = new SubCategoria();
-            subCategoria.setIdSubcategoria(rs.getInt("idSubcategoria"));
-            subCategoria.setSubTipoResumo(rs.getString("resumo"));
+            subCategoria.setIdSubcategoria(rs.getInt("id_subcategoria"));
+            subCategoria.setSubTipoResumo(rs.getString("subtipo_resumo"));
             subCategoria.setSubTipo(rs.getString("subtipo"));
 
             Categoria categoria = new Categoria();
-            categoria.setId(rs.getInt("idCategoria"));
+            categoria.setId(rs.getInt("id_categoria"));
             categoria.setTipoAmbiental(rs.getString("tipo"));
             subCategoria.setCategoria(categoria);
             denuncia.setSubCategoria(subCategoria);
@@ -210,119 +441,6 @@ public class DenunciaDao implements IDenunciaDao{
             throw erro;
         }
 
-    }
-
-    @Override
-    public void Alterar(Denuncia denuncia) throws Exception{
-        try{
-            String sql = "UPDATE denuncia SET  idSubCategoria = ?, cpfAnalista = ?, status = ?, parecer = ?  WHERE protocolo =" + denuncia.getProtocolo() + ";";
-            PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-            preparedStatement.setInt(1, denuncia.getSubCategoria().getIdSubcategoria());
-            preparedStatement.setString(2, denuncia.getAnalista().getCpf());
-            preparedStatement.setString(3, denuncia.getStatus().toString());
-            preparedStatement.setString(4, denuncia.getParecer());
-            preparedStatement.executeUpdate();
-        }catch (SQLException erro) {
-            throw new Exception("SQL Erro: " + erro.getMessage());
-        } catch(Exception erro){
-            throw erro;
-        }
-    }
-
-    @Override
-    public ArrayList<Denuncia> Listar() throws Exception{
-        SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
-        ArrayList<Denuncia> listaDeDenuncias = new ArrayList<>();
-        String sql = "denuncias.*, municipio.*, subcategoria*, categoria*, fotos*, ";
-        sql += "d.nome AS nomeDenunciante, d.email AS emailDenunciante, d.telefone AS telefoneDenunciante, d.tipo AS tipoDenunciante, ";
-        sql += "a.nome AS nomeAnalista, a.email AS emailAnalista, a.telefone AS telefoneAnalista, a.tipo AS tipoAnalista  ";
-        sql += "INNER JOIN municipio ON denuncia.idDenuncia = municipio.idMunicipio ";
-        sql += "INNER JOIN fotos ON denuncia.idFotos = fotos.idFotos ";
-        sql += "INNER JOIN usuario AS d ON denuncia.cpfDenunciante = denunciante.cpf";
-        sql += "INNER JOIN usuario AS a ON denuncia.cpfAnalista = analista.cpf";
-        sql += "INNER JOIN subcategoria ON denuncia.idSubCategoria = categoria.idSubCategoria ";
-        sql += "INNER JOIN categoria ON subcategoria.idCategoria = categoria.idCategoria ";
-        try {
-          Statement statement = conexao.createStatement();
-          ResultSet rs = statement.executeQuery(sql);
-          while (rs.next()) {
-            Denuncia denuncia = new Denuncia();
-            denuncia.setProtocolo(rs.getString("protocolo"));
-            denuncia.setDescricao(rs.getString("descricao"));
-            denuncia.setAutorCrime(rs.getString("autorCrime"));
-            denuncia.setParecer(rs.getString("parecer"));
-            denuncia.setStatus(Status.valueOf(rs.getString("status")));
-            String data = rs.getString("data") ;
-            Date date = formata.parse(data);
-            denuncia.setData(date);
-            data = rs.getString("dataDenuncia") ;
-            date = formata.parse(data);
-            denuncia.setDataDenuncia(date);
-            
-            Fotos fotos = new Fotos();
-            fotos.setId(rs.getInt("idFotos"));
-            fotos.addUrl(rs.getString("url1"));
-            if(!rs.getString("url2").equalsIgnoreCase(null)){
-                fotos.addUrl(rs.getString("url2"));
-                if(!rs.getString("url2").equalsIgnoreCase(null)){
-                    fotos.addUrl(rs.getString("url3"));
-                    if(!rs.getString("url2").equalsIgnoreCase(null)){
-                        fotos.addUrl(rs.getString("url4"));
-                    }
-                }
-            }
-            denuncia.setFotos(fotos);
-            
-            Usuario denunciante = new Usuario();
-            denunciante.setCpf(rs.getString("cpfDenunciante"));
-            denunciante.setNome(rs.getString("nomeDenunciante"));
-            denunciante.setEmail(rs.getString("emailDenunciante"));            
-            denunciante.setTelefone(rs.getString("telefoneDenunciante"));
-            denunciante.setTipo(TipoUsuario.valueOf(rs.getString("tipoDenunciante")));
-            denuncia.setDenunciante(denunciante);
-            
-            Usuario analista = new Usuario();
-            analista.setCpf(rs.getString("cpfAnalista"));
-            analista.setNome(rs.getString("nomeAnalista"));
-            analista.setEmail(rs.getString("emailAnalista"));            
-            analista.setTelefone(rs.getString("telefoneAnalista"));
-            analista.setTipo(TipoUsuario.valueOf(rs.getString("tipoAnalista")));
-            denuncia.setAnalista(analista);
-
-            Endereco endereco = new Endereco();
-            endereco.setCoordenada(rs.getString("coordenada"));
-            endereco.setCep(rs.getString("cep"));
-            endereco.setLogradouro(rs.getString("logradouro"));
-            endereco.setBairro(rs.getString("bairro"));
-            endereco.setPontoDeReferencia(rs.getString("pontoDeReferencia"));
-            
-            Municipio municipio = new Municipio();
-            municipio.setId(rs.getInt("idMunicipio"));
-            municipio.setNome(rs.getString("nome"));
-            municipio.setUf(rs.getString("uf"));
-            municipio.setCodIBGE(rs.getInt("codIbge"));
-            endereco.setMunicipio(municipio);
-            denuncia.setEndereco(endereco);
-            
-            SubCategoria subCategoria = new SubCategoria();
-            subCategoria.setIdSubcategoria(rs.getInt("idSubcategoria"));
-            subCategoria.setSubTipoResumo(rs.getString("resumo"));
-            subCategoria.setSubTipo(rs.getString("subtipo"));
-
-            Categoria categoria = new Categoria();
-            categoria.setId(rs.getInt("idCategoria"));
-            categoria.setTipoAmbiental(rs.getString("tipo"));
-            subCategoria.setCategoria(categoria);
-            denuncia.setSubCategoria(subCategoria);
-            
-            listaDeDenuncias.add(denuncia);
-          }
-          return listaDeDenuncias;
-        }catch (SQLException erro) {
-            throw new Exception("SQL Erro: " + erro.getMessage());
-        } catch(Exception erro){
-            throw erro;
-        } 
     }
     
 }

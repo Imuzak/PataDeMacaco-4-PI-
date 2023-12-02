@@ -4,14 +4,14 @@ import com.patademacaco.enumeracao.Status;
 import java.util.Date;
 
 public class Denuncia {
-    private String protocolo = "";
-    private String descricao = "";
+    private String protocolo = " ";
+    private String descricao = " ";
     private SubCategoria subCategoria = null;
     private Fotos fotos = new Fotos();
     private Date data = null;
     private Date dataDenuncia = null;
-    private String autorCrime = "";
-    private String parecer = "";
+    private String autorCrime = " ";
+    private String parecer = " ";
     private Usuario denunciante = null;
     private Usuario analista = null;
     private Endereco endereco = null;

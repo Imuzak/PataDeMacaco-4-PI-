@@ -1,10 +1,12 @@
 package com.patademacaco.controle;
 
+import com.patademacaco.enumeracao.Status;
 import com.patademacaco.modelo.Denuncia;
 import com.patademacaco.modelo.Municipio;
 import com.patademacaco.persistencia.DenunciaDao;
 import com.patademacaco.persistencia.IDenunciaDao;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DenunciaControle implements IDenunciaControle{
     
@@ -20,8 +22,8 @@ public class DenunciaControle implements IDenunciaControle{
     }
 
     @Override
-    public ArrayList<Denuncia> Buscar(Denuncia denuncia) throws Exception {
-        return denunciaDao.Buscar(denuncia);
+    public Denuncia Buscar(String protocolo) throws Exception {
+        return denunciaDao.Buscar(protocolo);
     }
 
     @Override
@@ -32,6 +34,11 @@ public class DenunciaControle implements IDenunciaControle{
     @Override
     public ArrayList<Denuncia> Listar() throws Exception {
         return denunciaDao.Listar();
+    }
+    
+    @Override
+    public ArrayList<Denuncia> listaFiltrada(int idMunicipio, String cpfDenunciante, int idCategoria, Date dataOcorrido, Date dataDenuncia, Status status) throws Exception {
+        return denunciaDao.listaFiltrada(idMunicipio, cpfDenunciante, idCategoria, dataOcorrido, dataDenuncia, status);
     }
 
     @Override
