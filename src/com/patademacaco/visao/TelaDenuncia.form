@@ -4,6 +4,7 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" value="Sistema de Den&#xfa;ncias de Crimes Ambientais"/>
+    <Property name="undecorated" type="boolean" value="true"/>
     <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[1080, 720]"/>
     </Property>
@@ -28,14 +29,14 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jScrollPanePrincipal" min="-2" pref="1952" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Component id="jScrollPanePrincipal" pref="1364" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPanePrincipal" alignment="0" pref="1409" max="32767" attributes="0"/>
+          <Component id="jScrollPanePrincipal" alignment="0" pref="1707" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -57,39 +58,29 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jSeparator1" max="32767" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                                      <Component id="jLabelcamposObrigatorios" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="1969" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jButtonCancelar" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="1669" max="-2" attributes="0"/>
-                                              <Component id="jButtonEditar" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButtonEnviar" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jPanel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                              <Component id="jLabelcamposObrigatorios" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jButtonCancelar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="1058" max="-2" attributes="0"/>
+                              <Component id="jButtonEditar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jButtonEnviar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jPanel4" max="32767" attributes="0"/>
+                          <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="654" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -97,21 +88,21 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jLabelcamposObrigatorios" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace pref="64" max="32767" attributes="0"/>
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonEnviar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonEditar" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -128,12 +119,12 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace pref="1638" max="32767" attributes="0"/>
-                          <Component id="jLabelMenuDenuncias1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="1058" max="32767" attributes="0"/>
+                          <Component id="jLabelMenuNovaDenuncia1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jSeparator4" min="-2" pref="3" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabelMenuNovaDenuncia1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelMenuDenuncias1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jSeparator5" min="-2" pref="3" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -145,7 +136,6 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabelMenuDenuncias1" alignment="0" pref="48" max="32767" attributes="0"/>
-                      <Component id="jLabelMenuNovaDenuncia1" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabelMenuMeuUsuario1" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
@@ -155,6 +145,7 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
+                      <Component id="jLabelMenuNovaDenuncia1" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -258,6 +249,7 @@
                   <Font name="Calibri" size="20" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Editar"/>
+                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEditarActionPerformed"/>
@@ -291,68 +283,56 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabelStatus" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabelProtocolo" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabelStatus" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabelBairro" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabelEndereco" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabelPontoDeReferencia" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabelCep" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabelDataOcorrido" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="Coordenadas" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="Coordenadas1" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <EmptySpace min="-2" pref="166" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jLabelStatusAtual" min="-2" pref="385" max="-2" attributes="0"/>
-                                              <Component id="jLabelNumeroDoProtocolo" min="-2" pref="385" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                                          <Component id="jTextFieldLogradouro" alignment="0" max="32767" attributes="0"/>
-                                                          <Component id="jTextFieldBairro" alignment="0" min="-2" pref="442" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                                              <Component id="jFormattedTextFieldDataOcorrencia" alignment="0" max="32767" attributes="0"/>
-                                                              <Component id="jFormattedTextFieldCep" alignment="0" min="-2" pref="133" max="-2" attributes="0"/>
-                                                          </Group>
-                                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                          <Component id="jLabelMunicipio" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                          <Component id="jComboBoxMunicipio" min="-2" pref="180" max="-2" attributes="0"/>
-                                                      </Group>
-                                                  </Group>
-                                                  <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="1" attributes="0">
-                                                      <Component id="jLabelSubCategoria1" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jLabelCategoria" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
-                                              <Component id="jTextFieldCoordenadas" alignment="0" min="-2" pref="256" max="-2" attributes="0"/>
-                                              <Component id="jTextFieldPontoDeReferencia" alignment="0" min="-2" pref="442" max="-2" attributes="0"/>
-                                              <Component id="jTextFieldPossivelAutor" alignment="0" min="-2" pref="256" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jComboBoxCategoria" min="-2" pref="180" max="-2" attributes="0"/>
-                                              <Component id="jComboBoxSubcategoria" min="-2" pref="296" max="-2" attributes="0"/>
-                                              <Component id="jScrollPane4" min="-2" pref="645" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                      <Component id="jLabelStatusAtual" min="-2" pref="385" max="-2" attributes="0"/>
+                                      <Component id="jLabelNumeroDoProtocolo" min="-2" pref="385" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Group type="102" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabelBairro" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabelEndereco" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabelCep" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabelDataOcorrido" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jFormattedTextFieldDataOcorrencia" min="-2" pref="133" max="-2" attributes="0"/>
+                                      <Component id="jFormattedTextFieldCep" min="-2" pref="133" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldLogradouro" min="-2" pref="442" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldBairro" min="-2" pref="442" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Component id="jLabelPontoDeReferencia" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="Coordenadas" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabelMunicipio" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabelCategoria" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabelSubCategoria1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="Coordenadas1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jComboBoxSubcategoria" min="-2" pref="296" max="-2" attributes="0"/>
+                                      <Component id="jComboBoxCategoria" min="-2" pref="180" max="-2" attributes="0"/>
+                                      <Component id="jComboBoxMunicipio" alignment="0" min="-2" pref="180" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldCoordenadas" min="-2" pref="256" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldPontoDeReferencia" min="-2" pref="442" max="-2" attributes="0"/>
+                                      <Component id="jScrollPane4" alignment="0" min="-2" pref="645" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldPossivelAutor" alignment="0" min="-2" pref="256" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Component id="jLabelRelatoDoOcorrido" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabelImagens" min="-2" max="-2" attributes="0"/>
@@ -362,20 +342,20 @@
                                       <Component id="jLabelInfoDenunciante" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabelParecerTecnico" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabelAnonimo" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabelRelatoDoOcorrido" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabelNomeDoAnalista" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jScrollPane2" min="-2" pref="854" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane3" alignment="0" min="-2" pref="756" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                           <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jPanelImagens" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="jPanelImagens" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
+                                      <Component id="jScrollPane3" alignment="0" min="-2" pref="756" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="432" max="32767" attributes="0"/>
+                          <EmptySpace pref="215" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -384,15 +364,15 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabelProtocolo" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelNumeroDoProtocolo" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelProtocolo" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabelStatus" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelStatusAtual" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelStatus" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jFormattedTextFieldDataOcorrencia" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelDataOcorrido" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -401,54 +381,58 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabelCep" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jFormattedTextFieldCep" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabelMunicipio" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBoxMunicipio" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabelCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBoxCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jTextFieldLogradouro" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelEndereco" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jTextFieldBairro" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelBairro" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabelMunicipio" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBoxMunicipio" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabelPontoDeReferencia" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextFieldPontoDeReferencia" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="Coordenadas" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextFieldCoordenadas" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabelCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBoxCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabelSubCategoria1" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jComboBoxSubcategoria" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jTextFieldBairro" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabelBairro" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabelPontoDeReferencia" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextFieldPontoDeReferencia" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jTextFieldCoordenadas" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="Coordenadas" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jTextFieldPossivelAutor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="Coordenadas1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
-                                  <Component id="jLabelRelatoDoOcorrido" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="jScrollPane4" min="-2" pref="157" max="-2" attributes="0"/>
-                                  <EmptySpace pref="36" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane3" min="-2" pref="157" max="-2" attributes="0"/>
-                              </Group>
+                          <Component id="jScrollPane4" min="-2" pref="157" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jTextFieldPossivelAutor" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="Coordenadas1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabelRelatoDoOcorrido" min="-2" max="-2" attributes="0"/>
+                              <Component id="jScrollPane3" min="-2" pref="157" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jPanelImagens" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                                   <Component id="jLabelImagens" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButtonEscolherArquivo" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -464,24 +448,19 @@
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabelParecerTecnico" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabelParecerTecnico" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jLabelNomeDoAnalista" min="-2" pref="32" max="-2" attributes="0"/>
+                              </Group>
                               <Component id="jScrollPane2" min="-2" pref="228" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabelProtocolo">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Calibri" size="20" style="0"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Protocolo"/>
-                    <Property name="verticalAlignment" type="int" value="3"/>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabelNumeroDoProtocolo">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -1008,7 +987,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Calibri" size="20" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Possivel Autor do Crime"/>
+                    <Property name="text" type="java.lang.String" value="Poss&#xed;vel Autor do Crime"/>
                     <Property name="verticalAlignment" type="int" value="3"/>
                   </Properties>
                 </Component>
@@ -1083,6 +1062,30 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JLabel" name="jLabelNomeDoAnalista">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="99" green="99" red="99" type="rgb"/>
+                    </Property>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Calibri" size="18" style="0"/>
+                    </Property>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="99" green="99" red="99" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="** AN&#xd4;NIMO"/>
+                    <Property name="verticalAlignment" type="int" value="3"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabelProtocolo">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Calibri" size="20" style="0"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Protocolo"/>
+                    <Property name="verticalAlignment" type="int" value="3"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JLabel" name="jLabelcamposObrigatorios">

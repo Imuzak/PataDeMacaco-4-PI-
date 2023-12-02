@@ -52,49 +52,44 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Component id="jSeparatorTitulo" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jSeparatorTitulo" max="32767" attributes="0"/>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jCheckBoxCategoria" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBoxMunicipio" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBoxProtocolo" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBoxDataDaOcorrencia" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jFormattedTextFieldDataOcorrencia" min="-2" pref="169" max="-2" attributes="0"/>
-                                      <Component id="jTextFieldBuscarProtocolo" min="-2" pref="159" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="jComboBoxMunicipio" max="32767" attributes="0"/>
-                                          <Component id="jComboBoxCategoria" pref="440" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
+                              <Component id="jCheckBoxCategoria" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jCheckBoxMunicipio" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jCheckBoxProtocolo" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jCheckBoxDataDaOcorrencia" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelTitulo2" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace pref="179" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jTextFieldBuscarProtocolo" min="-2" pref="159" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jComboBoxMunicipio" max="32767" attributes="0"/>
+                                  <Component id="jComboBoxCategoria" pref="440" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="jFormattedTextFieldDataOcorrencia" alignment="0" min="-2" pref="169" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jButtonCancelar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="jButtonBuscar" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabelTitulo2" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxDataDoCadastro" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxStatus" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jCheckBoxDataDoCadastro" min="-2" max="-2" attributes="0"/>
+                              <Component id="jCheckBoxStatus" min="-2" pref="76" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="64" max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jComboBoxStatus" max="32767" attributes="0"/>
-                              <Component id="jFormattedTextFieldDataCadastro" pref="169" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jFormattedTextFieldDataCadastro" min="-2" pref="169" max="-2" attributes="0"/>
+                              <Component id="jComboBoxStatus" min="-2" pref="169" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="277" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="271" max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -122,8 +117,8 @@
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jCheckBoxDataDaOcorrencia" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jFormattedTextFieldDataOcorrencia" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxDataDaOcorrencia" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">

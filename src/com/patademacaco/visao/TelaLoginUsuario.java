@@ -226,7 +226,6 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
     private void jLabelAindaNaoTemCadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelAindaNaoTemCadastroMouseClicked
         TelaCadastro tela = new TelaCadastro(TipoUsuario.DENUNCIANTE);
         tela.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_jLabelAindaNaoTemCadastroMouseClicked
 
     private void jButtonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEntrarActionPerformed
@@ -263,7 +262,6 @@ public class TelaLoginUsuario extends javax.swing.JFrame {
             anonimo = usuarioControle.buscar("00000000000");
             TelaDenuncia tela = new TelaDenuncia(anonimo, null);
             tela.setVisible(true);
-            this.dispose();
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
