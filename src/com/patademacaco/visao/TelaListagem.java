@@ -59,6 +59,12 @@ public class TelaListagem extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.usuario = usuario;
         
+        if (usuario.getTipo() == TipoUsuario.ANALISTA) {
+            jButtonNovaDenuncia.setVisible(false);
+            jLabelMenuNovaDenuncia.setVisible(false);
+            jSeparator1.setVisible(false);
+        }
+        
         jLabelTituloCpfUsuario.setText("CPF : " + usuario.getCpf());
         jLabelTituloNomeUsuario.setText("Nome : " + usuario.getNome());
         jLabelTituloTelefoneUsuario.setText("Telefone : " + usuario.getTelefone());
@@ -98,8 +104,6 @@ public class TelaListagem extends javax.swing.JFrame {
         jPanel4 = new RoundedPanel(20, new Color(255, 255, 255));
         jScrollPaneTabela = new javax.swing.JScrollPane();
         jTableListagem = new javax.swing.JTable();
-        jLabelTitulo1 = new javax.swing.JLabel();
-        jTextFieldBuscarProtocolo = new javax.swing.JTextField();
         jButtonBuscar = new javax.swing.JButton();
         jButtonNovaDenuncia = new javax.swing.JButton();
         jLabelTituloCpfUsuario = new javax.swing.JLabel();
@@ -157,11 +161,11 @@ public class TelaListagem extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelMenuDenuncias)
+                .addComponent(jLabelMenuNovaDenuncia)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelMenuNovaDenuncia)
+                .addComponent(jLabelMenuDenuncias)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -170,14 +174,15 @@ public class TelaListagem extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabelMenuDenuncias, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-            .addComponent(jLabelMenuNovaDenuncia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabelMenuDenuncias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelMenuNovaDenuncia, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jLabelMenuMeuUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator2)
-                    .addComponent(jSeparator1))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
 
@@ -218,17 +223,6 @@ public class TelaListagem extends javax.swing.JFrame {
         });
         jScrollPaneTabela.setViewportView(jTableListagem);
 
-        jLabelTitulo1.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        jLabelTitulo1.setText("Protocolo :");
-        jLabelTitulo1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-
-        jTextFieldBuscarProtocolo.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        jTextFieldBuscarProtocolo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldBuscarProtocoloKeyPressed(evt);
-            }
-        });
-
         jButtonBuscar.setBackground(new java.awt.Color(163, 177, 138));
         jButtonBuscar.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
         jButtonBuscar.setText("Buscar");
@@ -256,10 +250,6 @@ public class TelaListagem extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPaneTabela, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabelTitulo1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldBuscarProtocolo, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonBuscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonNovaDenuncia)))
@@ -270,8 +260,6 @@ public class TelaListagem extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelTitulo1)
-                    .addComponent(jTextFieldBuscarProtocolo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonNovaDenuncia)
                     .addComponent(jButtonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -427,19 +415,14 @@ public class TelaListagem extends javax.swing.JFrame {
         tela.setVisible(true);
     }//GEN-LAST:event_jLabelMenuNovaDenunciaMouseClicked
 
-    private void jTextFieldBuscarProtocoloKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarProtocoloKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER && (jTextFieldBuscarProtocolo.getText() != null || jTextFieldBuscarProtocolo.getText() != "")) {
-            System.out.println(jTextFieldBuscarProtocolo.getText());
-        }
-    }//GEN-LAST:event_jTextFieldBuscarProtocoloKeyPressed
-
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         TelaDeBusca telaBusca = new TelaDeBusca(usuario, this);
         telaBusca.setVisible(true);
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonNovaDenunciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaDenunciaActionPerformed
-        // TODO add your handling code here:
+        TelaDenuncia tela = new TelaDenuncia(usuario, this);
+        tela.setVisible(true);
     }//GEN-LAST:event_jButtonNovaDenunciaActionPerformed
 
     private void jTableListagemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableListagemMouseClicked
@@ -500,7 +483,6 @@ public class TelaListagem extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelMenuMeuUsuario;
     private javax.swing.JLabel jLabelMenuNovaDenuncia;
     private javax.swing.JLabel jLabelTitulo;
-    private javax.swing.JLabel jLabelTitulo1;
     private javax.swing.JLabel jLabelTituloCpfUsuario;
     private javax.swing.JLabel jLabelTituloEmailUsuario;
     private javax.swing.JLabel jLabelTituloNomeUsuario;
@@ -513,6 +495,5 @@ public class TelaListagem extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparatorTitulo;
     private javax.swing.JTable jTableListagem;
-    private javax.swing.JTextField jTextFieldBuscarProtocolo;
     // End of variables declaration//GEN-END:variables
 }
