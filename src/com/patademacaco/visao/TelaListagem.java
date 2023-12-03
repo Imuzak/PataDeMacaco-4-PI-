@@ -106,6 +106,7 @@ public class TelaListagem extends javax.swing.JFrame {
         jTableListagem = new javax.swing.JTable();
         jButtonBuscar = new javax.swing.JButton();
         jButtonNovaDenuncia = new javax.swing.JButton();
+        jButtonLimparFiltro = new javax.swing.JButton();
         jLabelTituloCpfUsuario = new javax.swing.JLabel();
         jLabelTituloNomeUsuario = new javax.swing.JLabel();
         jLabelTituloTelefoneUsuario = new javax.swing.JLabel();
@@ -174,9 +175,8 @@ public class TelaListagem extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabelMenuDenuncias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelMenuNovaDenuncia, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLabelMenuDenuncias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabelMenuNovaDenuncia, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(jLabelMenuMeuUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -241,6 +241,16 @@ public class TelaListagem extends javax.swing.JFrame {
             }
         });
 
+        jButtonLimparFiltro.setBackground(new java.awt.Color(163, 177, 138));
+        jButtonLimparFiltro.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jButtonLimparFiltro.setText("Limpar Filtro");
+        jButtonLimparFiltro.setEnabled(false);
+        jButtonLimparFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLimparFiltroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -251,6 +261,8 @@ public class TelaListagem extends javax.swing.JFrame {
                     .addComponent(jScrollPaneTabela, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jButtonBuscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonLimparFiltro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonNovaDenuncia)))
                 .addContainerGap())
@@ -261,7 +273,8 @@ public class TelaListagem extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonNovaDenuncia)
-                    .addComponent(jButtonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonLimparFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPaneTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -348,7 +361,6 @@ public class TelaListagem extends javax.swing.JFrame {
 
 //     imprimir na table
     public void imprimirDadosNaGrid(ArrayList<Denuncia> listaDenuncias) {
-        System.out.println("tento imprimir");
         try {
             DefaultTableModel model = (DefaultTableModel) jTableListagem.getModel();
             model.setNumRows(0);
@@ -418,6 +430,7 @@ public class TelaListagem extends javax.swing.JFrame {
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         TelaDeBusca telaBusca = new TelaDeBusca(usuario, this);
         telaBusca.setVisible(true);
+        jButtonLimparFiltro.setEnabled(true);
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonNovaDenunciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaDenunciaActionPerformed
@@ -431,11 +444,12 @@ public class TelaListagem extends javax.swing.JFrame {
         String protocolo = modelDenuncias.getValueAt(SelectedRowIndex, 0).toString();
         try{
             Denuncia objeto = denunciaControle.Buscar(protocolo);
-//            if(usuario.getTipo() == TipoUsuario.ANALISTA) {
-//                //objeto.setAnalista(usuario);
-//                objeto.setStatus(Status.ANDAMENTO);
-//                denunciaControle.Alterar(objeto);
-//            }
+            if(usuario.getTipo() == TipoUsuario.ANALISTA) {
+                objeto.setAnalista(usuario);
+                objeto.setStatus(Status.ANDAMENTO);
+                denunciaControle.Alterar(objeto);
+                imprimirDadosNaGrid(denunciaControle.Listar());
+            }
             TelaDenuncia telaDenuncia = new TelaDenuncia(usuario, objeto, this);
             telaDenuncia.setVisible(true);
         } catch (Exception erro) {
@@ -443,6 +457,16 @@ public class TelaListagem extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jTableListagemMouseClicked
+
+    private void jButtonLimparFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimparFiltroActionPerformed
+        try{
+            if (usuario.getTipo() == TipoUsuario.ANALISTA) imprimirDadosNaGrid(denunciaControle.Listar());
+            else imprimirDadosNaGrid(denunciaControle.listaFiltrada(0, usuario.getCpf(), 0, null, null, null));
+            jButtonLimparFiltro.setEnabled(false);
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+    }//GEN-LAST:event_jButtonLimparFiltroActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -478,6 +502,7 @@ public class TelaListagem extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBuscar;
+    private javax.swing.JButton jButtonLimparFiltro;
     private javax.swing.JButton jButtonNovaDenuncia;
     private javax.swing.JLabel jLabelMenuDenuncias;
     private javax.swing.JLabel jLabelMenuMeuUsuario;

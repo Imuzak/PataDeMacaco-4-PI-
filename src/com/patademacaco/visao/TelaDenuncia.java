@@ -129,9 +129,10 @@ public class TelaDenuncia extends javax.swing.JFrame {
         this.telaListagem = telaListagem;
         this.denuncia = denuncia;
         if(usuario.getTipo() == TipoUsuario.ANALISTA){
-            jButtonEnviar.setText("FINALIZAR");
+            jButtonEnviar.setText("Finalizar");
             jLabelMenuNovaDenuncia1.setVisible(false);
             jSeparator4.setVisible(false);
+            jTextParecer.setEditable(true);
         }
         if(usuario.getTipo() == TipoUsuario.DENUNCIANTE){
             jButtonEditar.setVisible(false);
@@ -144,7 +145,6 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jScrollPanePrincipal.getVerticalScrollBar().setUnitIncrement(10);
         
         
-        TravarCampos();
         try{
             categoriaControle = new CategoriaControle();
             denunciaControle = new DenunciaControle();
@@ -158,11 +158,12 @@ public class TelaDenuncia extends javax.swing.JFrame {
             if(urls.size() >= 2) setImagemLabel(jLabelImagem2, urls.get(1));
             if(urls.size() >= 3) setImagemLabel(jLabelImagem3, urls.get(2));
             if(urls.size() == 4) setImagemLabel(jLabelImagem4, urls.get(3));
-            
+            TravarCampos();
+            jButtonEnviar.setEnabled(false);
             //Preenche a tela Denuncia com as informações da denuncia selecionada
-            jComboBoxMunicipio.setSelectedItem(denuncia.getEndereco().getMunicipio());
-            jComboBoxCategoria.setSelectedItem(denuncia.getSubCategoria().getCategoria());
-            jComboBoxSubcategoria.setSelectedItem(denuncia.getSubCategoria());
+            jComboBoxMunicipio.getModel().setSelectedItem(denuncia.getEndereco().getMunicipio());
+            jComboBoxCategoria.getModel().setSelectedItem(denuncia.getSubCategoria().getCategoria());
+            jComboBoxSubcategoria.getModel().setSelectedItem(denuncia.getSubCategoria());
             jFormattedTextFieldCep.setText(denuncia.getEndereco().getCep());
             jFormattedTextFieldDataOcorrencia.setText(formata.format(denuncia.getData()));
             jLabelNumeroDoProtocolo.setText(denuncia.getProtocolo());
@@ -185,16 +186,17 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 jSeparator4.setVisible(false);
                 jSeparator5.setVisible(false);
             } else {
-                //jFormattedTextFieldCpf.setText(denuncia.getDenunciante().getCpf());
+                jFormattedTextFieldCpf.setText(denuncia.getDenunciante().getCpf());
                 jTextFieldNome.setText(denuncia.getDenunciante().getNome());
                 jTextFieldEmail.setText(denuncia.getDenunciante().getEmail());
                 jTextFieldTelefone.setText(denuncia.getDenunciante().getTelefone());
             }
             jTextParecer.setText(denuncia.getParecer());
-            String nomeDoAnalista = denuncia.getAnalista().getNome(); 
-            String[] partes = nomeDoAnalista.split("\\ "); 
-            jLabelNomeDoAnalista.setText(partes[0]); // pega apenas o primeiro nome do analista
-            
+            if(denuncia.getAnalista() != null){
+                String nomeDoAnalista = denuncia.getAnalista().getNome();
+                String[] partes = nomeDoAnalista.split("\\ "); 
+                jLabelNomeDoAnalista.setText(partes[0]); // pega apenas o primeiro nome do analista
+            } 
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
@@ -931,7 +933,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPanePrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1707, Short.MAX_VALUE)
+            .addComponent(jScrollPanePrincipal)
         );
 
         pack();
@@ -949,6 +951,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jComboBoxCategoria.setEnabled(false);
         jComboBoxMunicipio.setEnabled(false);
         jComboBoxSubcategoria.setEnabled(false);
+        jComboBoxSubcategoria.setEnabled(false);
     }
     
     private void jButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnviarActionPerformed
@@ -959,6 +962,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
             denuncia.setParecer(parecer);
             denuncia.setStatus(Status.FINALIZADO);
             denunciaControle.Alterar(denuncia);
+            jButtonEnviar.setEnabled(false);
             telaListagem.imprimirDadosNaGrid(denunciaControle.Listar());
             }else{
                 //data
@@ -974,21 +978,17 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 Municipio municipio = new Municipio();
                 municipio = (Municipio) jComboBoxMunicipio.getSelectedItem();
                 endereco.setMunicipio(municipio);
-                System.out.println("endereço settado");
                 //Possivel Autor
                 String possivelAutor = jTextFieldPossivelAutor.getText();
                 String descricao = jTextAreaRelatoDoOcorrido.getText();
-                System.out.println("descricao");
                 //Categoria e Subcategoria
                 SubCategoria subcategoria = new SubCategoria();
                 subcategoria = (SubCategoria) jComboBoxSubcategoria.getSelectedItem();
-                System.out.println("categoria coletada");
                 denuncia.setEndereco(endereco);
-                fotos.addUrl(imagem1);
+                if(!imagem1.equalsIgnoreCase("sem foto"))fotos.addUrl(imagem1);
                 if(!imagem2.equalsIgnoreCase("sem foto"))fotos.addUrl(imagem2);
                 if(!imagem3.equalsIgnoreCase("sem foto"))fotos.addUrl(imagem3);
                 if(!imagem4.equalsIgnoreCase("sem foto"))fotos.addUrl(imagem4);
-                System.out.println("imagens coletadas");
                 denuncia.setFotos(fotos);
                 denuncia.setDenunciante(usuario);
                 denuncia.setData(dataOcorrido);
@@ -996,9 +996,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 denuncia.setAutorCrime(possivelAutor);
                 denuncia.setDescricao(descricao);
                 denuncia.setSubCategoria(subcategoria);
-                System.out.println("itens settados");
                 String protocolo = denunciaControle.Cadastrar(denuncia);
-                System.out.println("protocolo coletado");
                 jLabelNumeroDoProtocolo.setText(protocolo);
                 jLabelStatusAtual.setText(denuncia.getStatus().toString());
                 jButtonEnviar.setEnabled(false);
@@ -1071,7 +1069,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
             File arquivo = fc.getSelectedFile();
-            String imagem1 = arquivo.getPath();
+            imagem1 = arquivo.getPath();
             setImagemLabel(jLabelImagem1, imagem1);
             
         } catch (Exception erro) {
@@ -1086,7 +1084,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
             File arquivo = fc.getSelectedFile();
-            String imagem2 = arquivo.getPath();
+            imagem2 = arquivo.getPath();
             setImagemLabel(jLabelImagem2, imagem2);
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro);
@@ -1100,7 +1098,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
             File arquivo = fc.getSelectedFile();
-            String imagem3 = arquivo.getPath();
+            imagem3 = arquivo.getPath();
             setImagemLabel(jLabelImagem3, imagem3);
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro);
@@ -1114,7 +1112,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
             File arquivo = fc.getSelectedFile();
-            String imagem4 = arquivo.getPath();
+            imagem4 = arquivo.getPath();
             setImagemLabel(jLabelImagem4, imagem4);
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro);

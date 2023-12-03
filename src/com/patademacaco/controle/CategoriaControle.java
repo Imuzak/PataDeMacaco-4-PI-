@@ -16,6 +16,15 @@ public class CategoriaControle implements ICategoriaControle{
     
     @Override
     public void Cadastrar(SubCategoria objeto) throws Exception {
+        if(objeto.getCategoria().getId() == 0){
+            throw new Exception("Selecione uma Categoria de crime ambiental valida!");
+        }
+        if(objeto.getSubTipoResumo().isBlank()){
+            throw new Exception("Preencha o campo com um breve resumo da subcategoria");
+        }
+        if(objeto.getSubTipo().isBlank()){
+            throw new Exception("Preencha o campo com a descrição detalhada da subcategoria");
+        }
         categoriaDao.Cadastrar(objeto);
     }
 

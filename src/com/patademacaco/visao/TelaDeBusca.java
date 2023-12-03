@@ -144,20 +144,20 @@ public class TelaDeBusca extends javax.swing.JFrame {
             }
         });
 
-        jFormattedTextFieldDataOcorrencia.setEditable(false);
         try {
             jFormattedTextFieldDataOcorrencia.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        jFormattedTextFieldDataOcorrencia.setEnabled(false);
         jFormattedTextFieldDataOcorrencia.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
 
-        jFormattedTextFieldDataCadastro.setEditable(false);
         try {
             jFormattedTextFieldDataCadastro.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        jFormattedTextFieldDataCadastro.setEnabled(false);
         jFormattedTextFieldDataCadastro.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
 
         jButtonBuscar.setBackground(new java.awt.Color(163, 177, 138));
@@ -324,17 +324,16 @@ public class TelaDeBusca extends javax.swing.JFrame {
                 ArrayList listaFiltrada = null;
                 if(jCheckBoxCategoria.isSelected()) categoria = (Categoria) jComboBoxCategoria.getSelectedItem();
                 if(jCheckBoxMunicipio.isSelected()) municipio = (Municipio) jComboBoxMunicipio.getSelectedItem();
-                if(jCheckBoxDataDaOcorrencia.isSelected()) dataOcorrido = formata.parse(jFormattedTextFieldDataOcorrencia.getText());
-                if(jCheckBoxDataDoCadastro.isSelected()) dataDenuncia = formata.parse(jFormattedTextFieldDataCadastro.getText());
+                if(jCheckBoxDataDaOcorrencia.isSelected() && denunciaControle.ValidarData(jFormattedTextFieldDataOcorrencia.getText()))dataOcorrido = formata.parse(jFormattedTextFieldDataOcorrencia.getText());
+                if(jCheckBoxDataDoCadastro.isSelected() && denunciaControle.ValidarData(jFormattedTextFieldDataCadastro.getText())) dataDenuncia = formata.parse(jFormattedTextFieldDataCadastro.getText());
                 if(jCheckBoxStatus.isSelected()) status = (Status) jComboBoxStatus.getSelectedItem();
                 if(usuario.getTipo()== TipoUsuario.ANALISTA){
-                    listaFiltrada = denunciaControle.listaFiltrada(municipio.getCodIBGE(), null, categoria.getId(), dataOcorrido, dataDenuncia, status);
+                    listaFiltrada = denunciaControle.listaFiltrada(municipio.getId(), null, categoria.getId(), dataOcorrido, dataDenuncia, status);
                 }else{
-                    listaFiltrada = denunciaControle.listaFiltrada(municipio.getCodIBGE(), usuario.getCpf(), categoria.getId(), dataOcorrido, dataDenuncia, status);
+                    listaFiltrada = denunciaControle.listaFiltrada(municipio.getId(), usuario.getCpf(), categoria.getId(), dataOcorrido, dataDenuncia, status);
                 }
                 telaListagem.imprimirDadosNaGrid(listaFiltrada);
             }
-            
             this.dispose();
             
         } catch (Exception erro) {
