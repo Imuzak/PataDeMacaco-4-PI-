@@ -21,7 +21,7 @@ public class DenunciaControle implements IDenunciaControle{
         if (denuncia.getData().compareTo(denuncia.getDataDenuncia())> 0 ){
             throw new Exception("Data invalida!");
         }
-        if (denuncia.getEndereco().getCep().length()<11){
+        if (denuncia.getEndereco().getCep().length()<10){
             throw new Exception("CEP invalido!");
         }
         if(denuncia.getEndereco().getLogradouro().isBlank()){
@@ -71,7 +71,7 @@ public class DenunciaControle implements IDenunciaControle{
 
     @Override
     public void Alterar(Denuncia denuncia) throws Exception {
-        if(denuncia.getStatus() == Status.FINALIZADO && denuncia.getParecer().isBlank()){
+        if(denuncia.getStatus() == Status.CONCLUIDA && denuncia.getParecer().isBlank()){
             throw new Exception("O analista deve preencher o campo de Parecer ao finalizar a ocorrencia.");
         }
         if(denuncia.getEndereco().getMunicipio().getId() == 0){

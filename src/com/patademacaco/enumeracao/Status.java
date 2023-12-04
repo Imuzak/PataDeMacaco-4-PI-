@@ -1,7 +1,7 @@
 package com.patademacaco.enumeracao;
 
 public enum Status {
-    ABERTO,
-    ANDAMENTO,
-    FINALIZADO;
+    CRIADA,
+    EM_ANDAMENTO,
+    CONCLUIDA;
 }

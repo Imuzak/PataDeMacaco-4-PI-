@@ -130,9 +130,11 @@ public class TelaDenuncia extends javax.swing.JFrame {
         this.denuncia = denuncia;
         if(usuario.getTipo() == TipoUsuario.ANALISTA){
             jButtonEnviar.setText("Finalizar");
+            jButtonEnviar.setEnabled(true);
             jLabelMenuNovaDenuncia1.setVisible(false);
             jSeparator4.setVisible(false);
-            jTextParecer.setEditable(true);
+            jComboBoxCategoria.setEnabled(true);
+            jTextParecer.setEnabled(true);
         }
         if(usuario.getTipo() == TipoUsuario.DENUNCIANTE){
             jButtonEditar.setVisible(false);
@@ -158,8 +160,6 @@ public class TelaDenuncia extends javax.swing.JFrame {
             if(urls.size() >= 2) setImagemLabel(jLabelImagem2, urls.get(1));
             if(urls.size() >= 3) setImagemLabel(jLabelImagem3, urls.get(2));
             if(urls.size() == 4) setImagemLabel(jLabelImagem4, urls.get(3));
-            TravarCampos();
-            jButtonEnviar.setEnabled(false);
             //Preenche a tela Denuncia com as informações da denuncia selecionada
             jComboBoxMunicipio.getModel().setSelectedItem(denuncia.getEndereco().getMunicipio());
             jComboBoxCategoria.getModel().setSelectedItem(denuncia.getSubCategoria().getCategoria());
@@ -960,7 +960,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
             if(usuario.getTipo() == TipoUsuario.ANALISTA){
             String parecer = jTextParecer.getText();
             denuncia.setParecer(parecer);
-            denuncia.setStatus(Status.FINALIZADO);
+            denuncia.setStatus(Status.CONCLUIDA);
             denunciaControle.Alterar(denuncia);
             jButtonEnviar.setEnabled(false);
             telaListagem.imprimirDadosNaGrid(denunciaControle.Listar());

@@ -15,7 +15,7 @@ public class Denuncia {
     private Usuario denunciante = null;
     private Usuario analista = null;
     private Endereco endereco = null;
-    private Status status = Status.ABERTO;
+    private Status status = Status.CRIADA;
     
     public Denuncia(){
     }

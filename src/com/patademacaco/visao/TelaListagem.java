@@ -446,7 +446,7 @@ public class TelaListagem extends javax.swing.JFrame {
             Denuncia objeto = denunciaControle.Buscar(protocolo);
             if(usuario.getTipo() == TipoUsuario.ANALISTA) {
                 objeto.setAnalista(usuario);
-                objeto.setStatus(Status.ANDAMENTO);
+                objeto.setStatus(Status.EM_ANDAMENTO);
                 denunciaControle.Alterar(objeto);
                 imprimirDadosNaGrid(denunciaControle.Listar());
             }
