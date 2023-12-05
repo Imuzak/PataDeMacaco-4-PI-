@@ -320,24 +320,20 @@
                                       <Component id="Coordenadas1" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jComboBoxSubcategoria" min="-2" pref="296" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="jComboBoxCategoria" min="-2" pref="180" max="-2" attributes="0"/>
                                       <Component id="jComboBoxMunicipio" alignment="0" min="-2" pref="180" max="-2" attributes="0"/>
                                       <Component id="jTextFieldCoordenadas" min="-2" pref="256" max="-2" attributes="0"/>
-                                      <Component id="jTextFieldPontoDeReferencia" min="-2" pref="442" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane4" alignment="0" min="-2" pref="645" max="-2" attributes="0"/>
+                                      <Component id="jScrollPane4" alignment="0" pref="645" max="32767" attributes="0"/>
                                       <Component id="jTextFieldPossivelAutor" alignment="0" min="-2" pref="256" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldPontoDeReferencia" alignment="0" min="-2" pref="442" max="-2" attributes="0"/>
+                                      <Component id="jComboBoxSubcategoria" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Component id="jLabelRelatoDoOcorrido" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jLabelImagens" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jButtonEscolherArquivo" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="jLabelImagens" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabelInfoDenunciante" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabelParecerTecnico" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabelAnonimo" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -431,10 +427,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jPanelImagens" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                  <Component id="jLabelImagens" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButtonEscolherArquivo" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jLabelImagens" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -594,14 +587,6 @@
                     <Property name="text" type="java.lang.String" value="Imagens *"/>
                     <Property name="verticalAlignment" type="int" value="3"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JButton" name="jButtonEscolherArquivo">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Escolher Arquivo"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEscolherArquivoActionPerformed"/>
-                  </Events>
                 </Component>
                 <Container class="javax.swing.JPanel" name="jPanelImagens">
                   <AuxValues>

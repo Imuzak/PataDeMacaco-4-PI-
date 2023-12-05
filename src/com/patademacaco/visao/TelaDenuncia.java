@@ -52,7 +52,6 @@ public class TelaDenuncia extends javax.swing.JFrame {
     private IDenunciaControle denunciaControle = null;
     private IUsuarioControle usuarioControle = null;
     private SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy");
-    //TelaListagem telaListagem = null;
 
     public TelaDenuncia() {
         initComponents();
@@ -284,7 +283,6 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jTextFieldBairro = new javax.swing.JTextField();
         jLabelMunicipio = new javax.swing.JLabel();
         jLabelImagens = new javax.swing.JLabel();
-        jButtonEscolherArquivo = new javax.swing.JButton();
         jPanelImagens = new RoundedPanel(20, new Color(163,177,138));
         jLabelImagem1 = new javax.swing.JLabel();
         jLabelImagem2 = new javax.swing.JLabel();
@@ -419,7 +417,6 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jButtonEditar.setBackground(new java.awt.Color(163, 177, 138));
         jButtonEditar.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
         jButtonEditar.setText("Editar");
-        jButtonEditar.setOpaque(true);
         jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditarActionPerformed(evt);
@@ -487,13 +484,6 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jLabelImagens.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
         jLabelImagens.setText("Imagens *");
         jLabelImagens.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-
-        jButtonEscolherArquivo.setText("Escolher Arquivo");
-        jButtonEscolherArquivo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEscolherArquivoActionPerformed(evt);
-            }
-        });
 
         jLabelImagem1.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabelImagem1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -776,21 +766,18 @@ public class TelaDenuncia extends javax.swing.JFrame {
                             .addComponent(jLabelSubCategoria1)
                             .addComponent(Coordenadas1))
                         .addGap(47, 47, 47)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jComboBoxMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldCoordenadas, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+                            .addComponent(jTextFieldPossivelAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldPontoDeReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldPossivelAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jComboBoxSubcategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jLabelRelatoDoOcorrido)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabelImagens)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonEscolherArquivo))
+                            .addComponent(jLabelImagens)
                             .addComponent(jLabelInfoDenunciante)
                             .addComponent(jLabelParecerTecnico)
                             .addComponent(jLabelAnonimo)
@@ -864,9 +851,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanelImagens, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabelImagens)
-                        .addComponent(jButtonEscolherArquivo)))
+                    .addComponent(jLabelImagens))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -1046,38 +1031,6 @@ public class TelaDenuncia extends javax.swing.JFrame {
             jlabel.setIcon(icon);
     }
     
-    private void jButtonEscolherArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEscolherArquivoActionPerformed
-        try {
-            if (controleImagens <= 4) {
-                JFileChooser fc = new JFileChooser("./src/javaapplication2");
-                File buscar = new File("./src/javaapplication2/imagem1");
-
-                fc.setCurrentDirectory(buscar);
-                fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fc.showOpenDialog(this);
-                File arquivo = fc.getSelectedFile();
-                String nomeDoArquivo = arquivo.getPath();
-                ImageIcon iconLogo = new ImageIcon(nomeDoArquivo);
-                if (controleImagens == 1) {
-                    iconLogo.setImage(iconLogo.getImage().getScaledInstance(jLabelImagem1.getWidth(), jLabelImagem1.getHeight(), 1));
-                    jLabelImagem1.setIcon(iconLogo);
-                } else if (controleImagens == 2) {
-                    iconLogo.setImage(iconLogo.getImage().getScaledInstance(jLabelImagem2.getWidth(), jLabelImagem2.getHeight(), 1));
-                    jLabelImagem2.setIcon(iconLogo);
-                } else if (controleImagens == 3) {
-                    iconLogo.setImage(iconLogo.getImage().getScaledInstance(jLabelImagem3.getWidth(), jLabelImagem3.getHeight(), 1));
-                    jLabelImagem3.setIcon(iconLogo);
-                } else if (controleImagens == 4) {
-                    iconLogo.setImage(iconLogo.getImage().getScaledInstance(jLabelImagem4.getWidth(), jLabelImagem4.getHeight(), 1));
-                    jLabelImagem4.setIcon(iconLogo);
-                }
-                controleImagens++;
-            }
-        } catch (Exception erro) {
-            JOptionPane.showMessageDialog(this, erro);
-        }
-    }//GEN-LAST:event_jButtonEscolherArquivoActionPerformed
-
     private void jLabelImagem1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImagem1MouseClicked
         try {
             JFileChooser fc = new JFileChooser("./src/com/patademacaco/imagens/fotos");
@@ -1206,7 +1159,6 @@ public class TelaDenuncia extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonEnviar;
-    private javax.swing.JButton jButtonEscolherArquivo;
     private javax.swing.JComboBox<Categoria> jComboBoxCategoria;
     private javax.swing.JComboBox<Municipio> jComboBoxMunicipio;
     private javax.swing.JComboBox<SubCategoria> jComboBoxSubcategoria;
