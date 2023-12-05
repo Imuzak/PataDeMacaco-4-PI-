@@ -107,6 +107,15 @@ public class UsuarioControle implements IUsuarioControle {
         if (objeto.getTipo() == null) {
             throw new Exception("Selecione uma das opções como usuário (DENUNCIANTE / ANALISTA).");
         }
+        if (objeto.getSenha().trim().isBlank()) {
+            throw new Exception("Senha inválida.");
+        }
+        if (objeto.getSenha().trim().contains(" ")) {
+            throw new Exception("A senha não pode conter espaços vazios.");
+        }
+        if (objeto.getSenha().trim().length()<6) {
+            throw new Exception("A senha deve conter no mínimo 6 caracteres.");
+        }
         usuarioPersistencia.cadastrar(objeto);
     }
 

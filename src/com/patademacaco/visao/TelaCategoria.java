@@ -229,6 +229,8 @@ public class TelaCategoria extends javax.swing.JFrame {
             subCategoria.setSubTipo(jTextDescricao.getText());
             subCategoria.setCategoria(categoria);
             categoriaControle.Cadastrar(subCategoria);
+            jTextDescricao.setText("");
+            jTextFieldSubCategoria.setText("");
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }

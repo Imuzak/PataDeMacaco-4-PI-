@@ -13,7 +13,7 @@ public class CategoriaComboBoxRenderer extends DefaultListCellRenderer {
                 //Armazena o objetoMarca completo
                 Categoria objetoCategoria = (Categoria) value;
                 //Apresenta apenas a descricao
-                value = objetoCategoria.getTipoAmbiental();
+                value = objetoCategoria.getTipoAmbiental().toUpperCase();
             }
             return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         }

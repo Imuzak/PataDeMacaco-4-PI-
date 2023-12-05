@@ -60,6 +60,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         ImageIcon image = new ImageIcon(".\\src\\com\\patademacaco\\imagens\\icones\\leaf.png");
         this.setIconImage(image.getImage());
         denuncia = new Denuncia();
+        jLabelAnonimo.setVisible(false);
         
         jScrollPanePrincipal.getVerticalScrollBar().setUI(new CustomScrollBarUI());
         jScrollPanePrincipal.setDoubleBuffered(true);
@@ -87,6 +88,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.usuario = usuario;
         this.telaListagem = telaListagem;
+        jLabelAnonimo.setVisible(false);
         denuncia = new Denuncia();
         if(usuario.getTipo() == TipoUsuario.DENUNCIANTE ){
             jButtonEditar.setVisible(false);
@@ -95,6 +97,8 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 jTextFieldEmail.setText(usuario.getEmail());
                 jTextFieldTelefone.setText(usuario.getTelefone());
                 jFormattedTextFieldCpf.setText(usuario.getCpf());
+            } else {
+                jLabelAnonimo.setVisible(true);
             }
         }
         ImageIcon image = new ImageIcon(".\\src\\com\\patademacaco\\imagens\\icones\\leaf.png");
@@ -128,16 +132,25 @@ public class TelaDenuncia extends javax.swing.JFrame {
         this.usuario = usuario;
         this.telaListagem = telaListagem;
         this.denuncia = denuncia;
+        TravarCampos();
+        jLabelAnonimo.setVisible(false);
         if(usuario.getTipo() == TipoUsuario.ANALISTA){
             jButtonEnviar.setText("Finalizar");
-            jButtonEnviar.setEnabled(true);
             jLabelMenuNovaDenuncia1.setVisible(false);
             jSeparator4.setVisible(false);
-            jComboBoxCategoria.setEnabled(true);
-            jTextParecer.setEnabled(true);
+            if(denuncia.getStatus() == Status.EM_ANDAMENTO){
+                jComboBoxCategoria.setEnabled(true);
+                jTextParecer.setEnabled(true);
+                jButtonEnviar.setEnabled(true);
+            }
+            
         }
         if(usuario.getTipo() == TipoUsuario.DENUNCIANTE){
             jButtonEditar.setVisible(false);
+            if (denuncia.getAnalista() == null) {
+                jLabelNomeDoAnalista.setVisible(false);
+            }
+            
         }
         ImageIcon image = new ImageIcon(".\\src\\com\\patademacaco\\imagens\\icones\\leaf.png");
         this.setIconImage(image.getImage());
@@ -951,7 +964,10 @@ public class TelaDenuncia extends javax.swing.JFrame {
         jComboBoxCategoria.setEnabled(false);
         jComboBoxMunicipio.setEnabled(false);
         jComboBoxSubcategoria.setEnabled(false);
-        jComboBoxSubcategoria.setEnabled(false);
+//        jLabelImagem1.setEnabled(false);
+//        jLabelImagem2.setEnabled(false);
+//        jLabelImagem3.setEnabled(false);
+//        jLabelImagem4.setEnabled(false);
     }
     
     private void jButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnviarActionPerformed
@@ -998,10 +1014,10 @@ public class TelaDenuncia extends javax.swing.JFrame {
                 denuncia.setSubCategoria(subcategoria);
                 String protocolo = denunciaControle.Cadastrar(denuncia);
                 jLabelNumeroDoProtocolo.setText(protocolo);
-                jLabelStatusAtual.setText(denuncia.getStatus().toString());
                 jButtonEnviar.setEnabled(false);
                 if(!usuario.getNome().equalsIgnoreCase("Anonimo"))telaListagem.imprimirDadosNaGrid(denunciaControle.listaFiltrada(0, usuario.getCpf(), 0, null, null, null));
             }
+            jLabelStatusAtual.setText(denuncia.getStatus().toString());
             TravarCampos();
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
@@ -1064,7 +1080,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
 
     private void jLabelImagem1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImagem1MouseClicked
         try {
-            JFileChooser fc = new JFileChooser();
+            JFileChooser fc = new JFileChooser("./src/com/patademacaco/imagens/fotos");
             fc.setDialogTitle("Escolha um Arquivo");
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
@@ -1079,7 +1095,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
 
     private void jLabelImagem2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImagem2MouseClicked
         try {
-            JFileChooser fc = new JFileChooser();
+            JFileChooser fc = new JFileChooser("./src/com/patademacaco/imagens/fotos");
             fc.setDialogTitle("Escolha um Arquivo");
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
@@ -1093,7 +1109,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
 
     private void jLabelImagem3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImagem3MouseClicked
         try {
-            JFileChooser fc = new JFileChooser();
+            JFileChooser fc = new JFileChooser("./src/com/patademacaco/imagens/fotos");
             fc.setDialogTitle("Escolha um Arquivo");
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
@@ -1107,7 +1123,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
 
     private void jLabelImagem4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImagem4MouseClicked
         try {
-            JFileChooser fc = new JFileChooser();
+            JFileChooser fc = new JFileChooser("./src/com/patademacaco/imagens/fotos");
             fc.setDialogTitle("Escolha um Arquivo");
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fc.showOpenDialog(this);
@@ -1143,8 +1159,9 @@ public class TelaDenuncia extends javax.swing.JFrame {
     private void jComboBoxCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxCategoriaItemStateChanged
         Categoria objeto = (Categoria) jComboBoxCategoria.getSelectedItem();
         try {
-            boxSubCategoria(categoriaControle.ListarSubCategorias(objeto.getId()));
-            jComboBoxSubcategoria.setEnabled(true);
+                boxSubCategoria(categoriaControle.ListarSubCategorias(objeto.getId()));
+                //if(denuncia.getAnalista()!= null && denuncia != null)
+                    jComboBoxSubcategoria.setEnabled(true);   
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
@@ -1154,6 +1171,7 @@ public class TelaDenuncia extends javax.swing.JFrame {
         SubCategoria objeto = (SubCategoria) jComboBoxSubcategoria.getSelectedItem();
         try {
             jTextAreaSubCategoria.setText(objeto.getSubTipo());
+            if (!jComboBoxCategoria.isEnabled()) jComboBoxSubcategoria.setEnabled(false);
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }

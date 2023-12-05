@@ -374,7 +374,7 @@ public class TelaListagem extends javax.swing.JFrame {
                 saida[2] = aux.getDenunciante().getCpf();
                 saida[3] = aux.getDenunciante().getNome();
                 saida[4] = aux.getEndereco().getMunicipio().getNome();
-                saida[5] = aux.getSubCategoria().getCategoria().getTipoAmbiental();//?
+                saida[5] = aux.getSubCategoria().getCategoria().getTipoAmbiental().toUpperCase();//?
                 String data = formata.format(aux.getData());
                 saida[6] = data;//?
                 Object[] dados = {saida[0], saida[1], saida[2], saida[3], saida[4], saida[5], saida[6]};
@@ -396,8 +396,8 @@ public class TelaListagem extends javax.swing.JFrame {
             saida[1] = denuncia.getStatus().toString();
             saida[2] = denuncia.getDenunciante().getCpf();
             saida[3] = denuncia.getDenunciante().getNome();
-            saida[4] = denuncia.getEndereco().getMunicipio().getNome() + " - " + denuncia.getEndereco().getMunicipio().getUf();
-            saida[5] = denuncia.getSubCategoria().getCategoria().getTipoAmbiental();//?
+            saida[4] = denuncia.getEndereco().getMunicipio().getNome();
+            saida[5] = denuncia.getSubCategoria().getCategoria().getTipoAmbiental().toUpperCase();//?
             String data = formata.format(denuncia.getData());
             saida[6] = data;//?
             Object[] dados = {saida[0], saida[1], saida[2], saida[3], saida[4], saida[5], saida[6]};
@@ -446,7 +446,7 @@ public class TelaListagem extends javax.swing.JFrame {
             Denuncia objeto = denunciaControle.Buscar(protocolo);
             if(usuario.getTipo() == TipoUsuario.ANALISTA) {
                 objeto.setAnalista(usuario);
-                objeto.setStatus(Status.EM_ANDAMENTO);
+                if(objeto.getStatus() == Status.CRIADA)objeto.setStatus(Status.EM_ANDAMENTO);
                 denunciaControle.Alterar(objeto);
                 imprimirDadosNaGrid(denunciaControle.Listar());
             }
